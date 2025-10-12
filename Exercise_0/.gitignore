@@ -1,0 +1,21 @@
+# Ignore all LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.idx
+*.ind
+*.ilg
+*.nav
+*.snm
+*.vrb
+
+# Ignore PDF output (optional - remove this line if you want to commit the PDF)
+*.pdf
