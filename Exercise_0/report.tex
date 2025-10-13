@@ -24,9 +24,13 @@
 }
 \date{\today}
 
+
+
 \begin{document}
 
 \maketitle
+
+\newpage
 
 \section{Introduction and Dataset Selection}
 
@@ -61,25 +65,53 @@ TODO: add more details about the target attribute, such as its distribution and 
 \subsection{Data Preprocessing}
 TODO describe preprocessing steps, such as handling missing values, encoding categorical variables, and normalizing numerical features (including describing data ranges).
 
-
+\newpage
 \section{Dataset 2: Adult}
 
-The Adult/Census Income dataset is a binary classification problems where we have to determine if a person earns >50.000\$ per year or under.
-It was choosen because it provides real-world socioeconomic relevance and offers diverse attributes (categorical and numerical) and also requires preprocessing.
+The Adult/Census Income dataset is a binary classification problem where we have to determine if a person earns $>$50.000\$ per year or under.
+It was chosen because it provides real-world socioeconomic relevance and offers diverse attributes (categorical and numerical) and also requires preprocessing.
 
 \subsection{Dataset structure}
-The dataset looks as follows:
-\begin{itemize}[noitemsep]
-    \item 48.842 instances
-    \item 15 features (14 input attributes + 1 target)
-    \item 2 classes (binary classification: >50.000\$, <50.000\$)
-\end{itemize}
-The attributes are split as 6 numeric attributes (age, fnlwgt, education-num, capital-gain, capital-loss, hours-per-week) 
-and 9 nominal attributes (workclass, education, marital-status, occupation, relationship, race, sex, native-country, class(target)).
+The dataset contains 48.842 instances with 15 features (14 input attributes + 1 target) and 2 classes (binary classification: $>$50.000\$, $<$50.000\$).
+The attributes are split as 6 numeric attributes (age (17-90), fnlwgt (12,285-1,484,705), education-num (1-16), capital-gain (0-99,999), capital-loss (0-4,356), hours-per-week (1-99)) 
+and 9 nominal attributes (workclass, education, marital-status, occupation, relationship, race, sex, native-country, class(target)), where education is also ordinal, which means the order has to be preserved.
+The numeric attributes have completely different scales which means some sort of normalizing/scaling will be done.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images_adult/01_target_distribution.png}
+        \caption{Income class distribution showing significant class imbalance (76.1\% vs 23.9\%)}
+        \label{fig:target}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images_adult/06_missing_values.png}
+        \caption{Missing values in workclass, occupation, and native-country features}
+        \label{fig:missing}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images_adult/05_capital_gain_distribution_2.png}
+        \caption{Capital-gain distribution (non-zero only)}
+        \label{fig:capital}
+    \end{subfigure}
+    \label{fig:overview}
+\end{figure}
+The dataset contains significant class imbalance, as can be seen in Figure~\ref{fig:target} with (76.1\% $\leq$ 50.000\$ vs. 23.9\% $> 50.000\$ $), which could impact model evaluation accuracy.
 
+In Figure~\ref{fig:missing} we can see that the dataset contains 6.465 missing values across the 3 features occupation, workclass and native-country. 
+Also the features capital-gain and capital-loss are highly skewed and will require some sort of transformation, which can be observed in Figure~\ref{fig:capital}.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{images_adult/07_education_vs_income.png}
+    \caption{Relationship between education level and income, showing strong correlation between higher education and income above 50.000\$}
+    \label{fig:education_income}
+\end{figure}
 
-
-
+We can also observe a strong correlation between education level and the predicted income in Figure~\ref{fig:education_income}, since people with a professional degree have a 72\% chance of earning $>50.000\$$, while people with only pre-school have a 2\% chance.
 \end{document}
