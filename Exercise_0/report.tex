@@ -35,13 +35,39 @@ In this report, we describe two datasets selected for our machine learning analy
 
 \section{Dataset 1: Road Safety}
 
+The Road Safety (TODO: add hyperlink here with the OpenML dataset ID) dataset contains information about road accidents in the UK from 1979 to 2015. It was chosen for its rich feature set, including categorical and numerical data, and its relevancy for traffic safety analysis.
+
+\subsection{Dataset structure}
+The dataset contains:
+\begin{itemize}[noitemsep]
+    \item 67 features
+    \item 363,243 instances
+\end{itemize}
+Given the large number of features, we will focus on a subset of relevant attributes for our analysis, including:
+\begin{itemize}[noitemsep]
+    \item Age\_of\_Driver: ratio attribute
+    \item Age\_of\_Casualty: ratio attribute
+    \item 1st\_Point\_of\_Impact: nominal attribute
+    \item Sex\_of\_Driver: nominal attribute
+    \item Sex\_of\_Casualty: nominal attribute
+    \item Weather\_Conditions: nominal attribute
+    \item Road\_Surface\_Conditions: nominal attribute
+\end{itemize}
+
+\subsection{Target Attribute}
+The target attribute for this dataset is the accident severity. This is a categorical variable with three possible values: fatal, serious, and slight.
+TODO: add more details about the target attribute, such as its distribution and importance. ALSO check actual severity value labels once dataset is loaded.
+
+\subsection{Data Preprocessing}
+TODO describe preprocessing steps, such as handling missing values, encoding categorical variables, and normalizing numerical features (including describing data ranges).
+
 
 \section{Dataset 2: Adult}
 
 The Adult/Census Income dataset is a binary classification problems where we have to determine if a person earns >50.000\$ per year or under.
-It was choosen because it provides real-worls socialeconomic relevance and offers diverse attributes (categorical and numerical) and also requires preprocessing.
+It was choosen because it provides real-world socioeconomic relevance and offers diverse attributes (categorical and numerical) and also requires preprocessing.
 
-\subsection(Dataset structure)
+\subsection{Dataset structure}
 The dataset looks as follows:
 \begin{itemize}[noitemsep]
     \item 48.842 instances
@@ -53,8 +79,6 @@ and 9 nominal attributes (workclass, education, marital-status, occupation, rela
 
 
 
-
-\subsection
 
 
 
