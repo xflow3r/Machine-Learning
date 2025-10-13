@@ -32,23 +32,29 @@
 
 In this report, we describe two datasets selected for our machine learning analysis: the \textbf{Road Safety Dataset} and the \textbf{Adult (Census Income) Dataset}. These datasets were chosen to satisfy the requirement of having different characteristics across multiple dimensions.
 
-\subsection{Rationale for Dataset Selection}
-
-The Road Safety dataset and Adult dataset provide strong contrasts in the following areas:
-
-\begin{itemize}[noitemsep]
-    \item \textbf{Sample size}: Road Safety contains 363,243 instances while Adult contains 48,842 instances (large vs. medium)
-    \item \textbf{Dimensionality}: Road Safety has 67 features while Adult has 14 features (high vs. low dimensional)
-    \item \textbf{Attribute types}: Road Safety is predominantly numeric (91\%) while Adult has a balanced mix of numeric and categorical attributes
-    \item \textbf{Missing values}: Road Safety contains 2,181,757 missing values while Adult has moderate missing values in specific columns
-    \item \textbf{Preprocessing requirements}: Different preprocessing strategies are needed for each dataset
-\end{itemize}
-
 
 \section{Dataset 1: Road Safety}
 
 
-\section{Dataset 2: adult}
+\section{Dataset 2: Adult}
+
+The Adult/Census Income dataset is a binary classification problems where we have to determine if a person earns >50.000\$ per year or under.
+It was choosen because it provides real-worls socialeconomic relevance and offers diverse attributes (categorical and numerical) and also requires preprocessing.
+
+\subsection(Dataset structure)
+The dataset looks as follows:
+\begin{itemize}[noitemsep]
+    \item 48.842 instances
+    \item 15 features (14 input attributes + 1 target)
+    \item 2 classes (binary classification: >50.000\$, <50.000\$)
+\end{itemize}
+The attributes are split as 6 numeric attributes (age, fnlwgt, education-num, capital-gain, capital-loss, hours-per-week) 
+and 9 nominal attributes (workclass, education, marital-status, occupation, relationship, race, sex, native-country, class(target)).
+
+
+
+
+\subsection
 
 
 
