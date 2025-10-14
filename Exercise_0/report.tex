@@ -66,52 +66,28 @@ TODO: add more details about the target attribute, such as its distribution and 
 TODO describe preprocessing steps, such as handling missing values, encoding categorical variables, and normalizing numerical features (including describing data ranges).
 
 \newpage
-\section{Dataset 2: Adult}
+\section{Dataset 2: Website Phishing}
+The Website Phishing dataset is a multi-class classification problem where we have to determine if a website is legitimate, suspicious, or phishing. It was chosen because it addresses a critical cybersecurity challenge in e-commerce and e-banking and provides diverse integer-encoded features representing various URL and website characteristics.
+It will also require some preprocessing due to class imbalance. It is also a nice contrast to the first dataset since we are working with no numerical data and a small dataset compared to only numerical data and a large dataset.
 
-The Adult/Census Income dataset is a binary classification problem where we have to determine if a person earns $>$50.000\$ per year or under.
-It was chosen because it provides real-world socioeconomic relevance and offers diverse attributes (categorical and numerical) and also requires preprocessing.
 
 \subsection{Dataset structure}
-The dataset contains 48.842 instances with 15 features (14 input attributes + 1 target) and 2 classes (binary classification: $>$50.000\$, $<$50.000\$).
-The attributes are split as 6 numeric attributes (age (17-90), fnlwgt (12,285-1,484,705), education-num (1-16), capital-gain (0-99,999), capital-loss (0-4,356), hours-per-week (1-99)) 
-and 9 nominal attributes (workclass, education, marital-status, occupation, relationship, race, sex, native-country, class(target)), where education is also ordinal, which means the order has to be preserved.
-The numeric attributes have completely different scales which means some sort of normalizing/scaling will be done.
+The dataset contains 1.353 instances with 10 features (9 input attributes + 1 target) and 3 classes (legitimate, suspicious, phishing). 
+All attributes are integer-encoded categorical features with values ranging from -1 to 1: SFH (Server Form Handler), popUpWindow, SSLfinal\_State, Request\_URL, URL\_of\_Anchor, web\_traffic, URL\_Length, age\_of\_domain, having\_IP\_Address, and Result (target). 
+Some features like age\_of\_domain, web\_traffic, and URL\_Length are ordinal with natural ordering, while others like having\_IP\_Address are nominal.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.32\textwidth}
+    \begin{subfigure}[b]{1\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{images_adult/01_target_distribution.png}
-        \caption{Income class distribution showing significant class imbalance (76.1\% vs 23.9\%)}
-        \label{fig:target}
+        \includegraphics[width=\textwidth]{images_adult/phishing_dataset_2plots.png}
     \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.32\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images_adult/06_missing_values.png}
-        \caption{Missing values in workclass, occupation, and native-country features}
-        \label{fig:missing}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.32\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images_adult/05_capital_gain_distribution_2.png}
-        \caption{Capital-gain distribution (non-zero only)}
-        \label{fig:capital}
-    \end{subfigure}
-    \label{fig:overview}
-\end{figure}
-The dataset contains significant class imbalance, as can be seen in Figure~\ref{fig:target} with (76.1\% $\leq$ 50.000\$ vs. 23.9\% $> 50.000\$ $), which could impact model evaluation accuracy.
-
-In Figure~\ref{fig:missing} we can see that the dataset contains 6.465 missing values across the 3 features occupation, workclass and native-country. 
-Also the features capital-gain and capital-loss are highly skewed and will require some sort of transformation, which can be observed in Figure~\ref{fig:capital}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.65\textwidth]{images_adult/07_education_vs_income.png}
-    \caption{Relationship between education level and income, showing strong correlation between higher education and income above 50.000\$}
-    \label{fig:education_income}
+    \caption{(Left) Class distribution. (Right) Risky feature indicators .}
+    \label{fig:phishing_overview}
 \end{figure}
 
-We can also observe a strong correlation between education level and the predicted income in Figure~\ref{fig:education_income}, since people with a professional degree have a 72\% chance of earning $>50.000\$$, while people with only pre-school have a 2\% chance.
+As shown in Figure~\ref{fig:phishing_overview}, the dataset shows some class imbalance with the suspicious class representing only 7.6\% of cases, which will require some processing like class weights during training.
+The risky feature analysis shows that SFH (Server Form Handler) and SSLfinal\_State are the strongest indicators for phishing sites showing 62\% and 43\% suspicious indicators respectively. Meanwhile the same features appear only around 10\% in legitimate sites. 
+It is also important to note that no popUpWindow was found on phishing sites in this dataset.
+
 \end{document}
