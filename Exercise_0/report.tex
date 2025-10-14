@@ -70,7 +70,6 @@ TODO describe preprocessing steps, such as handling missing values, encoding cat
 The Website Phishing dataset is a multi-class classification problem where we have to determine if a website is legitimate, suspicious, or phishing. It was chosen because it addresses a critical cybersecurity challenge in e-commerce and e-banking and provides diverse integer-encoded features representing various URL and website characteristics.
 It will also require some preprocessing due to class imbalance. It is also a nice contrast to the first dataset since we are working with no numerical data and a small dataset compared to only numerical data and a large dataset.
 
-
 \subsection{Dataset structure}
 The dataset contains 1.353 instances with 10 features (9 input attributes + 1 target) and 3 classes (legitimate, suspicious, phishing). 
 All attributes are integer-encoded categorical features with values ranging from -1 to 1: SFH (Server Form Handler), popUpWindow, SSLfinal\_State, Request\_URL, URL\_of\_Anchor, web\_traffic, URL\_Length, age\_of\_domain, having\_IP\_Address, and Result (target). 
@@ -80,7 +79,7 @@ Some features like age\_of\_domain, web\_traffic, and URL\_Length are ordinal wi
     \centering
     \begin{subfigure}[b]{1\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{images_adult/phishing_dataset_2plots.png}
+        \includegraphics[width=\textwidth]{images_phishingWebsites/phishing_dataset_2plots.png}
     \end{subfigure}
     \caption{(Left) Class distribution. (Right) Risky feature indicators .}
     \label{fig:phishing_overview}
