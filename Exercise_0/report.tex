@@ -39,9 +39,12 @@ In this report, we describe two datasets selected for our machine learning analy
 
 \section{Dataset 1: Road Safety}
 
-The Road Safety (TODO: add hyperlink here with the OpenML dataset ID) dataset contains information about road accidents in the UK from 1979 to 2015. It was chosen for its rich feature set, including categorical and numerical data, and its relevancy for traffic safety analysis.
+The Road Safety dataset contains information about road accidents in the UK from 1979 to 2015. It was chosen for its rich feature set, including categorical and numerical data, and its relevancy for traffic safety analysis.
 
 \subsection{Dataset structure}
+For more details, see the Road Safety dataset on OpenML: 
+\href{https://www.openml.org/d/42803}{OpenML Dataset 42803}
+
 The dataset contains:
 \begin{itemize}[noitemsep]
     \item 67 features
@@ -49,21 +52,21 @@ The dataset contains:
 \end{itemize}
 Given the large number of features, we will focus on a subset of relevant attributes for our analysis, including:
 \begin{itemize}[noitemsep]
-    \item Age\_of\_Driver: ratio attribute
-    \item Age\_of\_Casualty: ratio attribute
     \item 1st\_Point\_of\_Impact: nominal attribute
-    \item Sex\_of\_Driver: nominal attribute
-    \item Sex\_of\_Casualty: nominal attribute
     \item Weather\_Conditions: nominal attribute
     \item Road\_Surface\_Conditions: nominal attribute
+    \item Light\_Conditions: nominal attribute
+    \item Vehicle\_Type: nominal attribute
+    \item Casualty\_Severity: ordinal attribute
+    \item Day\_of\_Week: nominal attribute
+    \item Car\_Passenger: nominal attribute
 \end{itemize}
 
 \subsection{Target Attribute}
-The target attribute for this dataset is the accident severity. This is a categorical variable with three possible values: fatal, serious, and slight.
-TODO: add more details about the target attribute, such as its distribution and importance. ALSO check actual severity value labels once dataset is loaded.
+The planned target attribute for this dataset will be the Age Band of the Driver. This is an interval variable, with possible values 0 - 5, 6 - 10, 11 - 15, 16 - 20, 21 - 25, 26 - 35, 36 - 45, 46 - 55, 56 - 65, 66 - 75, and Over 75.
 
 \subsection{Data Preprocessing}
-TODO describe preprocessing steps, such as handling missing values, encoding categorical variables, and normalizing numerical features (including describing data ranges).
+Depending on the individual crash report, several fields may contain missing data, which will need to be addressed during preprocessing. Additionally, Vehicle\_Type is currently encoded as a categorical variable via a numeric value, but its distribution has several gaps between values, so could be adjusted to be smoother. Depending on the vehicle type, the categories could also be rearranged in terms of size and power (CC) to make the numeric encoding more meaningful.
 
 \newpage
 \section{Dataset 2: Website Phishing}

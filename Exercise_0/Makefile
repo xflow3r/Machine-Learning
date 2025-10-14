@@ -12,4 +12,5 @@ clean:
 	@for ext in $(LATEX_EXTS); do \
 		rm -f $(REPORT).$$ext; \
 	done
+	rm -f images_road_safety/*.png
 	@echo "Done."
