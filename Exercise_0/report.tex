@@ -72,7 +72,7 @@ It will also require some preprocessing due to class imbalance. It is also a nic
 
 \subsection{Dataset structure}
 The dataset contains 1.353 instances with 10 features (9 input attributes + 1 target) and 3 classes (legitimate, suspicious, phishing). 
-All attributes are integer-encoded categorical features with values ranging from -1 to 1: SFH (Server Form Handler), popUpWindow, SSLfinal\_State, Request\_URL, URL\_of\_Anchor, web\_traffic, URL\_Length, age\_of\_domain, having\_IP\_Address, and Result (target). 
+All attributes are integer-encoded categorical features with values ranging from -1 to 1 (except having\_IP\_Address which is 0, 1): SFH (Server Form Handler), popUpWindow, SSLfinal\_State, Request\_URL, URL\_of\_Anchor, web\_traffic, URL\_Length, age\_of\_domain, having\_IP\_Address, and Result (target). 
 Some features like age\_of\_domain, web\_traffic, and URL\_Length are ordinal with natural ordering, while others like having\_IP\_Address are nominal.
 
 \begin{figure}[H]
