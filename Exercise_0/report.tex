@@ -29,12 +29,12 @@
 \begin{document}
 
 \maketitle
-
-\newpage
-
 \section{Introduction and Dataset Selection}
 
 In this report, we describe two datasets selected for our machine learning analysis: the \textbf{Road Safety Dataset} and the \textbf{Adult (Census Income) Dataset}. These datasets were chosen to satisfy the requirement of having different characteristics across multiple dimensions.
+
+
+\newpage
 
 
 \section{Dataset 1: Road Safety}
@@ -52,26 +52,26 @@ The dataset contains:
 \end{itemize}
 Given the large number of features, we will focus on a subset of relevant attributes for our analysis, including:
 \begin{itemize}[noitemsep]
-    \item 1st\_Point\_of\_Impact: nominal attribute
-    \item Weather\_Conditions: nominal attribute
-    \item Road\_Surface\_Conditions: nominal attribute
-    \item Light\_Conditions: nominal attribute
-    \item Vehicle\_Type: nominal attribute
-    \item Casualty\_Severity: ordinal attribute
-    \item Day\_of\_Week: nominal attribute
-    \item Car\_Passenger: nominal attribute
+    \item \textbf{1st\_Point\_of\_Impact}: nominal attribute (Front, Back, Offside, Nearside, No impact)
+    \item \textbf{Weather\_Conditions}: nominal attribute (Fine, Rain, Snow, High Winds, Rain + High Winds, Snow + High Winds, Fog or mist, Other)
+    \item \textbf{Road\_Surface\_Conditions}: nominal attribute (Dry, Wet or damp, Snow, Frost or ice, Flood over 3cm. deep, Oil or diesel, Mud)
+    \item \textbf{Light\_Conditions}: nominal attribute (Daylight, Darkness - lights lit, Darkness - lights unlit, Darkness - no lighting, Darkness - lighting unknown, Data missing or out of range)
+    \item \textbf{Vehicle\_Type}: nominal attribute (28 types) - May need to further preprocess into weight classes or power classes
+    \item \textbf{Casualty\_Severity}: ordinal attribute (Fatal, Serious, Slight)
+    \item \textbf{Day\_of\_Week}: nominal attribute
+    \item \textbf{Car\_Passenger}: nominal attribute (No passenger, Front seat passenger, Rear seat passenger)
 \end{itemize}
 
 \subsection{Target Attribute}
 The planned target attribute for this dataset will be the Age Band of the Driver. This is an interval variable, with possible values 0 - 5, 6 - 10, 11 - 15, 16 - 20, 21 - 25, 26 - 35, 36 - 45, 46 - 55, 56 - 65, 66 - 75, and Over 75.
 
 \subsection{Data Preprocessing}
-Depending on the individual crash report, several fields may contain missing data, which will need to be addressed during preprocessing. Additionally, Vehicle\_Type is currently encoded as a categorical variable via a numeric value, but its distribution has several gaps between values, so could be adjusted to be smoother. Depending on the vehicle type, the categories could also be rearranged in terms of size and power (CC) to make the numeric encoding more meaningful.
+Depending on the individual crash report, several fields contain missing data, which will need to be addressed during preprocessing. Additionally, Vehicle\_Type is currently encoded as a categorical variable via a numeric value, but its distribution has several gaps between values, so could be adjusted to be smoother. Depending on the vehicle type, the categories could also be rearranged in terms of size and power (CC) to make the numeric encoding more meaningful.
 
 \newpage
 \section{Dataset 2: Website Phishing}
 The Website Phishing dataset is a multi-class classification problem where we have to determine if a website is legitimate, suspicious, or phishing. It was chosen because it addresses a critical cybersecurity challenge in e-commerce and e-banking and provides diverse integer-encoded features representing various URL and website characteristics.
-It will also require some preprocessing due to class imbalance. It is also a nice contrast to the first dataset since we are working with no numerical data and a small dataset compared to only numerical data and a large dataset.
+It will also require some preprocessing due to class imbalance. It is a nice contrast to the first dataset since the target attribute is nominal and a small dataset compared to an interval target attribute and a large dataset.
 
 \subsection{Dataset structure}
 The dataset contains 1.353 instances with 10 features (9 input attributes + 1 target) and 3 classes (legitimate, suspicious, phishing). 

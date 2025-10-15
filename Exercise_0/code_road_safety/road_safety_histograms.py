@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import openml
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -19,7 +20,7 @@ INPUT_ATTRS = [
 ]
 TARGET_ATTR = 'Age_Band_of_Driver'
 
-PLOT_OUTPUT_DIR = 'images_road_safety'
+PLOT_OUTPUT_DIR = os.path.join(os.getcwd(), '..', 'images_road_safety')
 
 
 def plot_histograms(df: pd.DataFrame) -> None:
