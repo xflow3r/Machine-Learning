@@ -21,7 +21,8 @@ INPUT_ATTRS = [
 TARGET_ATTR = 'Age_Band_of_Driver'
 
 PLOT_OUTPUT_DIR = os.path.join(os.getcwd(), '..', 'images_road_safety')
-
+if not os.path.exists(PLOT_OUTPUT_DIR):
+    os.makedirs(PLOT_OUTPUT_DIR)
 
 def plot_histograms(df: pd.DataFrame) -> None:
     # Input attributes histograms
