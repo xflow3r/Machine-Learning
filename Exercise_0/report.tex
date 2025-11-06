@@ -29,46 +29,58 @@
 \begin{document}
 
 \maketitle
-
-\newpage
-
 \section{Introduction and Dataset Selection}
 
 In this report, we describe two datasets selected for our machine learning analysis: the \textbf{Road Safety Dataset} and the \textbf{Adult (Census Income) Dataset}. These datasets were chosen to satisfy the requirement of having different characteristics across multiple dimensions.
 
 
+\newpage
+
+
 \section{Dataset 1: Road Safety}
 
-The Road Safety (TODO: add hyperlink here with the OpenML dataset ID) dataset contains information about road accidents in the UK from 1979 to 2015. It was chosen for its rich feature set, including categorical and numerical data, and its relevancy for traffic safety analysis.
+The Road Safety dataset contains information about road accidents in the UK from 1979 to 2015. It was chosen for its rich feature set, including categorical and numerical data, and its relevancy for traffic safety analysis.
 
 \subsection{Dataset structure}
-The dataset contains:
-\begin{itemize}[noitemsep]
-    \item 67 features
-    \item 363,243 instances
-\end{itemize}
-Given the large number of features, we will focus on a subset of relevant attributes for our analysis, including:
-\begin{itemize}[noitemsep]
-    \item Age\_of\_Driver: ratio attribute
-    \item Age\_of\_Casualty: ratio attribute
-    \item 1st\_Point\_of\_Impact: nominal attribute
-    \item Sex\_of\_Driver: nominal attribute
-    \item Sex\_of\_Casualty: nominal attribute
-    \item Weather\_Conditions: nominal attribute
-    \item Road\_Surface\_Conditions: nominal attribute
-\end{itemize}
+For more details, see the Road Safety dataset on OpenML:
+\href{https://www.openml.org/d/42803}{OpenML Dataset 42803} \newline
+The dataset contains 363,243 instances with 67 possible features, although depending
+on the individual crash report, not all features are populated. Some of the key 
+features include: \textbf{1st\_Point\_of\_Impact, Weather\_Conditions, Road\_Surface\_Conditions, Light\_Conditions, Vehicle\_Type, Casualty\_Severity, Day\_of\_Week, Car\_Passenger}. These features provide a mixture of integer-encoded nominal and ordinal attributes of differing ranges, which will allow us to explore various preprocessing techniques.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.18\textheight]{images_road_safety/Casualty_Severity_histogram.png}
+        \caption{Casualty Severity Distribution}
+        \label{fig:casualty_severity}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.18\textheight]{images_road_safety/1st_Point_of_Impact_histogram.png}
+        \caption{Distribution of 1st Point of Impact}
+        \label{fig:1st_point_of_impact}
+    \end{subfigure}
+\end{figure}
 \subsection{Target Attribute}
-The target attribute for this dataset is the accident severity. This is a categorical variable with three possible values: fatal, serious, and slight.
-TODO: add more details about the target attribute, such as its distribution and importance. ALSO check actual severity value labels once dataset is loaded.
+The planned target attribute for this dataset will be the Age Band of the Driver. This is an interval variable, with possible values 0 - 5, 6 - 10, 11 - 15, 16 - 20, 21 - 25, 26 - 35, 36 - 45, 46 - 55, 56 - 65, 66 - 75, and Over 75.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth, height=0.18\textheight]{images_road_safety/age_band_of_driver_histogram.png}
+    \caption{Distribution of Age Band of Driver}
+    \label{fig:age_band_of_driver}
+\end{figure}
 
 \subsection{Data Preprocessing}
-TODO describe preprocessing steps, such as handling missing values, encoding categorical variables, and normalizing numerical features (including describing data ranges).
+Depending on the individual crash report, several fields contain missing data, which will need to be addressed during preprocessing. Additionally, Vehicle\_Type is currently encoded as a categorical variable via a numeric value, but its distribution has several gaps between values, so could be adjusted to be smoother. Depending on the vehicle type, the categories could also be rearranged in terms of size and power (CC) to make the numeric encoding more meaningful.
 
 \newpage
 \section{Dataset 2: Website Phishing}
 The Website Phishing dataset is a multi-class classification problem where we have to determine if a website is legitimate, suspicious, or phishing. It was chosen because it addresses a critical cybersecurity challenge in e-commerce and e-banking and provides diverse integer-encoded features representing various URL and website characteristics.
-It will also require some preprocessing due to class imbalance. It is also a nice contrast to the first dataset since we are working with no numerical data and a small dataset compared to only numerical data and a large dataset.
+It will also require some preprocessing due to class imbalance. It is a nice contrast to the first dataset since the target attribute is nominal and a small dataset compared to an interval target attribute and a large dataset.
 
 \subsection{Dataset structure}
 The dataset contains 1.353 instances with 10 features (9 input attributes + 1 target) and 3 classes (legitimate, suspicious, phishing). 

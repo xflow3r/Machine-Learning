@@ -10,3 +10,34 @@ make clean
 ```
 
 This command will delete all auxiliary files and the generated PDF, to make a clean slate for the next compilation.
+
+## Road Safety Dataset Histograms
+
+A Python script is provided to download the Road Safety dataset from OpenML and generate histograms for key attributes.
+
+### Setup Instructions
+1. Create a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+2. Install required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Run the Script
+To generate and show the histograms, run:
+```bash
+python road_safety_histograms.py
+```
+
+This will download the dataset and display histograms for:
+- Age_of_Driver
+- Age_of_Casualty
+- Sex_of_Driver
+- Sex_of_Casualty
+- Weather_Conditions
+- Accident_Index (target)
+
+Graphs use the colors #3498db and #e74c3c for visual distinction.
