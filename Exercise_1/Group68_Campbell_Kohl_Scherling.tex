@@ -1,0 +1,632 @@
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[margin=1in]{geometry}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue
+}
+
+% Code listing style (if needed)
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    showstringspaces=false
+}
+
+\title{\textbf{Exercise 1: Classification\\
+VU Machine Learning 2025W}}
+
+\author{
+    Group00\\[0.3cm]
+    Student Name 1 (Matriculation Number)\\
+    Student Name 2 (Matriculation Number)\\
+    Student Name 3 (Matriculation Number)
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+\tableofcontents
+\newpage
+
+\setcounter{page}{1}
+
+%=============================================================================
+\section{Introduction}
+\label{sec:introduction}
+
+% Brief overview of the exercise objectives
+% What you aim to investigate
+% Structure of the report
+
+This report presents our work on Exercise 1 of the Machine Learning course, focusing on classification tasks across multiple datasets using different algorithms. The main objectives are to experiment with various classifier-dataset combinations, analyze preprocessing strategies, evaluate performance using multiple metrics, and compare holdout and cross-validation approaches.
+
+
+%=============================================================================
+\section{Datasets}
+\label{sec:datasets}
+
+% Describe each of the 4 datasets
+% 2 from Kaggle competition
+% 2 from Exercise 0
+% Justify your choice - explain diversity:
+%   - number of samples (small vs large)
+%   - number of dimensions (low vs high)
+%   - number of classes (few vs many)
+%   - preprocessing needs
+
+We selected four diverse datasets to comprehensively evaluate classifier performance across different data characteristics:
+
+\subsection{Dataset 1: [Kaggle Dataset Name]}
+\label{subsec:dataset1}
+
+\textbf{Source:} Kaggle Competition (Course-specific)
+
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Number of samples (train/test): XX / XX
+    \item Number of features: XX
+    \item Number of classes: XX
+    \item Feature types: [numerical/categorical/mixed]
+    \item Class distribution: [balanced/imbalanced]
+\end{itemize}
+
+\textbf{Description:} [Brief description of what the dataset represents]
+
+\textbf{Challenges:} [e.g., missing values, outliers, high dimensionality, class imbalance]
+
+\subsection{Dataset 2: [Kaggle Dataset Name]}
+\label{subsec:dataset2}
+
+\textbf{Source:} Kaggle Competition (Course-specific)
+
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Number of samples (train/test): XX / XX
+    \item Number of features: XX
+    \item Number of classes: XX
+    \item Feature types: [numerical/categorical/mixed]
+    \item Class distribution: [balanced/imbalanced]
+\end{itemize}
+
+\textbf{Description:} [Brief description]
+
+\textbf{Challenges:} [Specific challenges]
+
+\subsection{Dataset 3: [Exercise 0 Dataset Name]}
+\label{subsec:dataset3}
+
+\textbf{Source:} Exercise 0
+
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Number of samples: XX
+    \item Number of features: XX
+    \item Number of classes: XX
+    \item Feature types: [numerical/categorical/mixed]
+    \item Class distribution: [balanced/imbalanced]
+\end{itemize}
+
+\textbf{Description:} [Brief description]
+
+\textbf{Challenges:} [Specific challenges]
+
+\subsection{Dataset 4: [Exercise 0 Dataset Name]}
+\label{subsec:dataset4}
+
+\textbf{Source:} Exercise 0
+
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Number of samples: XX
+    \item Number of features: XX
+    \item Number of classes: XX
+    \item Feature types: [numerical/categorical/mixed]
+    \item Class distribution: [balanced/imbalanced]
+\end{itemize}
+
+\textbf{Description:} [Brief description]
+
+\textbf{Challenges:} [Specific challenges]
+
+\subsection{Dataset Selection Rationale}
+\label{subsec:dataset_rationale}
+
+Our dataset selection ensures diversity across multiple dimensions:
+
+
+\centering
+
+%=============================================================================
+\section{Data Preprocessing}
+\label{sec:preprocessing}
+
+% Describe preprocessing steps for each dataset
+% Justify why you chose these steps
+% Discuss impact of preprocessing (especially scaling) on results
+
+This section describes the preprocessing steps applied to each dataset and justifies these choices based on data characteristics and classifier requirements.
+
+\subsection{General Preprocessing Pipeline}
+
+Our preprocessing pipeline follows these general steps:
+\begin{enumerate}
+    \item Data loading and initial exploration
+    \item Handling missing values
+    \item Outlier detection and treatment
+    \item Feature encoding (for categorical variables)
+    \item Feature scaling/normalization
+    \item Feature selection (if applicable)
+\end{enumerate}
+
+\subsection{Dataset-Specific Preprocessing}
+
+\subsubsection{Dataset 1 Preprocessing}
+
+\textbf{Missing Values:} [Strategy used and justification]
+
+\textbf{Outliers:} [Detection method and treatment]
+
+\textbf{Encoding:} [e.g., One-Hot Encoding for categorical features]
+
+\textbf{Scaling:} [e.g., StandardScaler, MinMaxScaler, or none]
+\begin{itemize}
+    \item \textit{Justification:} [Why this scaling method was chosen]
+\end{itemize}
+
+\subsubsection{Dataset 2 Preprocessing}
+
+[Similar structure as Dataset 1]
+
+\subsubsection{Dataset 3 Preprocessing}
+
+[Similar structure]
+
+\subsubsection{Dataset 4 Preprocessing}
+
+[Similar structure]
+
+\subsection{Impact of Preprocessing on Performance}
+
+To evaluate the impact of preprocessing, we compared classifier performance with and without key preprocessing steps, particularly scaling.
+
+
+%=============================================================================
+\section{Classifiers}
+\label{sec:classifiers}
+
+% Describe the 3 chosen classifiers
+% Must be from at least 2 different paradigms/types
+% Explain characteristics (brief, don't repeat lecture material)
+% Justify your choice
+
+We selected three classifiers from different learning paradigms to ensure comprehensive evaluation:
+
+\subsection{Classifier 1: [e.g., Random Forest]}
+\label{subsec:classifier1}
+
+\textbf{Type/Paradigm:} Ensemble Learning / Tree-based
+
+\textbf{Key Characteristics:}
+\begin{itemize}
+    \item [List 3-5 key characteristics]
+    \item [e.g., Handles non-linear relationships]
+    \item [e.g., Robust to outliers]
+    \item [e.g., Provides feature importance]
+\end{itemize}
+
+\textbf{Expected Strengths:} [What types of datasets/problems is it good for?]
+
+\textbf{Expected Weaknesses:} [What are its limitations?]
+
+\subsection{Classifier 2: [e.g., Support Vector Machine]}
+\label{subsec:classifier2}
+
+\textbf{Type/Paradigm:} Kernel-based / Maximum Margin
+
+\textbf{Key Characteristics:}
+\begin{itemize}
+    \item [List key characteristics]
+\end{itemize}
+
+\textbf{Expected Strengths:} [Strengths]
+
+\textbf{Expected Weaknesses:} [Weaknesses]
+
+\subsection{Classifier 3: [e.g., Neural Network / Logistic Regression]}
+\label{subsec:classifier3}
+
+\textbf{Type/Paradigm:} [Different from above two]
+
+\textbf{Key Characteristics:}
+\begin{itemize}
+    \item [List key characteristics]
+\end{itemize}
+
+\textbf{Expected Strengths:} [Strengths]
+
+\textbf{Expected Weaknesses:} [Weaknesses]
+
+\subsection{Classifier Selection Rationale}
+
+We selected these three classifiers to ensure:
+\begin{itemize}
+    \item Diversity in learning paradigms (at least two different types)
+    \item Coverage of different algorithmic approaches
+    \item Ability to evaluate performance across various data characteristics
+    \item [Additional justification]
+\end{itemize}
+
+%=============================================================================
+\section{Experimental Methodology}
+\label{sec:methodology}
+
+% Explain your experimental setup
+% How you ensure fair comparison
+% Performance measures and why you chose them
+% Parameter settings explored
+% Train/test split strategy
+
+\subsection{Experimental Design}
+
+Our experimental design follows a systematic approach to ensure valid and reproducible results:
+
+
+
+\subsection{Ensuring Fair Comparison}
+
+To ensure meaningful comparisons, we:
+
+\begin{itemize}
+    \item Used the same train-test splits for all classifiers on each dataset
+    \item Applied consistent preprocessing for each dataset
+    \item Used the same random seed for reproducibility: [SEED\_VALUE]
+    \item Evaluated all classifiers using identical metrics
+    \item Normalized/scaled data appropriately for classifiers that require it
+    \item [Additional measures taken]
+\end{itemize}
+
+\subsection{Performance Measures}
+
+
+We selected multiple performance measures to comprehensively evaluate classifier effectiveness:
+
+
+
+\subsubsection{Additional Metrics}
+\begin{itemize}
+    \item \textbf{Confusion Matrix:} For detailed error analysis
+    \item \textbf{ROC-AUC:} [If applicable for binary/multi-class]
+    \item \textbf{Training Time:} To evaluate efficiency
+    \item \textbf{Prediction Time:} For real-world deployment considerations
+\end{itemize}
+
+\textit{Note:} For multi-class problems, we use [macro/weighted] averaging for precision, recall, and F1-score because [justification].
+
+\subsection{Parameter Exploration}
+
+For each classifier, we explored multiple parameter configurations:
+
+\subsubsection{Classifier 1 Parameters}
+\begin{itemize}
+    \item \textbf{Parameter 1:} [Values tested and why]
+    \item \textbf{Parameter 2:} [Values tested and why]
+    \item \textbf{Parameter 3:} [Values tested and why]
+\end{itemize}
+
+\subsubsection{Classifier 2 Parameters}
+[Similar structure]
+
+\subsubsection{Classifier 3 Parameters}
+[Similar structure]
+
+\subsection{Computational Environment}
+
+All experiments were conducted in the following environment:
+\begin{itemize}
+    \item \textbf{Hardware:} [CPU, RAM specifications]
+    \item \textbf{Software:} Python 3.X, scikit-learn X.X.X, [other libraries]
+    \item \textbf{Random Seed:} [Fixed seed value for reproducibility]
+\end{itemize}
+
+%=============================================================================
+\section{Results}
+\label{sec:results}
+
+% Present your experimental results
+% Use tables and figures
+% Results for each dataset-classifier combination
+% Different parameter settings
+% Be clear and organized
+
+This section presents the experimental results for all dataset-classifier combinations. Results are organized by dataset, with comprehensive performance metrics for each classifier configuration.
+
+\subsection{Dataset 1 Results}
+
+\subsubsection{Overall Performance Comparison}
+
+
+
+
+\subsubsection{Parameter Sensitivity Analysis}
+
+
+
+\subsubsection{Confusion Matrices}
+
+
+
+\subsection{Dataset 2 Results}
+
+[Similar structure as Dataset 1]
+
+\subsection{Dataset 3 Results}
+
+[Similar structure]
+
+\subsection{Dataset 4 Results}
+
+[Similar structure]
+
+\subsection{Aggregated Results Overview}
+
+
+
+%=============================================================================
+\section{Analysis and Discussion}
+
+
+% Analyze and discuss your results
+% Compare classifiers across datasets
+% Identify patterns and trends
+% Discuss parameter sensitivity
+% Explain preprocessing impact
+% Discuss what worked and what didn't
+
+\subsection{Classifier Performance Comparison}
+
+\subsubsection{Overall Performance Trends}
+
+
+
+\textbf{Key Findings:}
+\begin{itemize}
+    \item [Finding 1: e.g., "Classifier A consistently outperformed others on high-dimensional datasets"]
+    \item [Finding 2: e.g., "Classifier B showed best performance on imbalanced datasets"]
+    \item [Finding 3]
+\end{itemize}
+
+\subsubsection{Dataset-Specific Observations}
+
+\textbf{Small vs. Large Datasets:}
+[Discuss how classifiers performed differently based on dataset size]
+
+\textbf{Low vs. High Dimensional Datasets:}
+[Discuss impact of dimensionality]
+
+\textbf{Few vs. Many Classes:}
+[Discuss how number of classes affected performance]
+
+\subsection{Parameter Sensitivity}
+
+\subsubsection{Classifier A Sensitivity}
+
+
+
+[Discuss which parameters had the most impact and why]
+
+\subsubsection{Classifier B Sensitivity}
+
+[Similar analysis]
+
+\subsubsection{Classifier C Sensitivity}
+
+[Similar analysis]
+
+\subsection{Preprocessing Impact}
+
+\subsubsection{Effect of Scaling}
+
+
+
+
+\subsubsection{Effect of Other Preprocessing Steps}
+
+[Discuss impact of outlier removal, missing value imputation, etc.]
+
+\subsection{Patterns and Trends}
+
+\subsubsection{Which Methods Work Well?}
+
+[Identify classifiers that consistently performed well and explain why]
+
+\subsubsection{Which Methods Did Not Work Well?}
+
+[Identify classifiers that underperformed and explain potential reasons]
+
+\subsubsection{Is There One Method Outperforming All Others?}
+
+[Discuss whether any single classifier dominated across all datasets or if performance was dataset-dependent]
+
+\subsection{Performance Improvements}
+
+\textbf{Strategies that Improved Results:}
+\begin{enumerate}
+    \item [e.g., "Hyperparameter tuning improved Classifier A by XX\%"]
+    \item [e.g., "Feature scaling was crucial for Classifier B"]
+    \item [e.g., "Handling class imbalance through SMOTE/class weights"]
+    \item [Additional strategies]
+\end{enumerate}
+
+\subsection{Efficiency Analysis}
+
+\subsubsection{Training Time Comparison}
+
+
+\subsubsection{Scalability with Dataset Size}
+
+
+
+[Discuss how runtime scaled with dataset size for each classifier]
+
+\subsection{Unexpected Findings and Issues}
+
+\textbf{Unexpected Results:}
+\begin{itemize}
+    \item [Any surprising observations]
+\end{itemize}
+
+\textbf{Challenges Encountered:}
+\begin{itemize}
+    \item [Technical issues, convergence problems, etc.]
+    \item [How you addressed them]
+\end{itemize}
+
+%=============================================================================
+\section{Holdout vs. Cross-Validation Comparison}
+\label{sec:holdout_cv}
+
+% Compare holdout to cross-validation
+% Pay attention to splits and settings
+% Are there differences? Why? In which metrics?
+
+To evaluate the robustness of our results, we compared holdout validation with k-fold cross-validation.
+
+\subsection{Methodology}
+
+\textbf{Holdout Validation:}
+\begin{itemize}
+    \item Train-test split: [e.g., 80-20]
+    \item Random seed: [SEED]
+    \item Single split used for all experiments
+\end{itemize}
+
+\textbf{Cross-Validation:}
+\begin{itemize}
+    \item Method: [e.g., 5-fold or 10-fold CV]
+    \item Stratified: [Yes/No and why]
+    \item Random seed: [SEED]
+\end{itemize}
+
+\subsection{Results Comparison}
+
+
+
+
+
+\subsection{Analysis}
+
+\subsubsection{Differences Observed}
+
+[Discuss whether holdout and CV results differ significantly]
+
+\subsubsection{Variance and Stability}
+
+[Discuss standard deviation from CV - which classifiers are more stable?]
+
+\subsubsection{Reasons for Differences}
+
+
+
+\subsubsection{Which Metrics Are Most Affected?}
+
+[Analyze if certain metrics (accuracy, precision, recall) show more variation between holdout and CV]
+
+\subsection{Recommendations}
+
+
+
+
+% Optional section: Discuss your Kaggle submissions
+% What strategies worked best?
+% How did you rank?
+
+\subsection{Competition Performance}
+
+
+
+
+
+\subsection{Lessons Learned from Competition}
+
+[Discuss what worked well and what didn't in the competitive setting]
+
+%=============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+% Summarize your main findings
+% Answer the key questions
+% What did you learn?
+% Future work suggestions
+
+
+\subsection{Lessons Learned}
+
+Through this exercise, we learned:
+\begin{itemize}
+    \item The importance of proper data preprocessing
+    \item How dataset characteristics influence classifier selection
+    \item The value of systematic experimentation and parameter tuning
+    \item The necessity of using multiple evaluation metrics
+    \item [Additional lessons]
+\end{itemize}
+
+\subsection{Future Work}
+
+Potential directions for future investigation:
+\begin{itemize}
+    \item [e.g., "Exploring ensemble methods combining our classifiers"]
+    \item [e.g., "Investigating more advanced feature engineering techniques"]
+    \item [e.g., "Testing additional classifier types"]
+    \item [Additional suggestions]
+\end{itemize}
+
+\subsection{Final Remarks}
+
+[Concluding thoughts on the exercise and machine learning classification in general]
+
+%=============================================================================
+\section*{Group Work Organization}
+
+
+\textbf{Collaboration Process:}
+[Describe how you worked together, meetings held, communication methods, etc.]
+
+\textbf{Equal Contribution:}
+All group members contributed equally to this project through [describe how equal contribution was ensured].
+
+%=============================================================================
+% References (if needed)
+% \bibliographystyle{plain}
+% \bibliography{references}
+
+\end{document}
