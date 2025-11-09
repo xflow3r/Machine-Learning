@@ -137,6 +137,7 @@ def load_road_safety_dataset(train_percentage: float = 0.8, seed: int = 42, debu
     # 1. Pare down columns for simpler model
     # Drop high-cardinality identifier and location columns, as well as columns with excessive missing values
     cols_to_drop = [
+        'Age_of_Driver', # would be perfect predictor of Age_Band_of_Driver
         'Accident_Index',  # Unique identifier (no predictive value)
         'LSOA_of_Accident_Location',  # 25k+ unique locations (too high cardinality)
         '2nd_Road_Class',  # 48% missing
