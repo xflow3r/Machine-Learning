@@ -27,15 +27,11 @@ def prepare_data(x_train, y_train):
     Returns:
         X_train_clean: DataFrame without ID column
         y_train: Series with target labels
-        id_to_idx: dict mapping ID to row index
     """
-    # Create ID mapping (ID -> row index in original frame)
-    id_to_idx = dict(zip(x_train['ID'], x_train.index))
-    
     # Drop ID column for training
     X_train_clean = x_train.drop(columns=['ID'])
     
-    return X_train_clean, y_train, id_to_idx
+    return X_train_clean, y_train
 
 
 def train_holdout(X_train, y_train, holdout_pct=0.2, max_depth=None, min_samples_split=2):
@@ -176,12 +172,12 @@ def run_experiments():
     Run decision tree experiments with different configurations.
     """
     print("Loading Amazon Review Dataset...")
-    x_train, x_test, y_train, y_test = load_amazon_review_dataset(debug=True)
+    x_train, x_test, y_train, y_test = load_amazon_review_dataset(debug=False)
     print()
     
     # Prepare data
-    print("Preparing data (mapping IDs and dropping ID column)...")
-    X_train_clean, y_train, id_to_idx = prepare_data(x_train, y_train)
+    print("Preparing data (dropping ID column)...")
+    X_train_clean, y_train = prepare_data(x_train, y_train)
     print(f"Training data shape (without ID): {X_train_clean.shape}")
     print(f"Number of classes: {y_train.nunique()}")
     print()
@@ -214,7 +210,7 @@ def run_experiments():
                 max_depth=config['max_depth'],
                 min_samples_split=config['min_samples_split']
             )
-        else:  # cv
+        else:  # CV
             result = train_cross_validation(
                 X_train_clean, y_train,
                 n_folds=config['n_folds'],
