@@ -25,10 +25,6 @@ def load_amazon_review_dataset(debug=False):
     df_train = pd.read_csv(amazon_train)
     df_test = pd.read_csv(amazon_test)
 
-    # Preprocess: drop rows with missing values
-    for df in [df_train, df_test]:
-        df.dropna(how="any", inplace=True)
-
     y_train = df_train["Class"]
     x_train = df_train.drop(columns=["Class"])
     y_test = None # No labels in test set
@@ -47,22 +43,20 @@ def load_voting_dataset(debug=False):
     df_train = pd.read_csv(voting_train)
     df_test = pd.read_csv(voting_test)
 
-    # Preprocess: explicit replace and dtype cast to avoid future downcasting warnings
+    # Preprocess: replace categorical values with numeric, keeping NaN for missing values
     train_feature_cols = df_train.columns.difference(["ID", "class"])  # features only
     df_train[train_feature_cols] = (
         df_train[train_feature_cols]
         .replace({"y": 1, "n": 0, "unknown": np.nan})
-        .astype("Int64")
+        .astype(float)  # Standard float64 naturally supports NaN
     )
-    df_train.dropna(how="any", inplace=True)
 
     test_feature_cols = df_test.columns.difference(["ID"])  # test set has no 'class'
     df_test[test_feature_cols] = (
         df_test[test_feature_cols]
         .replace({"y": 1, "n": 0, "unknown": np.nan})
-        .astype("Int64")
+        .astype(float)  # Standard float64 naturally supports NaN
     )
-    df_test.dropna(how="any", inplace=True)
 
     # Target and features
     y_train = df_train["class"]
@@ -89,9 +83,6 @@ def load_phishing_dataset(train_percentage: float = 0.8, seed: int = 42, debug=F
 
     target_mapping = {-1: 'Legitimate', 0: 'Suspicious', 1: 'Phishing'}
     df['Result_Label'] = df['Result'].map(target_mapping)
-
-    # Drop missing rows to keep X/y aligned
-    df.dropna(how='any', inplace=True)
 
     X = df.drop(columns=['Result'])
     y = df['Result']
