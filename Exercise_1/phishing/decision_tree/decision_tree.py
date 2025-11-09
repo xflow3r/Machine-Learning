@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Decision Tree Classifier for Road Safety Dataset
+Decision Tree Classifier for Phishing Dataset
 Compares holdout validation vs. cross-validation with timing and accuracy metrics.
 """
 
@@ -11,14 +11,30 @@ import pandas as pd
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_validate, train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 # Add parent directory to path to import preprocess_datasets
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from preprocess_datasets import load_road_safety_dataset
+from preprocess_datasets import load_phishing_dataset
 
 # Random state for reproducibility
 RANDOM_STATE = 2742
+
+
+def prepare_data(x_train, y_train, x_test):
+    """
+    Prepare data by dropping the Result_Label column (it's derived from target).
+    
+    Returns:
+        X_train_clean, y_train, X_test_clean
+    """
+    # Drop Result_Label if it exists (it's a string label derived from target)
+    if 'Result_Label' in x_train.columns:
+        x_train = x_train.drop(columns=['Result_Label'])
+    if 'Result_Label' in x_test.columns:
+        x_test = x_test.drop(columns=['Result_Label'])
+    
+    return x_train, y_train, x_test
 
 
 def train_holdout(X_train, y_train, holdout_pct=0.2, max_depth=None, min_samples_split=2):
@@ -152,26 +168,31 @@ def run_experiments():
     """
     Run decision tree experiments with different configurations.
     """
-    print("Loading Road Safety Dataset...")
-    x_train, x_test, y_train, y_test = load_road_safety_dataset(debug=False)
-    print(f"Training data shape: {x_train.shape}")
-    print(f"Test data shape: {x_test.shape}")
+    print("Loading Phishing Dataset...")
+    x_train, x_test, y_train, y_test = load_phishing_dataset(debug=False)
+    print()
+    
+    print("Preparing data (dropping Result_Label column)...")
+    X_train_clean, y_train, X_test_clean = prepare_data(x_train, y_train, x_test)
+    print(f"Training data shape: {X_train_clean.shape}")
+    print(f"Test data shape: {X_test_clean.shape}")
     print(f"Number of classes: {y_train.nunique()}")
+    print(f"Target classes: {sorted(y_train.unique())} (-1=Legitimate, 0=Suspicious, 1=Phishing)")
     print()
     
     # Define parameter grid
     configs = [
-        # Holdout with different splits and parameters
+        # Holdout with different splits
         {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'holdout', 'holdout_pct': 0.3, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 10, 'min_samples_split': 5},
-        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 15, 'min_samples_split': 10},
+        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 5, 'min_samples_split': 10},
         
-        # Cross-validation with different folds and parameters
+        # Cross-validation with different folds
         {'method': 'cv', 'n_folds': 5, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'cv', 'n_folds': 10, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'cv', 'n_folds': 5, 'max_depth': 10, 'min_samples_split': 5},
-        {'method': 'cv', 'n_folds': 5, 'max_depth': 15, 'min_samples_split': 10},
+        {'method': 'cv', 'n_folds': 5, 'max_depth': 5, 'min_samples_split': 10},
     ]
     
     results = []
@@ -184,21 +205,21 @@ def run_experiments():
         
         if config['method'] == 'holdout':
             result = train_holdout(
-                x_train, y_train,
+                X_train_clean, y_train,
                 holdout_pct=config['holdout_pct'],
                 max_depth=config['max_depth'],
                 min_samples_split=config['min_samples_split']
             )
         else:  # CV
             result = train_cross_validation(
-                x_train, y_train,
+                X_train_clean, y_train,
                 n_folds=config['n_folds'],
                 max_depth=config['max_depth'],
                 min_samples_split=config['min_samples_split']
             )
         
         # Evaluate on test set
-        test_results = evaluate_on_test(result['model'], x_test, y_test)
+        test_results = evaluate_on_test(result['model'], X_test_clean, y_test)
         result['test_accuracy'] = test_results['test_accuracy']
         result['test_confusion_matrix'] = test_results['confusion_matrix']
         
@@ -246,15 +267,21 @@ def run_experiments():
     
     # Show confusion matrix for best model
     print("\nConfusion Matrix (Best Model - Test Set):")
-    print(best_result['test_confusion_matrix'])
+    print("          Predicted")
+    print("           -1    0    1")
+    print("Actual")
+    cm = best_result['test_confusion_matrix']
+    labels = [-1, 0, 1]
+    for i, label in enumerate(labels):
+        print(f"   {label:2d}  {cm[i, 0]:5d} {cm[i, 1]:5d} {cm[i, 2]:5d}")
     
     # Calculate per-class metrics for best model
-    cm = best_result['test_confusion_matrix']
     n_classes = cm.shape[0]
+    class_names = ['Legitimate (-1)', 'Suspicious (0)', 'Phishing (1)']
     
     print(f"\nPer-Class Metrics (Best Model - Test Set):")
-    print(f"{'Class':<10} {'Precision':<12} {'Recall':<12} {'F1-Score':<12} {'Support':<10}")
-    print("-" * 60)
+    print(f"{'Class':<20} {'Precision':<12} {'Recall':<12} {'F1-Score':<12} {'Support':<10}")
+    print("-" * 70)
     
     for i in range(n_classes):
         tp = cm[i, i]
@@ -266,14 +293,14 @@ def run_experiments():
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0
         f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
         
-        print(f"{i+1:<10} {precision:<12.4f} {recall:<12.4f} {f1:<12.4f} {support:<10}")
+        print(f"{class_names[i]:<20} {precision:<12.4f} {recall:<12.4f} {f1:<12.4f} {support:<10}")
     
     # Overall metrics
     total_correct = np.trace(cm)
     total_samples = cm.sum()
     overall_acc = total_correct / total_samples
     
-    print("-" * 60)
+    print("-" * 70)
     print(f"Overall Test Accuracy: {overall_acc:.4f} ({total_correct}/{int(total_samples)})")
     
     print("\n" + "=" * 100)
