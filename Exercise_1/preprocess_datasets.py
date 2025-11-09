@@ -1,15 +1,44 @@
 import pandas as pd
-from scipy.io import arff
-
+from scipy.io import arff as arff
+import numpy as np
 
 # There is nothing to preprocess here
 def load_amazon_review():
-    df1 = pd.read_csv('../Datasets/amazon_review_learn.csv')
-    df2 = pd.read_csv('../Datasets/amazon_review_test.csv')
+    df_train = pd.read_csv('Datasets/amazon_review_learn.csv')
+    df_test = pd.read_csv('Datasets/amazon_review_test.csv')
 
-    df1.dropna(how='any')
+    df_train.dropna(how="any", inplace=True)
+    df_test.dropna(how="any", inplace=True)
 
-    return df1, df2
+    y = df_train["Class"]
+    x_train = df_train.drop(columns=["Class"])
+
+    print("amazon train shape:", x_train.shape)
+    print("amazon test  shape:", df_test.shape)
+
+    return x_train, y, df_test
+
+
+def load_voting_dataset():
+    df_train = pd.read_csv('Datasets/voting_learn.csv')
+    df_test = pd.read_csv('Datasets/voting_test.csv')
+
+    # Target and features
+    y = df_train["class"]
+    x_train = df_train.drop(columns=["ID", "class"])
+    x_test = df_test.drop(columns=["ID"])
+
+    # Convert to numeric
+    for df in [x_train, x_test]:
+        df.replace({"y": 1, "n": 0, "unknown": np.nan}, inplace=True)
+        df.dropna(how="any", inplace=True)
+
+    print("voting train shape:", x_train.shape)
+    print("voting test  shape:", x_test.shape)
+
+    return x_train, x_test, y
+
+load_amazon_review()
 
 
 # You can specify how large your train/test should be.
@@ -32,4 +61,3 @@ def load_phishing_dataset(train_percentage = 0.8):
 
     return train, test
 
-load_phishing_dataset()
