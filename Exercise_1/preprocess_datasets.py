@@ -2,6 +2,7 @@ import pandas as pd
 from scipy.io import arff as arff
 import numpy as np
 
+
 # There is nothing to preprocess here
 def load_amazon_review():
     df_train = pd.read_csv('Datasets/amazon_review_learn.csv')
@@ -38,9 +39,10 @@ def load_voting_dataset():
 
     return x_train, x_test, y
 
+
 # You can specify how large your train/test should be.
 # "train_percentage" says, how much data is going to be used for training
-def load_phishing_dataset(train_percentage = 0.8):
+def load_phishing_dataset(train_percentage=0.8):
     data, meta = arff.loadarff('Datasets/phishing_data.arff')
     df = pd.DataFrame(data)
 
@@ -50,11 +52,10 @@ def load_phishing_dataset(train_percentage = 0.8):
     df['Result_Label'] = df['Result'].map(target_mapping)
 
     eighty_percent = train_percentage * df.shape[0]
-    train = df.loc[:eighty_percent-1, :]
+    train = df.loc[:eighty_percent - 1, :]
     test = df.loc[eighty_percent:, :]
 
     print('phishing train shape:', train.shape)
     print('phishing test  shape:', test.shape)
 
     return train, test
-
