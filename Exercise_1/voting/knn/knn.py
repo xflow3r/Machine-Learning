@@ -2,9 +2,10 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
-from Exercise_1.preprocess_datasets import load_amazon_review
 
-x_train, x_test, y_train = load_amazon_review()
+from Exercise_1.preprocess_datasets import load_amazon_review_dataset
+
+x_train, x_test, y_train, y_test = load_amazon_review_dataset()
 
 scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
@@ -29,8 +30,8 @@ plt.show()
 
 # Create a DataFrame with ID and predicted class
 output = pd.DataFrame({
-    "ID": pd.read_csv('../Datasets/amazon_review_test.csv')["ID"],
+    "ID": pd.read_csv('../../Datasets/amazon_review_test.csv')["ID"],
     "Class": y_pred})
 
 # Save to CSV (no index column)
-output.to_csv("./voting/knn_voting_test_result.csv", index=False)
+output.to_csv("./voting_knn_result.csv", index=False)

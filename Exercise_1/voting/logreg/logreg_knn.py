@@ -6,10 +6,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 
-from Exercise_1.preprocess_datasets import load_amazon_review
+from Exercise_1.preprocess_datasets import load_amazon_review_dataset
 
 # Load data (already numeric features)
-x_train, x_test, y_train = load_amazon_review()
+x_train, x_test, y_train, y_test = load_amazon_review_dataset()
 
 # Make y a 1-D vector
 y_train = np.asarray(y_train).ravel()
@@ -59,7 +59,6 @@ plt.grid(axis="y", linestyle="--", alpha=0.7)
 plt.show()
 
 # Save predictions with test IDs
-test_ids = pd.read_csv('../Datasets/amazon_review_test.csv')["ID"]
+test_ids = pd.read_csv('../../Datasets/amazon_review_test.csv')["ID"]
 output = pd.DataFrame({"ID": test_ids, "Class": y_pred})
-output.to_csv("./voting/logreg_test_result.csv", index=False)
-print("Results saved to ./voting/logreg_test_result.csv")
+output.to_csv("./logreg_voting_result.csv", index=False)
