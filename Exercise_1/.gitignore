@@ -45,3 +45,4 @@ var/
 .installed.cfg
 *.egg
 MANIFEST
+/voting/logreg/logreg_voting_result.csv

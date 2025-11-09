@@ -19,11 +19,11 @@ scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
+print("Training...")
 # Logistic Regression with class balancing; tune C via CV
 logreg = LogisticRegression(
     max_iter=1000,
     class_weight="balanced",
-    multi_class="auto",
     solver="lbfgs"  # use 'saga' if your data is sparse and large
 )
 
