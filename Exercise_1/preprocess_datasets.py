@@ -16,7 +16,7 @@ def load_amazon_review():
     print("amazon train shape:", x_train.shape)
     print("amazon test  shape:", df_test.shape)
 
-    return x_train, y, df_test
+    return x_train, df_test, y
 
 
 def load_voting_dataset():
@@ -37,9 +37,6 @@ def load_voting_dataset():
     print("voting test  shape:", x_test.shape)
 
     return x_train, x_test, y
-
-load_amazon_review()
-
 
 # You can specify how large your train/test should be.
 # "train_percentage" says, how much data is going to be used for training
