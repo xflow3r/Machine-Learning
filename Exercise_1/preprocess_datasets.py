@@ -5,8 +5,8 @@ import numpy as np
 
 # There is nothing to preprocess here
 def load_amazon_review():
-    df_train = pd.read_csv('Datasets/amazon_review_learn.csv')
-    df_test = pd.read_csv('Datasets/amazon_review_test.csv')
+    df_train = pd.read_csv('../Datasets/amazon_review_learn.csv')
+    df_test = pd.read_csv('../Datasets/amazon_review_test.csv')
 
     df_train.dropna(how="any", inplace=True)
     df_test.dropna(how="any", inplace=True)
