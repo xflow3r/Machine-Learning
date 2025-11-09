@@ -67,8 +67,8 @@ def load_voting_dataset(debug=False):
     # Target and features
     y_train = df_train["class"]
     y_test = None  # No labels in test set
-    x_train = df_train.drop(columns=["ID", "class"])
-    x_test = df_test.drop(columns=["ID"])
+    x_train = df_train.drop(columns=["class"])
+    x_test = df_test
 
     if debug:
         print("voting x_train shape:", x_train.shape)
