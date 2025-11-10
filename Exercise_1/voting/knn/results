@@ -1,47 +1,47 @@
 ====================================================================================================
 Running HOLDOUT evaluations...
-[Holdout] k= 3, weights=uniform , p=1 | train_acc=0.9598 train_f1m=0.9588 | val_acc=0.9773 val_f1m=0.9763 | time: fit=0.003s infer=0.001s
-[Holdout] k= 3, weights=uniform , p=2 | train_acc=0.9598 train_f1m=0.9588 | val_acc=0.9773 val_f1m=0.9763 | time: fit=0.002s infer=0.002s
-[Holdout] k= 3, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9763 | time: fit=0.002s infer=0.001s
-[Holdout] k= 3, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9763 | time: fit=0.002s infer=0.001s
-[Holdout] k= 5, weights=uniform , p=1 | train_acc=0.9253 train_f1m=0.9240 | val_acc=0.9545 val_f1m=0.9530 | time: fit=0.002s infer=0.001s
-[Holdout] k= 5, weights=uniform , p=2 | train_acc=0.9253 train_f1m=0.9240 | val_acc=0.9545 val_f1m=0.9530 | time: fit=0.002s infer=0.001s
-[Holdout] k= 5, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9545 val_f1m=0.9530 | time: fit=0.002s infer=0.001s
-[Holdout] k= 5, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9545 val_f1m=0.9530 | time: fit=0.002s infer=0.001s
-[Holdout] k= 7, weights=uniform , p=1 | train_acc=0.9310 train_f1m=0.9299 | val_acc=1.0000 val_f1m=1.0000 | time: fit=0.002s infer=0.002s
-[Holdout] k= 7, weights=uniform , p=2 | train_acc=0.9253 train_f1m=0.9240 | val_acc=1.0000 val_f1m=1.0000 | time: fit=0.003s infer=0.001s
-[Holdout] k= 7, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
-[Holdout] k= 7, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=1.0000 val_f1m=1.0000 | time: fit=0.002s infer=0.001s
-[Holdout] k= 9, weights=uniform , p=1 | train_acc=0.9195 train_f1m=0.9182 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
-[Holdout] k= 9, weights=uniform , p=2 | train_acc=0.9195 train_f1m=0.9182 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
-[Holdout] k= 9, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
-[Holdout] k= 9, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
-[Holdout] k=11, weights=uniform , p=1 | train_acc=0.9080 train_f1m=0.9063 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
-[Holdout] k=11, weights=uniform , p=2 | train_acc=0.9138 train_f1m=0.9123 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
-[Holdout] k=11, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
-[Holdout] k=11, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k= 3, weights=uniform , p=1 | train_acc=0.9598 | val_acc=0.9773 | time: fit=0.003s infer=0.001s
+[Holdout] k= 3, weights=uniform , p=2 | train_acc=0.9598 | val_acc=0.9773 | time: fit=0.002s infer=0.002s
+[Holdout] k= 3, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k= 3, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k= 5, weights=uniform , p=1 | train_acc=0.9253 | val_acc=0.9545 | time: fit=0.002s infer=0.001s
+[Holdout] k= 5, weights=uniform , p=2 | train_acc=0.9253 | val_acc=0.9545 | time: fit=0.002s infer=0.001s
+[Holdout] k= 5, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9545 | time: fit=0.002s infer=0.001s
+[Holdout] k= 5, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9545 | time: fit=0.002s infer=0.001s
+[Holdout] k= 7, weights=uniform , p=1 | train_acc=0.9310 | val_acc=1.0000 | time: fit=0.002s infer=0.002s
+[Holdout] k= 7, weights=uniform , p=2 | train_acc=0.9253 | val_acc=1.0000 | time: fit=0.003s infer=0.001s
+[Holdout] k= 7, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k= 7, weights=distance, p=2 | train_acc=1.0000 | val_acc=1.0000 | time: fit=0.002s infer=0.001s
+[Holdout] k= 9, weights=uniform , p=1 | train_acc=0.9195 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k= 9, weights=uniform , p=2 | train_acc=0.9195 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k= 9, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k= 9, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k=11, weights=uniform , p=1 | train_acc=0.9080 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k=11, weights=uniform , p=2 | train_acc=0.9138 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k=11, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
+[Holdout] k=11, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9773 | time: fit=0.002s infer=0.001s
 
 Running CROSS-VALIDATION evaluations...
-[5-Fold CV] k= 3, weights=uniform , p=1 | train_acc=0.9564 train_f1m=0.9553 | val_acc=0.9311 (sd=0.0294) val_f1m=0.9292 | time=1.126s
-[5-Fold CV] k= 3, weights=uniform , p=2 | train_acc=0.9587 train_f1m=0.9577 | val_acc=0.9311 (sd=0.0294) val_f1m=0.9292 | time=0.376s
-[5-Fold CV] k= 3, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9312 (sd=0.0206) val_f1m=0.9292 | time=0.377s
-[5-Fold CV] k= 3, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9265 (sd=0.0271) val_f1m=0.9246 | time=0.377s
-[5-Fold CV] k= 5, weights=uniform , p=1 | train_acc=0.9427 train_f1m=0.9416 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9198 | time=0.376s
-[5-Fold CV] k= 5, weights=uniform , p=2 | train_acc=0.9427 train_f1m=0.9416 | val_acc=0.9311 (sd=0.0257) val_f1m=0.9297 | time=0.022s
-[5-Fold CV] k= 5, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9312 (sd=0.0206) val_f1m=0.9292 | time=0.022s
-[5-Fold CV] k= 5, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9357 (sd=0.0309) val_f1m=0.9344 | time=0.023s
-[5-Fold CV] k= 7, weights=uniform , p=1 | train_acc=0.9358 train_f1m=0.9346 | val_acc=0.9311 (sd=0.0257) val_f1m=0.9297 | time=0.023s
-[5-Fold CV] k= 7, weights=uniform , p=2 | train_acc=0.9335 train_f1m=0.9321 | val_acc=0.9311 (sd=0.0257) val_f1m=0.9297 | time=0.022s
-[5-Fold CV] k= 7, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9357 (sd=0.0309) val_f1m=0.9344 | time=0.024s
-[5-Fold CV] k= 7, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9357 (sd=0.0309) val_f1m=0.9344 | time=0.022s
-[5-Fold CV] k= 9, weights=uniform , p=1 | train_acc=0.9300 train_f1m=0.9287 | val_acc=0.9264 (sd=0.0232) val_f1m=0.9248 | time=0.024s
-[5-Fold CV] k= 9, weights=uniform , p=2 | train_acc=0.9266 train_f1m=0.9251 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.023s
-[5-Fold CV] k= 9, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9311 (sd=0.0257) val_f1m=0.9295 | time=0.023s
-[5-Fold CV] k= 9, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.022s
-[5-Fold CV] k=11, weights=uniform , p=1 | train_acc=0.9266 train_f1m=0.9251 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.022s
-[5-Fold CV] k=11, weights=uniform , p=2 | train_acc=0.9255 train_f1m=0.9239 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.023s
-[5-Fold CV] k=11, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9264 (sd=0.0232) val_f1m=0.9248 | time=0.023s
-[5-Fold CV] k=11, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.022s
+[5-Fold CV] k= 3, weights=uniform , p=1 | train_acc=0.9564 | val_acc=0.9311 (sd=0.0294) | time=1.126s
+[5-Fold CV] k= 3, weights=uniform , p=2 | train_acc=0.9587 | val_acc=0.9311 (sd=0.0294) | time=0.376s
+[5-Fold CV] k= 3, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9312 (sd=0.0206) | time=0.377s
+[5-Fold CV] k= 3, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9265 (sd=0.0271) | time=0.377s
+[5-Fold CV] k= 5, weights=uniform , p=1 | train_acc=0.9427 | val_acc=0.9219 (sd=0.0239) | time=0.376s
+[5-Fold CV] k= 5, weights=uniform , p=2 | train_acc=0.9427 | val_acc=0.9311 (sd=0.0257) | time=0.022s
+[5-Fold CV] k= 5, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9312 (sd=0.0206) | time=0.022s
+[5-Fold CV] k= 5, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9357 (sd=0.0309) | time=0.023s
+[5-Fold CV] k= 7, weights=uniform , p=1 | train_acc=0.9358 | val_acc=0.9311 (sd=0.0257) | time=0.023s
+[5-Fold CV] k= 7, weights=uniform , p=2 | train_acc=0.9335 | val_acc=0.9311 (sd=0.0257) | time=0.022s
+[5-Fold CV] k= 7, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9357 (sd=0.0309) | time=0.024s
+[5-Fold CV] k= 7, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9357 (sd=0.0309) | time=0.022s
+[5-Fold CV] k= 9, weights=uniform , p=1 | train_acc=0.9300 | val_acc=0.9264 (sd=0.0232) | time=0.024s
+[5-Fold CV] k= 9, weights=uniform , p=2 | train_acc=0.9266 | val_acc=0.9219 (sd=0.0239) | time=0.023s
+[5-Fold CV] k= 9, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9311 (sd=0.0257) | time=0.023s
+[5-Fold CV] k= 9, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9219 (sd=0.0239) | time=0.022s
+[5-Fold CV] k=11, weights=uniform , p=1 | train_acc=0.9266 | val_acc=0.9219 (sd=0.0239) | time=0.022s
+[5-Fold CV] k=11, weights=uniform , p=2 | train_acc=0.9255 | val_acc=0.9219 (sd=0.0239) | time=0.023s
+[5-Fold CV] k=11, weights=distance, p=1 | train_acc=1.0000 | val_acc=0.9264 (sd=0.0232) | time=0.023s
+[5-Fold CV] k=11, weights=distance, p=2 | train_acc=1.0000 | val_acc=0.9219 (sd=0.0239) | time=0.022s
 
 ====================================================================================================
 RESULTS SUMMARY TABLE
