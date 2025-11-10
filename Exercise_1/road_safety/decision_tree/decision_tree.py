@@ -13,7 +13,7 @@ from sklearn.metrics import accuracy_score, classification_report
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from preprocess_datasets import load_road_safety_dataset
 from decision_tree_common.decision_tree_common import (
-    get_experiment_configs,
+    get_holdout_experiment_configs,
     train_holdout,
     train_cross_validation
 )
@@ -29,30 +29,24 @@ def run_experiments():
     print(f"Number of classes: {y_train.nunique()}")
     print()
 
-    configs = get_experiment_configs()
+    # Get holdout experiment configs
+    holdout_configs = get_holdout_experiment_configs()
     
     results = []
     
     print("Running experiments...")
     print("=" * 100)
     
-    for i, config in enumerate(configs, 1):
-        print(f"\nExperiment {i}/{len(configs)}: {config}")
+    # Run holdout experiments
+    for i, config in enumerate(holdout_configs, 1):
+        print(f"\nExperiment {i}/{len(holdout_configs)}: {config}")
         
-        if config['method'] == 'holdout':
-            result = train_holdout(
-                x_train, y_train,
-                holdout_pct=config['holdout_pct'],
-                max_depth=config['max_depth'],
-                min_samples_split=config['min_samples_split']
-            )
-        else:  # CV
-            result = train_cross_validation(
-                x_train, y_train,
-                n_folds=config['n_folds'],
-                max_depth=config['max_depth'],
-                min_samples_split=config['min_samples_split']
-            )
+        result = train_holdout(
+            x_train, y_train,
+            holdout_pct=config['holdout_pct'],
+            max_depth=config['max_depth'],
+            min_samples_split=config['min_samples_split']
+        )
 
         # Evaluate on test set
         y_pred_test = result['model'].predict(x_test)
@@ -65,11 +59,29 @@ def run_experiments():
         print(f"  Method: {result['method']}")
         print(f"  Training time: {result['train_time']:.3f}s")
         print(f"  Train accuracy: {result['train_accuracy']:.4f}")
-        if 'val_accuracy_std' in result:
-            print(f"  Val accuracy: {result['val_accuracy']:.4f} (sd: {result['val_accuracy_std']:.4f})")
-        else:
-            print(f"  Val accuracy: {result['val_accuracy']:.4f}")
+        print(f"  Val accuracy: {result['val_accuracy']:.4f}")
         print(f"  Test accuracy: {result['test_accuracy']:.4f}")
+
+    # Run GridSearchCV experiment (automated hyperparameter tuning)
+    print(f"\nExperiment {len(holdout_configs) + 1}/{len(holdout_configs) + 1}: GridSearchCV with 5-Fold CV")
+    
+    cv_result = train_cross_validation(x_train, y_train, n_folds=5)
+    
+    # Evaluate on test set
+    y_pred_test = cv_result['model'].predict(x_test)
+    test_acc = accuracy_score(y_test, y_pred_test)
+    cv_result['test_accuracy'] = test_acc
+    
+    results.append(cv_result)
+    
+    # Print summary
+    print(f"  Method: {cv_result['method']}")
+    print(f"  Best params: {cv_result['params']}")
+    print(f"  Training time: {cv_result['train_time']:.3f}s")
+    print(f"  Train accuracy: {cv_result['train_accuracy']:.4f}")
+    print(f"  Val accuracy: {cv_result['val_accuracy']:.4f} (sd: {cv_result['val_accuracy_std']:.4f})")
+    print(f"  Test accuracy: {cv_result['test_accuracy']:.4f}")
+
 
     print("\n" + "=" * 100)
     print("Selecting best model based on validation accuracy...")
@@ -90,6 +102,7 @@ def run_experiments():
             'Method': r['method'],
             'Max Depth': r['params']['max_depth'] if r['params']['max_depth'] is not None else 'None',
             'Min Split': r['params']['min_samples_split'],
+            'Min Leaf': r['params'].get('min_samples_leaf', 'N/A'),
             'Train Time (s)': f"{r['train_time']:.3f}",
             'Train Acc': f"{r['train_accuracy']:.4f}",
             'Val Acc': f"{r['val_accuracy']:.4f}" + (f" (sd: {r['val_accuracy_std']:.4f})" if 'val_accuracy_std' in r else ''),
