@@ -16,7 +16,7 @@ from sklearn.metrics import accuracy_score
 RANDOM_STATE = 2742
 
 
-def get_experiment_configs():
+def get_holdout_experiment_configs():
     """
     Return standard experiment configurations for decision tree analysis.
     
@@ -24,17 +24,15 @@ def get_experiment_configs():
         List of dictionaries with experiment configurations
     """
     return [
-        # Holdout with different splits and parameters
+        # === Holdout validation with different splits ===
         {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'holdout', 'holdout_pct': 0.3, 'max_depth': None, 'min_samples_split': 2},
-        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 10, 'min_samples_split': 5},
-        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 5, 'min_samples_split': 10},
-
-        # Cross-validation with different folds and parameters
-        {'method': 'cv', 'n_folds': 5, 'max_depth': None, 'min_samples_split': 2},
-        {'method': 'cv', 'n_folds': 10, 'max_depth': None, 'min_samples_split': 2},
-        {'method': 'cv', 'n_folds': 5, 'max_depth': 10, 'min_samples_split': 5},
-        {'method': 'cv', 'n_folds': 5, 'max_depth': 5, 'min_samples_split': 10},
+        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': None, 'min_samples_split': 1},
+        {'method': 'holdout', 'holdout_pct': 0.3, 'max_depth': None, 'min_samples_split': 1},
+        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 10, 'min_samples_split': 2},
+        {'method': 'holdout', 'holdout_pct': 0.3, 'max_depth': 10, 'min_samples_split': 2},
+        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 10, 'min_samples_split': 1},
+        {'method': 'holdout', 'holdout_pct': 0.3, 'max_depth': 10, 'min_samples_split': 1},
     ]
 
 
