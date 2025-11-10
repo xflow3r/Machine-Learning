@@ -96,16 +96,14 @@ We selected four diverse datasets to comprehensively evaluate classifier perform
     \item Number of features: 16
     \item Number of classes: 2 (Democrat vs. Republican)
     \item Feature types: Categorical (voting records on various congressional bills)
-    \item Class distribution: Imbalanced (58.3% Democrat / 41.7% Republican)
+    \item Class distribution: Imbalanced (58.3\% Democrat / 41.7\% Republican)
 \end{itemize}
 
 \textbf{Description:}
-This dataset contains congressional voting records for U.S. House Representatives, with each feature representing a vote (yes/no/abstain) on specific legislation. The classification task is to predict party affiliation (Democrat or Republican) based on voting patterns. This represents a classic political science application where voting behavior serves as a strong indicator of party membership.
+This dataset contains congressional voting records for U.S. House Representatives, with each feature representing a vote (yes/no/abstain) on specific legislation. The classification task is to predict party affiliation (Democrat or Republican) based on voting patterns.
 
-
-\textbf{Challenges:} 
-This dataset had a small sample size of only 218 training samples which created a big risk of overfitting. It also had a slight class imbalance
-which could lead to a prediction bias towards the majority class. Also missing votes needed appropriate handling.
+\textbf{Challenges:}
+This dataset had a small sample size of only 218 training samples which created a big risk of overfitting. It also had a slight class imbalance which could lead to a prediction bias towards the majority class. Also missing votes needed appropriate handling.
 
 \subsection{Dataset 2: [Amazon Product Reviews]}
 \label{subsec:dataset2}
@@ -122,13 +120,10 @@ which could lead to a prediction bias towards the majority class. Also missing v
 \end{itemize}
 
 \textbf{Description:}
-This text classification dataset contains Amazon product reviews that have been preprocessed into a high-dimensional feature representation. 
-Each review must be classified into one of 50 product categories. This represents a challenging multi-class text classification problem typical in e-commerce and natural language processing applications.
-
+This text classification dataset contains Amazon product reviews that have been preprocessed into a high-dimensional feature representation. Each review must be classified into one of 50 categories, each class being the name of a reviewer.
 
 \textbf{Challenges:}
-This dataset had a very high dimensionality which was challenging. It also had a relatively small sample size compared to the feature count
-
+This dataset had a very high dimensionality which was challenging. It also had a relatively small sample size compared to the feature count.
 
 
 \subsection{Dataset 3: [Phishing Website Detection]}
@@ -171,8 +166,8 @@ Also the 3-class problem is a bit more complex compared to binary classification
 
 \textbf{Description:}
 This large-scale dataset from the UK Department for Transport contains detailed records of traffic accidents, including information about road conditions, weather, vehicle types, location characteristics, and casualty outcomes. 
-The classification task is to predict casualty severity level (ranging from slight injuries to fatalities) based on accident circumstances. 
-This represents a real-world public safety application where accurate predictions could inform emergency response resource allocation.
+The classification task is to predict Age\_Band\_of\_Driver (different age ranges, rather than predicting numerical value of specific age) based on accident circumstances.
+This represents a real-world public safety application where experiment outcomes could help inform policy decisions and safety measures.
 
 \textbf{Challenges:}
 The dataset is massive with 363.000 samples which made it really challenging to compute. Some teammembers needed to use subsampling since we didn't have the needed compute power.
@@ -242,8 +237,8 @@ The Class column (target) contains author names as strings. No encoding was nece
 \textbf{Scaling:} 
 Feature scaling requirements depend on the classifier:
 \begin{itemize}
-    \item \textit{For KNN and SVM:} StandardScaler or MinMaxScaler applied to normalize the high-dimensional feature space
-    \item \textit{For Decision Trees/Logistic Regression:} (TODO check this) Scaling may or may not be applied depending on the specific library implementation
+    \item \textit{For KNN and SVM:} StandardScaler applied to normalize the high-dimensional feature space
+    \item \textit{For Decision Trees:} Scaling not needed, as tree-based methods are invariant to feature scaling
     \item \textit{Justification:} Distance-based methods (KNN) and kernel methods (SVM) are highly sensitive to feature scales, especially in high-dimensional spaces where some features may dominate distance calculations
 \end{itemize}
 
@@ -275,22 +270,15 @@ This dataset required the most extensive preprocessing due to its large size, mi
 
 \textbf{Dimensionality Reduction:}
 Due to computational constraints, we performed strategic column removal:
-    TODO confirm these match the actual pre-processing function
 \begin{itemize}
     \item \textbf{High-cardinality identifiers:} Removed \texttt{Accident\_Index}, \texttt{LSOA\_of\_Accident\_Location} (25,000+ unique values), \texttt{Local\_Authority} columns (356+ unique districts)
     \item \textbf{Perfect predictors:} Removed \texttt{Age\_of\_Driver} as it would perfectly predict our target \texttt{Age\_Band\_of\_Driver}
     \item \textbf{Geographic coordinates:} Dropped \texttt{Location\_Easting\_OSGR}, \texttt{Location\_Northing\_OSGR}, \texttt{Longitude}, \texttt{Latitude} to reduce dimensionality while retaining other location features
-    \item \textbf{High-missing columns:} Removed \texttt{2nd\_Road\_Class} (48\% missing), \texttt{Junction\_Control} (48\% missing), \texttt{Propulsion\_Code} (23\% missing)
+    \item \textbf{High-missing columns:} Removed \texttt{2nd\_Road\_Class} (48\% missing), \texttt{Junction\_Control} (48\% missing), \texttt{Propulsion\_Code} (23\% missing), \texttt{Casualty\_IMD\_Decile} (19\% missing)
 \end{itemize}
 
 \textbf{Missing Values:}
-After removing high-missing columns, remaining NaN values were preserved rather than imputed. This approach:
-\begin{itemize}
-    \item Maintains data integrity by not introducing artificial patterns
-    \item Is compatible with tree-based methods that handle missing values natively
-    \item TODO was NaN natively compatible with KNN/SVM? If not, mention imputation strategy here
-    \item Reflects genuine uncertainty in accident records
-\end{itemize}
+In inital pre-processing functions, missing values were left as NaN, as the decision tree classifier can handle them natively. For the KNN and SVM classifiers, rows with missing values were dropped, as the classifiers do not natively support NaN. This likely led to a degradation of performance on this dataset, as the road\_safety dataset had lots of missing values.
 
 \textbf{Feature Engineering:}
 \begin{enumerate}
@@ -313,11 +301,10 @@ No outlier removal was performed. In accident data, extreme cases (e.g., unusual
 Most categorical features were already numerically encoded in the OpenML dataset format. We preserved these encodings.
 
 \textbf{Scaling:}
-TODO should we have done scaling here for the numerical features? What about how scaling affects SVM?
-No feature scaling was applied in the preprocessing pipeline. The tree-based classifier makes scaling unnecessary. For distance-based methods (KNN), scaling would be applied during model-specific preprocessing.
+Scaling was applied for the SVM classifier using StandardScaler to normalize numerical features. For the Decision Tree classifier, no scaling was applied, as tree-based methods are invariant to feature scaling. No feature scaling was applied for KNN.
 
 \textbf{Dataset Subsampling:}
-Due to the dataset's large size (<TODO: insert total number of samples here> samples) and computational limitations, some experiments used random subsampling (e.g., 10,000 samples) with a fixed random seed for reproducibility. This trade-off prioritized experimental feasibility while maintaining representative data distribution.
+Due to the dataset's large size (363,243 samples) and computational limitations, some experiments used random subsampling (e.g., 10,000 samples) with a fixed random seed for reproducibility. This trade-off prioritized experimental feasibility while maintaining representative data distribution.
 
 
 \subsection{Impact of Preprocessing on Performance}
@@ -340,47 +327,8 @@ TODO, don't have info here yet for KNN and SVM
 
 \textbf{Tree-based methods (Decision Trees):}
 \begin{itemize}
-    \item No measurable performance difference with or without scaling
-    \item Trees use threshold-based splits that are invariant to scale transformations
-    \item This confirmed the theoretical expectation that tree methods don't require scaling
+    \item No measurable performance difference with or without scaling (expected)
 \end{itemize}
-
-\subsubsection{Effect of Missing Value Handling}
-
-\textbf{Voting Dataset:}
-\begin{itemize}
-    \item Preserving NaN values for "unknown" votes performed better than mean/mode imputation
-    \item Decision Trees achieved 96.3\% accuracy with NaN preservation vs. 94.1\% with mode imputation -TODO is this true?
-    \item This suggests that voting abstentions carry meaningful political information
-\end{itemize}
-
-\textbf{Road Safety Dataset:}
-\begin{itemize}
-    \item Tree-based methods handled missing values natively without performance degradation
-    \item Attempted imputation strategies (mean for numerical, mode for categorical) did not improve results
-    \item Removing rows with any missing values would have discarded $\sim$19\% of data, significantly reducing training set size
-\end{itemize}
-
-\subsubsection{Effect of Feature Engineering}
-
-\textbf{Road Safety Time Period Feature:}
-TODO any effect here? Dimensionality reduction is good for training performance anyway
-
-\textbf{Road Safety Date Decomposition:}
-\begin{itemize}
-    \item TODO - should we have dropped date? Did it have an outsize effect on performance, given its larger cardinality?
-\end{itemize}
-
-\subsubsection{General Observations}
-
-\begin{enumerate}
-    \item \textbf{Preprocessing is algorithm-dependent:} What helps one classifier may be irrelevant or harmful to another
-    \item \textbf{Domain knowledge matters:} Understanding data semantics (e.g., voting abstentions, time periods) guides better preprocessing decisions than generic statistical approaches
-    \item \textbf{High-dimensional data requires careful scaling:} The curse of dimensionality amplifies the importance of normalization for distance-based methods
-    \item \textbf{Feature engineering can outperform raw features:} Thoughtful transformations (time periods, date decomposition) improved performance while reducing dimensionality
-\end{enumerate}
-
-These findings motivated our final preprocessing choices for each dataset-classifier combination, prioritizing approaches that demonstrated empirical improvements in our validation experiments.
 
 
 %=============================================================================
