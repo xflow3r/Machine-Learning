@@ -1,30 +1,17 @@
-"""
-Visualization Creation for Phishing SVM Results
-Exercise 1 - Machine Learning
-Creates all visualizations for the Phishing dataset SVM experiments
-"""
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import os
 
-# Get the directory where this script is located
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Set style for professional-looking plots
 sns.set_style("whitegrid")
 plt.rcParams['figure.dpi'] = 300
 plt.rcParams['savefig.dpi'] = 300
 plt.rcParams['font.size'] = 10
 
-print("="*80)
-print("CREATING VISUALIZATIONS FOR PHISHING DATASET")
-print("="*80)
-print(f"Script directory: {SCRIPT_DIR}")
 
-# Load results
 results_path = os.path.join(SCRIPT_DIR, 'phishing_results.csv')
 print(f"Loading results from: {results_path}")
 
@@ -35,29 +22,18 @@ if not os.path.exists(results_path):
 
 results_df = pd.read_csv(results_path)
 
-# Remove any rows with errors
 results_df = results_df[results_df['accuracy'].notna()]
 
 if len(results_df) == 0:
     print("\n✗ ERROR: No valid results found in CSV!")
     exit(1)
 
-print(f"✓ Loaded {len(results_df)} experiment results")
-print(f"\nOutput directory: {SCRIPT_DIR}\n")
-
-
-# ============================================================================
-# 1. ACCURACY COMPARISON: LINEAR VS RBF KERNELS
-# ============================================================================
-print("1. Creating kernel comparison plot...")
 
 fig, ax = plt.subplots(figsize=(10, 6))
 
-# Group by kernel
 linear_results = results_df[results_df['kernel'] == 'linear']
 rbf_results = results_df[results_df['kernel'] == 'rbf']
 
-# Get best accuracy for each kernel
 linear_best = linear_results['accuracy'].max() if len(linear_results) > 0 else 0
 rbf_best = rbf_results['accuracy'].max() if len(rbf_results) > 0 else 0
 
@@ -67,7 +43,6 @@ colors = ['#3498db', '#e74c3c']
 
 bars = ax.bar(kernels, accuracies, color=colors, edgecolor='black', linewidth=2, width=0.5)
 
-# Add value labels
 for bar in bars:
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2., height,
@@ -84,17 +59,9 @@ plt.tight_layout()
 output_path = os.path.join(SCRIPT_DIR, 'phishing_viz_1_kernel_comparison.png')
 plt.savefig(output_path, bbox_inches='tight')
 plt.close()
-print(f"   ✓ Saved: {output_path}")
-
-
-# ============================================================================
-# 2. PARAMETER SENSITIVITY: EFFECT OF C
-# ============================================================================
-print("\n2. Creating parameter sensitivity plot...")
 
 fig, ax = plt.subplots(figsize=(10, 6))
 
-# Plot lines for each kernel
 for kernel, color, marker in [('linear', '#3498db', 'o'), ('rbf', '#e74c3c', 's')]:
     kernel_data = results_df[results_df['kernel'] == kernel].copy()
     kernel_data = kernel_data.sort_values('C')
@@ -103,7 +70,6 @@ for kernel, color, marker in [('linear', '#3498db', 'o'), ('rbf', '#e74c3c', 's'
             marker=marker, label=kernel.upper(), linewidth=2.5, 
             markersize=10, color=color)
     
-    # Add value labels
     for x, y in zip(kernel_data['C'], kernel_data['accuracy']):
         ax.annotate(f'{y:.3f}', (x, y), textcoords="offset points", 
                    xytext=(0,10), ha='center', fontsize=9, fontweight='bold')
@@ -121,17 +87,10 @@ plt.tight_layout()
 output_path = os.path.join(SCRIPT_DIR, 'phishing_viz_2_parameter_sensitivity.png')
 plt.savefig(output_path, bbox_inches='tight')
 plt.close()
-print(f"   ✓ Saved: {output_path}")
 
-
-# ============================================================================
-# 3. TRAINING TIME COMPARISON
-# ============================================================================
-print("\n3. Creating training time comparison...")
 
 fig, ax = plt.subplots(figsize=(10, 6))
 
-# Group by kernel and get mean training time
 time_by_kernel = results_df.groupby('kernel')['train_time'].agg(['mean', 'std']).reset_index()
 
 colors_dict = {'linear': '#3498db', 'rbf': '#e74c3c'}
@@ -141,7 +100,6 @@ bars = ax.bar(time_by_kernel['kernel'], time_by_kernel['mean'],
               yerr=time_by_kernel['std'], capsize=5,
               color=bar_colors, edgecolor='black', linewidth=2, alpha=0.8)
 
-# Add value labels
 for i, bar in enumerate(bars):
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2., height,
@@ -158,15 +116,7 @@ plt.tight_layout()
 output_path = os.path.join(SCRIPT_DIR, 'phishing_viz_3_training_time.png')
 plt.savefig(output_path, bbox_inches='tight')
 plt.close()
-print(f"   ✓ Saved: {output_path}")
 
-
-# ============================================================================
-# 4. HEATMAP: ALL RESULTS
-# ============================================================================
-print("\n4. Creating results heatmap...")
-
-# Create pivot table
 pivot_data = results_df.pivot_table(
     values='accuracy',
     index='kernel',
@@ -188,19 +138,12 @@ plt.tight_layout()
 output_path = os.path.join(SCRIPT_DIR, 'phishing_viz_4_heatmap.png')
 plt.savefig(output_path, bbox_inches='tight')
 plt.close()
-print(f"   ✓ Saved: {output_path}")
 
-
-# ============================================================================
-# 5. COMPREHENSIVE METRICS TABLE
-# ============================================================================
-print("\n5. Creating comprehensive metrics table...")
 
 fig, ax = plt.subplots(figsize=(14, 6))
 ax.axis('tight')
 ax.axis('off')
 
-# Prepare table data
 table_data = []
 table_data.append(['Kernel', 'C', 'Accuracy', 'Precision', 'Recall', 'F1-Score', 'Time (s)'])
 
@@ -222,18 +165,16 @@ table.auto_set_font_size(False)
 table.set_fontsize(10)
 table.scale(1, 2.2)
 
-# Style header row
 for i in range(7):
     table[(0, i)].set_facecolor('#3498db')
     table[(0, i)].set_text_props(weight='bold', color='white')
 
-# Alternate row colors and highlight best accuracy
 best_acc_idx = results_df['accuracy'].idxmax()
 for i in range(1, len(table_data)):
     for j in range(7):
         if i % 2 == 0:
             table[(i, j)].set_facecolor('#f0f0f0')
-        # Highlight best result
+
         if i-1 == best_acc_idx:
             table[(i, j)].set_facecolor('#abebc6')
             table[(i, j)].set_text_props(weight='bold')
@@ -245,18 +186,11 @@ plt.tight_layout()
 output_path = os.path.join(SCRIPT_DIR, 'phishing_viz_5_metrics_table.png')
 plt.savefig(output_path, bbox_inches='tight')
 plt.close()
-print(f"   ✓ Saved: {output_path}")
 
-
-# ============================================================================
-# 6. SUMMARY DASHBOARD
-# ============================================================================
-print("\n6. Creating summary dashboard...")
 
 fig = plt.figure(figsize=(14, 10))
 gs = fig.add_gridspec(3, 2, hspace=0.3, wspace=0.3)
 
-# 6a. Best accuracy per kernel (top left)
 ax1 = fig.add_subplot(gs[0, 0])
 kernel_best = results_df.groupby('kernel')['accuracy'].max().reset_index()
 colors_list = ['#3498db' if k == 'linear' else '#e74c3c' for k in kernel_best['kernel']]
@@ -271,7 +205,6 @@ ax1.set_title('Best Accuracy by Kernel', fontweight='bold', fontsize=12)
 ax1.set_ylim(0.8, 0.95)
 ax1.grid(True, alpha=0.3, axis='y')
 
-# 6b. Training time by C parameter (top right)
 ax2 = fig.add_subplot(gs[0, 1])
 for kernel, color in [('linear', '#3498db'), ('rbf', '#e74c3c')]:
     kernel_data = results_df[results_df['kernel'] == kernel]
@@ -284,7 +217,6 @@ ax2.set_xscale('log')
 ax2.legend()
 ax2.grid(True, alpha=0.3)
 
-# 6c. Accuracy by configuration (middle)
 ax3 = fig.add_subplot(gs[1, :])
 x = range(len(results_df))
 colors_bars = ['#3498db' if k == 'linear' else '#e74c3c' for k in results_df['kernel']]
@@ -301,7 +233,6 @@ ax3.set_xticklabels([f"{r['kernel'][:3].upper()}\nC={r['C']}"
 ax3.legend()
 ax3.grid(True, alpha=0.3, axis='y')
 
-# 6d. Dataset info (bottom left)
 ax4 = fig.add_subplot(gs[2, 0])
 ax4.axis('tight')
 ax4.axis('off')
@@ -324,7 +255,6 @@ for i in range(len(dataset_info)):
     table[(i, 0)].set_text_props(weight='bold')
 ax4.set_title('Dataset Information', fontweight='bold', fontsize=12, pad=20)
 
-# 6e. Summary statistics (bottom right)
 ax5 = fig.add_subplot(gs[2, 1])
 ax5.axis('tight')
 ax5.axis('off')
@@ -354,37 +284,11 @@ plt.suptitle('Phishing Dataset: SVM Classification Summary',
 output_path = os.path.join(SCRIPT_DIR, 'phishing_viz_6_summary_dashboard.png')
 plt.savefig(output_path, bbox_inches='tight')
 plt.close()
-print(f"   ✓ Saved: {output_path}")
+ inclusion!")
 
-
-# ============================================================================
-# SUMMARY
-# ============================================================================
-print("\n" + "="*80)
-print("ALL VISUALIZATIONS CREATED SUCCESSFULLY!")
-print("="*80)
-print(f"\nOutput directory: {SCRIPT_DIR}")
-print("\nGenerated files:")
-print("  1. phishing_viz_1_kernel_comparison.png     - Linear vs RBF performance")
-print("  2. phishing_viz_2_parameter_sensitivity.png - Effect of C parameter")
-print("  3. phishing_viz_3_training_time.png         - Training time by kernel")
-print("  4. phishing_viz_4_heatmap.png               - Complete results heatmap")
-print("  5. phishing_viz_5_metrics_table.png         - Detailed metrics table")
-print("  6. phishing_viz_6_summary_dashboard.png     - Complete summary dashboard")
-print("\nAll images saved at 300 DPI for high-quality report inclusion!")
-print("="*80)
-
-# Display best result
 best_idx = results_df['accuracy'].idxmax()
 best_result = results_df.loc[best_idx]
-print("\n" + "="*80)
-print("BEST MODEL SUMMARY")
-print("="*80)
-print(f"Kernel: {best_result['kernel'].upper()}")
-print(f"C: {best_result['C']}")
-print(f"Accuracy: {best_result['accuracy']:.4f}")
-print(f"Precision: {best_result['precision']:.4f}")
-print(f"Recall: {best_result['recall']:.4f}")
+
 print(f"F1-Score: {best_result['f1']:.4f}")
 print(f"Training Time: {best_result['train_time']:.4f}s")
 print("="*80)
