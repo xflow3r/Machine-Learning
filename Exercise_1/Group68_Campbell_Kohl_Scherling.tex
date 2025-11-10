@@ -765,13 +765,6 @@ RBF & 1.0 & \textbf{0.2810} & 1.95 & \textbf{+209\%} \\
 
 Best configuration: RBF (C=1.0) achieved 28.1\%, representing a 3× improvement over random guessing (9.1\%). While this appears low, it demonstrates significant learning on this challenging 11-class problem with imbalanced classes (19.2\% to 5.6\% range). The dataset was subsampled from 363K to 10K samples for computational feasibility. Medium dimensionality (66 features) allowed RBF to maintain slight edge over Linear. Training time scaled dramatically with C: Linear C=10.0 required 45s vs 1.6s for C=0.1.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.65\textwidth]{road_safety/svm/road_safety_viz_1_kernel_comparison.png}
-    \caption{SVM achieves 3× improvement over random baseline on 11-class problem}
-    \label{fig:road_safety_svm}
-\end{figure}
-
 
 %=============================================================================
 \section{Conclusion}
