@@ -1,0 +1,119 @@
+====================================================================================================
+Running HOLDOUT evaluations...
+[Holdout] C=   0.01 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.7133 val_f1m=0.6932 | time: fit=4.339s infer=0.035s
+[Holdout] C= 0.0464 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.7200 val_f1m=0.6928 | time: fit=3.755s infer=0.033s
+[Holdout] C=  0.215 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.7200 val_f1m=0.6993 | time: fit=1.455s infer=0.034s
+[Holdout] C=      1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.7067 val_f1m=0.6816 | time: fit=1.205s infer=0.033s
+[Holdout] C=   4.64 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.7133 val_f1m=0.6870 | time: fit=1.599s infer=0.034s
+[Holdout] C=   21.5 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.7133 val_f1m=0.6870 | time: fit=1.477s infer=0.034s
+[Holdout] C=    100 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.7133 val_f1m=0.6870 | time: fit=1.368s infer=0.035s
+
+Running CROSS-VALIDATION evaluations...
+[5-Fold CV] C=   0.01 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.6893 (sd=0.0359) val_f1m=0.6673 | time=6.522s
+[5-Fold CV] C= 0.0464 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.6960 (sd=0.0303) val_f1m=0.6765 | time=3.826s
+[5-Fold CV] C=  0.215 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.6893 (sd=0.0306) val_f1m=0.6735 | time=2.114s
+[5-Fold CV] C=      1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.6907 (sd=0.0262) val_f1m=0.6727 | time=2.010s
+[5-Fold CV] C=   4.64 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.6907 (sd=0.0262) val_f1m=0.6731 | time=1.927s
+[5-Fold CV] C=   21.5 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.6907 (sd=0.0262) val_f1m=0.6731 | time=1.771s
+[5-Fold CV] C=    100 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.6907 (sd=0.0262) val_f1m=0.6732 | time=1.773s
+
+====================================================================================================
+RESULTS SUMMARY TABLE
+         Method          C Train Time (s) Train Acc Train F1m            Val Acc Val F1m
+Holdout (80/20)   0.215443          1.455    1.0000    1.0000             0.7200  0.6993
+Holdout (80/20)   0.010000          4.339    1.0000    1.0000             0.7133  0.6932
+Holdout (80/20)   0.046416          3.755    1.0000    1.0000             0.7200  0.6928
+Holdout (80/20)   4.641589          1.599    1.0000    1.0000             0.7133  0.6870
+Holdout (80/20)  21.544347          1.477    1.0000    1.0000             0.7133  0.6870
+Holdout (80/20) 100.000000          1.368    1.0000    1.0000             0.7133  0.6870
+Holdout (80/20)   1.000000          1.205    1.0000    1.0000             0.7067  0.6816
+      5-Fold CV   0.046416          3.826    1.0000    1.0000 0.6960 (sd 0.0303)  0.6765
+      5-Fold CV   0.215443          2.114    1.0000    1.0000 0.6893 (sd 0.0306)  0.6735
+      5-Fold CV 100.000000          1.773    1.0000    1.0000 0.6907 (sd 0.0262)  0.6732
+      5-Fold CV   4.641589          1.927    1.0000    1.0000 0.6907 (sd 0.0262)  0.6731
+      5-Fold CV  21.544347          1.771    1.0000    1.0000 0.6907 (sd 0.0262)  0.6731
+      5-Fold CV   1.000000          2.010    1.0000    1.0000 0.6907 (sd 0.0262)  0.6727
+      5-Fold CV   0.010000          6.522    1.0000    1.0000 0.6893 (sd 0.0359)  0.6673
+
+====================================================================================================
+Best model: Holdout (80/20) with params {'C': np.float64(0.21544346900318834)}
+Best validation: F1m=0.6993 | Acc=0.7200
+
+Confusion Matrix (Best Holdout Model):
+[[3 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 2 ... 0 0 0]
+ ...
+ [0 0 0 ... 2 0 0]
+ [0 0 0 ... 0 2 1]
+ [0 0 0 ... 0 0 3]]
+
+Per-class report:
+              precision    recall  f1-score   support
+
+     Agresti       0.75      1.00      0.86         3
+   Ashbacher       0.00      0.00      0.00         2
+       Auken       1.00      0.67      0.80         3
+ Blankenship       1.00      0.67      0.80         3
+       Brody       1.00      0.67      0.80         3
+       Brown       0.33      0.33      0.33         3
+    Bukowsky       0.75      1.00      0.86         3
+         CFH       1.00      0.67      0.80         3
+   Calvinnme       0.67      0.67      0.67         3
+     Chachra       0.57      1.00      0.73         4
+    Chandler       1.00      0.67      0.80         3
+       Chell       0.50      0.75      0.60         4
+    Cholette       1.00      0.33      0.50         3
+      Comdet       0.50      0.75      0.60         4
+        Corn       0.67      0.67      0.67         3
+       Cutey       0.50      1.00      0.67         3
+    Davisson       0.75      0.75      0.75         4
+        Dent       1.00      0.50      0.67         2
+    Engineer       0.67      1.00      0.80         2
+      Goonan       0.60      1.00      0.75         3
+       Grove       0.67      0.67      0.67         3
+        Harp       1.00      1.00      1.00         3
+       Hayes       0.60      0.75      0.67         4
+      Janson       1.00      1.00      1.00         3
+     Johnson       1.00      1.00      1.00         3
+      Koenig       0.00      0.00      0.00         2
+       Kolln       0.33      1.00      0.50         2
+   Lawyeraau       0.67      0.67      0.67         3
+         Lee       1.00      0.33      0.50         3
+      Lovitt       1.00      0.50      0.67         2
+  Mahlers2nd       1.00      1.00      1.00         3
+        Mark       1.00      0.67      0.80         3
+       McKee       0.33      0.33      0.33         3
+     Merritt       1.00      1.00      1.00         4
+     Messick       1.00      0.33      0.50         3
+    Mitchell       1.00      0.50      0.67         2
+    Morrison       1.00      1.00      1.00         3
+        Neal       0.67      0.67      0.67         3
+       Nigam       0.50      0.33      0.40         3
+    Peterson       1.00      1.00      1.00         2
+       Power       0.80      1.00      0.89         4
+       Riley       1.00      0.33      0.50         3
+      Robert       0.75      1.00      0.86         3
+        Shea       1.00      0.67      0.80         3
+     Sherwin       0.57      1.00      0.73         4
+      Taylor       1.00      1.00      1.00         2
+      Vernon       1.00      0.33      0.50         3
+      Vision       1.00      0.67      0.80         3
+     Walters       0.67      0.67      0.67         3
+      Wilson       0.75      0.75      0.75         4
+
+    accuracy                           0.72       150
+   macro avg       0.77      0.70      0.70       150
+weighted avg       0.77      0.72      0.71       150
+
+
+Final training on full data: 1.267s
+
+First 30 predictions:
+['Mitchell' 'Bukowsky' 'Grove' 'Mahlers2nd' 'Corn' 'Bukowsky' 'Peterson'
+ 'Sherwin' 'Goonan' 'Lawyeraau' 'Comdet' 'Johnson' 'Dent' 'Lawyeraau'
+ 'Hayes' 'Harp' 'Peterson' 'Cutey' 'Mark' 'Johnson' 'Nigam' 'Engineer'
+ 'Cholette' 'Bukowsky' 'Lovitt' 'Chandler' 'Ashbacher' 'Cutey' 'Brody'
+ 'Comdet']
+
+Predictions saved to: /home/chrisvenator/IdeaProjects/Machine-Learning/Exercise_1/reviews/logreg/logreg_voting_result.csv

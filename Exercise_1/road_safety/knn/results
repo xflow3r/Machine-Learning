@@ -1,0 +1,100 @@
+====================================================================================================
+Running HOLDOUT evaluations...
+[Holdout] k= 3, weights=uniform , p=1 | train_acc=0.6335 train_f1m=0.6227 | val_acc=0.3394 val_f1m=0.2781 | time: fit=0.225s infer=2.305s
+[Holdout] k= 3, weights=uniform , p=2 | train_acc=0.5831 train_f1m=0.5568 | val_acc=0.2702 val_f1m=0.2151 | time: fit=0.225s infer=0.532s
+[Holdout] k= 3, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3771 val_f1m=0.3227 | time: fit=0.230s infer=2.373s
+[Holdout] k= 3, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3072 val_f1m=0.2439 | time: fit=0.240s infer=0.534s
+[Holdout] k= 5, weights=uniform , p=1 | train_acc=0.5851 train_f1m=0.5744 | val_acc=0.3560 val_f1m=0.3040 | time: fit=0.305s infer=2.357s
+[Holdout] k= 5, weights=uniform , p=2 | train_acc=0.5260 train_f1m=0.4801 | val_acc=0.2846 val_f1m=0.2231 | time: fit=0.250s infer=0.575s
+[Holdout] k= 5, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3888 val_f1m=0.3341 | time: fit=0.242s infer=2.385s
+[Holdout] k= 5, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3067 val_f1m=0.2521 | time: fit=0.249s infer=0.559s
+[Holdout] k= 7, weights=uniform , p=1 | train_acc=0.5479 train_f1m=0.5294 | val_acc=0.3644 val_f1m=0.3101 | time: fit=0.235s infer=2.323s
+[Holdout] k= 7, weights=uniform , p=2 | train_acc=0.4791 train_f1m=0.4173 | val_acc=0.2857 val_f1m=0.2131 | time: fit=0.251s infer=0.551s
+[Holdout] k= 7, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3960 val_f1m=0.3396 | time: fit=0.238s infer=2.347s
+[Holdout] k= 7, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3081 val_f1m=0.2393 | time: fit=0.247s infer=0.565s
+[Holdout] k= 9, weights=uniform , p=1 | train_acc=0.5280 train_f1m=0.4943 | val_acc=0.3690 val_f1m=0.3167 | time: fit=0.241s infer=2.481s
+[Holdout] k= 9, weights=uniform , p=2 | train_acc=0.4540 train_f1m=0.3745 | val_acc=0.2869 val_f1m=0.2140 | time: fit=0.237s infer=0.567s
+[Holdout] k= 9, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3997 val_f1m=0.3448 | time: fit=0.243s infer=2.310s
+[Holdout] k= 9, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3101 val_f1m=0.2442 | time: fit=0.223s infer=0.650s
+[Holdout] k=11, weights=uniform , p=1 | train_acc=0.5115 train_f1m=0.4671 | val_acc=0.3760 val_f1m=0.3082 | time: fit=0.236s infer=2.314s
+[Holdout] k=11, weights=uniform , p=2 | train_acc=0.4364 train_f1m=0.3535 | val_acc=0.2928 val_f1m=0.2255 | time: fit=0.233s infer=0.647s
+[Holdout] k=11, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.4065 val_f1m=0.3487 | time: fit=0.227s infer=2.346s
+[Holdout] k=11, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3110 val_f1m=0.2422 | time: fit=0.233s infer=0.599s
+
+Running CROSS-VALIDATION evaluations...
+[5-Fold CV] k= 3, weights=uniform , p=1 | train_acc=0.6354 train_f1m=0.6190 | val_acc=0.3335 (sd=0.0036) val_f1m=0.2976 | time=119.020s
+[5-Fold CV] k= 3, weights=uniform , p=2 | train_acc=0.5850 train_f1m=0.5537 | val_acc=0.2717 (sd=0.0019) val_f1m=0.2259 | time=25.221s
+[5-Fold CV] k= 3, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3791 (sd=0.0033) val_f1m=0.3449 | time=113.326s
+[5-Fold CV] k= 3, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3084 (sd=0.0029) val_f1m=0.2615 | time=25.563s
+[5-Fold CV] k= 5, weights=uniform , p=1 | train_acc=0.5867 train_f1m=0.5530 | val_acc=0.3577 (sd=0.0027) val_f1m=0.3110 | time=117.664s
+[5-Fold CV] k= 5, weights=uniform , p=2 | train_acc=0.5260 train_f1m=0.4682 | val_acc=0.2847 (sd=0.0029) val_f1m=0.2313 | time=24.977s
+[5-Fold CV] k= 5, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3930 (sd=0.0032) val_f1m=0.3585 | time=113.376s
+[5-Fold CV] k= 5, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3102 (sd=0.0034) val_f1m=0.2516 | time=24.982s
+[5-Fold CV] k= 7, weights=uniform , p=1 | train_acc=0.5480 train_f1m=0.5114 | val_acc=0.3640 (sd=0.0034) val_f1m=0.3228 | time=113.043s
+[5-Fold CV] k= 7, weights=uniform , p=2 | train_acc=0.4809 train_f1m=0.4180 | val_acc=0.2858 (sd=0.0033) val_f1m=0.2269 | time=25.038s
+[5-Fold CV] k= 7, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.4000 (sd=0.0022) val_f1m=0.3572 | time=112.907s
+[5-Fold CV] k= 7, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3123 (sd=0.0017) val_f1m=0.2521 | time=24.823s
+[5-Fold CV] k= 9, weights=uniform , p=1 | train_acc=0.5285 train_f1m=0.4862 | val_acc=0.3712 (sd=0.0033) val_f1m=0.3276 | time=113.040s
+[5-Fold CV] k= 9, weights=uniform , p=2 | train_acc=0.4544 train_f1m=0.3771 | val_acc=0.2876 (sd=0.0011) val_f1m=0.2253 | time=24.980s
+[5-Fold CV] k= 9, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.4064 (sd=0.0027) val_f1m=0.3574 | time=117.465s
+[5-Fold CV] k= 9, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3105 (sd=0.0018) val_f1m=0.2511 | time=24.848s
+[5-Fold CV] k=11, weights=uniform , p=1 | train_acc=0.5134 train_f1m=0.4581 | val_acc=0.3761 (sd=0.0030) val_f1m=0.3301 | time=112.918s
+[5-Fold CV] k=11, weights=uniform , p=2 | train_acc=0.4371 train_f1m=0.3532 | val_acc=0.2903 (sd=0.0015) val_f1m=0.2234 | time=24.960s
+[5-Fold CV] k=11, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.4095 (sd=0.0036) val_f1m=0.3588 | time=113.638s
+[5-Fold CV] k=11, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.3114 (sd=0.0011) val_f1m=0.2464 | time=25.255s
+
+====================================================================================================
+RESULTS SUMMARY TABLE
+         Method  k  Weights  p Train Time (s) Train Acc Train F1m            Val Acc Val F1m
+      5-Fold CV 11 distance  1        113.638    1.0000    1.0000 0.4095 (sd 0.0036)  0.3588
+      5-Fold CV  5 distance  1        113.376    1.0000    1.0000 0.3930 (sd 0.0032)  0.3585
+      5-Fold CV  9 distance  1        117.465    1.0000    1.0000 0.4064 (sd 0.0027)  0.3574
+      5-Fold CV  7 distance  1        112.907    1.0000    1.0000 0.4000 (sd 0.0022)  0.3572
+Holdout (80/20) 11 distance  1          0.227    1.0000    1.0000             0.4065  0.3487
+      5-Fold CV  3 distance  1        113.326    1.0000    1.0000 0.3791 (sd 0.0033)  0.3449
+Holdout (80/20)  9 distance  1          0.243    1.0000    1.0000             0.3997  0.3448
+Holdout (80/20)  7 distance  1          0.238    1.0000    1.0000             0.3960  0.3396
+Holdout (80/20)  5 distance  1          0.242    1.0000    1.0000             0.3888  0.3341
+      5-Fold CV 11  uniform  1        112.918    0.5134    0.4581 0.3761 (sd 0.0030)  0.3301
+      5-Fold CV  9  uniform  1        113.040    0.5285    0.4862 0.3712 (sd 0.0033)  0.3276
+      5-Fold CV  7  uniform  1        113.043    0.5480    0.5114 0.3640 (sd 0.0034)  0.3228
+Holdout (80/20)  3 distance  1          0.230    1.0000    1.0000             0.3771  0.3227
+Holdout (80/20)  9  uniform  1          0.241    0.5280    0.4943             0.3690  0.3167
+      5-Fold CV  5  uniform  1        117.664    0.5867    0.5530 0.3577 (sd 0.0027)  0.3110
+Holdout (80/20)  7  uniform  1          0.235    0.5479    0.5294             0.3644  0.3101
+Holdout (80/20) 11  uniform  1          0.236    0.5115    0.4671             0.3760  0.3082
+Holdout (80/20)  5  uniform  1          0.305    0.5851    0.5744             0.3560  0.3040
+      5-Fold CV  3  uniform  1        119.020    0.6354    0.6190 0.3335 (sd 0.0036)  0.2976
+Holdout (80/20)  3  uniform  1          0.225    0.6335    0.6227             0.3394  0.2781
+      5-Fold CV  3 distance  2         25.563    1.0000    1.0000 0.3084 (sd 0.0029)  0.2615
+      5-Fold CV  7 distance  2         24.823    1.0000    1.0000 0.3123 (sd 0.0017)  0.2521
+Holdout (80/20)  5 distance  2          0.249    1.0000    1.0000             0.3067  0.2521
+      5-Fold CV  5 distance  2         24.982    1.0000    1.0000 0.3102 (sd 0.0034)  0.2516
+      5-Fold CV  9 distance  2         24.848    1.0000    1.0000 0.3105 (sd 0.0018)  0.2511
+      5-Fold CV 11 distance  2         25.255    1.0000    1.0000 0.3114 (sd 0.0011)  0.2464
+Holdout (80/20)  9 distance  2          0.223    1.0000    1.0000             0.3101  0.2442
+Holdout (80/20)  3 distance  2          0.240    1.0000    1.0000             0.3072  0.2439
+Holdout (80/20) 11 distance  2          0.233    1.0000    1.0000             0.3110  0.2422
+Holdout (80/20)  7 distance  2          0.247    1.0000    1.0000             0.3081  0.2393
+      5-Fold CV  5  uniform  2         24.977    0.5260    0.4682 0.2847 (sd 0.0029)  0.2313
+      5-Fold CV  7  uniform  2         25.038    0.4809    0.4180 0.2858 (sd 0.0033)  0.2269
+      5-Fold CV  3  uniform  2         25.221    0.5850    0.5537 0.2717 (sd 0.0019)  0.2259
+Holdout (80/20) 11  uniform  2          0.233    0.4364    0.3535             0.2928  0.2255
+      5-Fold CV  9  uniform  2         24.980    0.4544    0.3771 0.2876 (sd 0.0011)  0.2253
+      5-Fold CV 11  uniform  2         24.960    0.4371    0.3532 0.2903 (sd 0.0015)  0.2234
+Holdout (80/20)  5  uniform  2          0.250    0.5260    0.4801             0.2846  0.2231
+Holdout (80/20)  3  uniform  2          0.225    0.5831    0.5568             0.2702  0.2151
+Holdout (80/20)  9  uniform  2          0.237    0.4540    0.3745             0.2869  0.2140
+Holdout (80/20)  7  uniform  2          0.251    0.4791    0.4173             0.2857  0.2131
+
+====================================================================================================
+Best model: 5-Fold CV with params {'n_neighbors': 11, 'weights': 'distance', 'p': 1}
+Best validation: F1m=0.3588 | Acc=0.4095
+
+Final training on full data: 0.293s
+
+First 30 predictions vs truths:
+[7. 6. 7. 8. 7. 6. 7. 8. 4. 8. 7. 6. 7. 7. 6. 7. 6. 6. 7. 7. 6. 8. 7. 9.
+ 6. 7. 8. 9. 7. 6.]
+[ 9.  8.  6.  8.  5.  8.  7.  8.  4.  8. 11.  9.  7.  8.  8.  8.  6.  8.
+  8.  4.  6.  5.  7.  7.  6.  9.  8.  9.  6.  5.]

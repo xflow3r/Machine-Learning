@@ -1,0 +1,118 @@
+====================================================================================================
+Running HOLDOUT evaluations...
+[Holdout] k= 3, weights=uniform , p=1 | train_acc=0.9598 train_f1m=0.9588 | val_acc=0.9773 val_f1m=0.9763 | time: fit=0.003s infer=0.001s
+[Holdout] k= 3, weights=uniform , p=2 | train_acc=0.9598 train_f1m=0.9588 | val_acc=0.9773 val_f1m=0.9763 | time: fit=0.002s infer=0.002s
+[Holdout] k= 3, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9763 | time: fit=0.002s infer=0.001s
+[Holdout] k= 3, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9763 | time: fit=0.002s infer=0.001s
+[Holdout] k= 5, weights=uniform , p=1 | train_acc=0.9253 train_f1m=0.9240 | val_acc=0.9545 val_f1m=0.9530 | time: fit=0.002s infer=0.001s
+[Holdout] k= 5, weights=uniform , p=2 | train_acc=0.9253 train_f1m=0.9240 | val_acc=0.9545 val_f1m=0.9530 | time: fit=0.002s infer=0.001s
+[Holdout] k= 5, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9545 val_f1m=0.9530 | time: fit=0.002s infer=0.001s
+[Holdout] k= 5, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9545 val_f1m=0.9530 | time: fit=0.002s infer=0.001s
+[Holdout] k= 7, weights=uniform , p=1 | train_acc=0.9310 train_f1m=0.9299 | val_acc=1.0000 val_f1m=1.0000 | time: fit=0.002s infer=0.002s
+[Holdout] k= 7, weights=uniform , p=2 | train_acc=0.9253 train_f1m=0.9240 | val_acc=1.0000 val_f1m=1.0000 | time: fit=0.003s infer=0.001s
+[Holdout] k= 7, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k= 7, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=1.0000 val_f1m=1.0000 | time: fit=0.002s infer=0.001s
+[Holdout] k= 9, weights=uniform , p=1 | train_acc=0.9195 train_f1m=0.9182 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k= 9, weights=uniform , p=2 | train_acc=0.9195 train_f1m=0.9182 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k= 9, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k= 9, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k=11, weights=uniform , p=1 | train_acc=0.9080 train_f1m=0.9063 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k=11, weights=uniform , p=2 | train_acc=0.9138 train_f1m=0.9123 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k=11, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+[Holdout] k=11, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9773 val_f1m=0.9767 | time: fit=0.002s infer=0.001s
+
+Running CROSS-VALIDATION evaluations...
+[5-Fold CV] k= 3, weights=uniform , p=1 | train_acc=0.9564 train_f1m=0.9553 | val_acc=0.9311 (sd=0.0294) val_f1m=0.9292 | time=1.126s
+[5-Fold CV] k= 3, weights=uniform , p=2 | train_acc=0.9587 train_f1m=0.9577 | val_acc=0.9311 (sd=0.0294) val_f1m=0.9292 | time=0.376s
+[5-Fold CV] k= 3, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9312 (sd=0.0206) val_f1m=0.9292 | time=0.377s
+[5-Fold CV] k= 3, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9265 (sd=0.0271) val_f1m=0.9246 | time=0.377s
+[5-Fold CV] k= 5, weights=uniform , p=1 | train_acc=0.9427 train_f1m=0.9416 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9198 | time=0.376s
+[5-Fold CV] k= 5, weights=uniform , p=2 | train_acc=0.9427 train_f1m=0.9416 | val_acc=0.9311 (sd=0.0257) val_f1m=0.9297 | time=0.022s
+[5-Fold CV] k= 5, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9312 (sd=0.0206) val_f1m=0.9292 | time=0.022s
+[5-Fold CV] k= 5, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9357 (sd=0.0309) val_f1m=0.9344 | time=0.023s
+[5-Fold CV] k= 7, weights=uniform , p=1 | train_acc=0.9358 train_f1m=0.9346 | val_acc=0.9311 (sd=0.0257) val_f1m=0.9297 | time=0.023s
+[5-Fold CV] k= 7, weights=uniform , p=2 | train_acc=0.9335 train_f1m=0.9321 | val_acc=0.9311 (sd=0.0257) val_f1m=0.9297 | time=0.022s
+[5-Fold CV] k= 7, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9357 (sd=0.0309) val_f1m=0.9344 | time=0.024s
+[5-Fold CV] k= 7, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9357 (sd=0.0309) val_f1m=0.9344 | time=0.022s
+[5-Fold CV] k= 9, weights=uniform , p=1 | train_acc=0.9300 train_f1m=0.9287 | val_acc=0.9264 (sd=0.0232) val_f1m=0.9248 | time=0.024s
+[5-Fold CV] k= 9, weights=uniform , p=2 | train_acc=0.9266 train_f1m=0.9251 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.023s
+[5-Fold CV] k= 9, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9311 (sd=0.0257) val_f1m=0.9295 | time=0.023s
+[5-Fold CV] k= 9, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.022s
+[5-Fold CV] k=11, weights=uniform , p=1 | train_acc=0.9266 train_f1m=0.9251 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.022s
+[5-Fold CV] k=11, weights=uniform , p=2 | train_acc=0.9255 train_f1m=0.9239 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.023s
+[5-Fold CV] k=11, weights=distance, p=1 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9264 (sd=0.0232) val_f1m=0.9248 | time=0.023s
+[5-Fold CV] k=11, weights=distance, p=2 | train_acc=1.0000 train_f1m=1.0000 | val_acc=0.9219 (sd=0.0239) val_f1m=0.9203 | time=0.022s
+
+====================================================================================================
+RESULTS SUMMARY TABLE
+         Method  k  Weights  p Train Time (s) Train Acc Train F1m            Val Acc Val F1m
+Holdout (80/20)  7  uniform  1          0.002    0.9310    0.9299             1.0000  1.0000
+Holdout (80/20)  7  uniform  2          0.003    0.9253    0.9240             1.0000  1.0000
+Holdout (80/20)  7 distance  2          0.002    1.0000    1.0000             1.0000  1.0000
+Holdout (80/20)  7 distance  1          0.002    1.0000    1.0000             0.9773  0.9767
+Holdout (80/20)  9  uniform  1          0.002    0.9195    0.9182             0.9773  0.9767
+Holdout (80/20)  9  uniform  2          0.002    0.9195    0.9182             0.9773  0.9767
+Holdout (80/20)  9 distance  1          0.002    1.0000    1.0000             0.9773  0.9767
+Holdout (80/20)  9 distance  2          0.002    1.0000    1.0000             0.9773  0.9767
+Holdout (80/20) 11  uniform  1          0.002    0.9080    0.9063             0.9773  0.9767
+Holdout (80/20) 11  uniform  2          0.002    0.9138    0.9123             0.9773  0.9767
+Holdout (80/20) 11 distance  1          0.002    1.0000    1.0000             0.9773  0.9767
+Holdout (80/20) 11 distance  2          0.002    1.0000    1.0000             0.9773  0.9767
+Holdout (80/20)  3  uniform  1          0.003    0.9598    0.9588             0.9773  0.9763
+Holdout (80/20)  3  uniform  2          0.002    0.9598    0.9588             0.9773  0.9763
+Holdout (80/20)  3 distance  1          0.002    1.0000    1.0000             0.9773  0.9763
+Holdout (80/20)  3 distance  2          0.002    1.0000    1.0000             0.9773  0.9763
+Holdout (80/20)  5  uniform  1          0.002    0.9253    0.9240             0.9545  0.9530
+Holdout (80/20)  5  uniform  2          0.002    0.9253    0.9240             0.9545  0.9530
+Holdout (80/20)  5 distance  1          0.002    1.0000    1.0000             0.9545  0.9530
+Holdout (80/20)  5 distance  2          0.002    1.0000    1.0000             0.9545  0.9530
+      5-Fold CV  5 distance  2          0.023    1.0000    1.0000 0.9357 (sd 0.0309)  0.9344
+      5-Fold CV  7 distance  1          0.024    1.0000    1.0000 0.9357 (sd 0.0309)  0.9344
+      5-Fold CV  7 distance  2          0.022    1.0000    1.0000 0.9357 (sd 0.0309)  0.9344
+      5-Fold CV  5  uniform  2          0.022    0.9427    0.9416 0.9311 (sd 0.0257)  0.9297
+      5-Fold CV  7  uniform  1          0.023    0.9358    0.9346 0.9311 (sd 0.0257)  0.9297
+      5-Fold CV  7  uniform  2          0.022    0.9335    0.9321 0.9311 (sd 0.0257)  0.9297
+      5-Fold CV  9 distance  1          0.023    1.0000    1.0000 0.9311 (sd 0.0257)  0.9295
+      5-Fold CV  3 distance  1          0.377    1.0000    1.0000 0.9312 (sd 0.0206)  0.9292
+      5-Fold CV  5 distance  1          0.022    1.0000    1.0000 0.9312 (sd 0.0206)  0.9292
+      5-Fold CV  3  uniform  1          1.126    0.9564    0.9553 0.9311 (sd 0.0294)  0.9292
+      5-Fold CV  3  uniform  2          0.376    0.9587    0.9577 0.9311 (sd 0.0294)  0.9292
+      5-Fold CV  9  uniform  1          0.024    0.9300    0.9287 0.9264 (sd 0.0232)  0.9248
+      5-Fold CV 11 distance  1          0.023    1.0000    1.0000 0.9264 (sd 0.0232)  0.9248
+      5-Fold CV  3 distance  2          0.377    1.0000    1.0000 0.9265 (sd 0.0271)  0.9246
+      5-Fold CV  9  uniform  2          0.023    0.9266    0.9251 0.9219 (sd 0.0239)  0.9203
+      5-Fold CV  9 distance  2          0.022    1.0000    1.0000 0.9219 (sd 0.0239)  0.9203
+      5-Fold CV 11  uniform  1          0.022    0.9266    0.9251 0.9219 (sd 0.0239)  0.9203
+      5-Fold CV 11  uniform  2          0.023    0.9255    0.9239 0.9219 (sd 0.0239)  0.9203
+      5-Fold CV 11 distance  2          0.022    1.0000    1.0000 0.9219 (sd 0.0239)  0.9203
+      5-Fold CV  5  uniform  1          0.376    0.9427    0.9416 0.9219 (sd 0.0239)  0.9198
+
+====================================================================================================
+Best model: Holdout (80/20) with params {'n_neighbors': 7, 'weights': 'distance', 'p': 2}
+Best validation: F1m=1.0000 | Acc=1.0000
+
+Confusion Matrix (Best Holdout Model):
+[[26  0]
+ [ 0 18]]
+
+Per-class report:
+              precision    recall  f1-score   support
+
+    democrat       1.00      1.00      1.00        26
+  republican       1.00      1.00      1.00        18
+
+    accuracy                           1.00        44
+   macro avg       1.00      1.00      1.00        44
+weighted avg       1.00      1.00      1.00        44
+
+
+Final training on full data: 0.002s
+
+First 30 predictions:
+['democrat' 'democrat' 'republican' 'democrat' 'democrat' 'democrat'
+ 'democrat' 'republican' 'republican' 'democrat' 'republican' 'republican'
+ 'republican' 'democrat' 'democrat' 'democrat' 'republican' 'republican'
+ 'republican' 'republican' 'democrat' 'republican' 'democrat' 'republican'
+ 'republican' 'democrat' 'republican' 'democrat' 'republican' 'republican']
+
+Predictions saved to: /home/chrisvenator/IdeaProjects/Machine-Learning/Exercise_1/voting/knn/voting_knn_result.csv
