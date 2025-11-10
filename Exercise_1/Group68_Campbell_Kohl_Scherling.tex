@@ -269,6 +269,32 @@ To evaluate the impact of preprocessing, we compared classifier performance with
 \textbf{Selection reasoning:}
 We selected SVM specifically to investigate the relationship between dataset dimensionality and kernel performance. SVMs offer a unique capability to switch between linear and non-linear decision boundaries through kernel selection, making them ideal for testing our hypothesis: high-dimensional sparse data (Amazon: 10,000 features) should favor linear kernels, while low-dimensional structured data (Phishing: 9 features) should benefit from non-linear RBF kernels. This kernel flexibility allows us to systematically evaluate how the curse of dimensionality affects non-linear methods. Additionally, SVMs provide theoretical guarantees through margin maximization and clear interpretability through support vectors, making them valuable for understanding classifier behavior across diverse datasets.
 
+\subsection{Classifier 3: K-Nearest Neighbor}
+\label{subsec:classifier3}
+
+\textbf{Type/Paradigm:} NN, non-parametric supervised learning
+
+\textbf{Key Characteristics:}
+\begin{itemize}
+    \item lazy loading
+    \item always retains all training data to make predictions
+    \item training data is stored as vectors
+    \item when a new element comes, it will be classified as the mean of the k surrounding nearest neighbors
+    \item basically a majority voting
+\end{itemize}
+
+\textbf{Expected Strengths:}
+\begin{itemize}
+    \item Very simple to implement
+    \item Extremeley fast for small datasets.
+    \item can classify quite good with categorical data (like voting)
+\end{itemize}
+
+\textbf{Expected Weaknesses:}
+\begin{itemize}
+    \item Very basic. Probably not very good performance
+    \item Extremely slow for large datasets.
+\end{itemize}
 
 
 %=============================================================================
@@ -331,8 +357,16 @@ For each classifier, we explored multiple parameter configurations:
 \subsubsection{Classifier 2 Parameters}
 [Similar structure]
 
-\subsubsection{Classifier 3 Parameters}
-[Similar structure]
+\subsubsection{Classifier 3 Parameters} 
+We tested multiple different parameters and came to the conclusion that these were the best ones for knn for each dataset. We ran multiple tests and then compared the results. These are the optimized parameters: 
+\begin{itemize}
+    \item \textbf{Dataset phishing:} $n\_neighbors$: 9, weights: distance, p: 1
+    \item \textbf{Dataset reviews:} $n\_neighbors$: 1, weights: distance, p: 2
+    \item \textbf{Dataset road\_safety:} $n\_neighbors$: 11, weights: distance, p: 1
+    \item \textbf{Dataset voting:} $n\_neighbors$: 7, weights: distance, p: 2
+\end{itemize}
+
+
 
 \subsection{Computational Environment}
 
@@ -434,6 +468,10 @@ This section presents the experimental results for all dataset-classifier combin
 [Similar analysis]
 
 \subsubsection{Classifier C Sensitivity}
+
+When setting the "weights" parameter, the computation time immerdiately multiplied. Normally, the calculation were done within a few seconds up to a minute. But when using other weights, we had to stop the calculation after 2 hours since id did not finish until then.
+
+The most impact had the "$n\_neighbors$". It did not impact the model that much but still the most. It could shift the accuracy about +-0.10. The reason is that the lower the number, the less values are being compared with. So, there could form a local bubble, where only a certain class is present, when in reality there value should be a totally different class. On the other hand, when k=n, then it takes just the average.
 
 [Similar analysis]
 
