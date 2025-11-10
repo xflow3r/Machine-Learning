@@ -49,6 +49,7 @@ MANIFEST
 
 # predictions
 *_predictions.csv
+/reviews/logreg/logreg_voting_result.csv
 /voting/knn/voting_knn_result.csv
 
 # generated files
