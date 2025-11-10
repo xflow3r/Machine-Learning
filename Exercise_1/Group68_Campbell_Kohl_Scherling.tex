@@ -535,7 +535,7 @@ This section presents the experimental results for all dataset-classifier combin
 \subsection{Dataset 1: Voting Records Results}
 
 \subsubsection{Overall Performance Comparison}
-Decision Tree Results:
+\subsection{Decision Tree Results - Voting Dataset}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/voting_decision_tree_results_summary_table.png}
@@ -543,17 +543,6 @@ Decision Tree Results:
     \label{fig:voting_dt_results}
 \end{figure}
 The table above shows results for the Decision Tree classifier. The decision tree was able to reach consistently high accuracies of 96\% or higher. We can also see that grid search CV gave slightly lower training accuracies, but better generalization to the test set. Training times were negligible for single holdout splits, but increased to several seconds for GridSearchCV due to multiple folds and parameter combinations. Performance was stable across the two fold counts. Curiously, the 10-fold CV took less time to train than the 5-fold CV, possibly due to implementation details in sklearn's parallelization, or else local concurrent processes on the machine used for training.
-
-K Nearest Neighbors
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{assets/voting_knn_results_summary.png}
-    \caption{Decision Tree Results Summary - Voting Dataset}
-    \label{fig:voting_knn_results}
-\end{figure}
-The aim was to get the best parameters for train accuracy and validation accuracy. Validation accuracies are consistently around 0.97-1.00, showing strong performance. Some configurations (e.g., k=7, weights=uniform, p=1 or 2) even reach perfect validation accuracy. Models with weights=distance often have train\_acc=1.0000, suggesting they perfectly fit the training data — possibly a slight overfitting risk. It was a small dataset. So the inference times are negligible.
-
-\subsubsection{Parameter Sensitivity Analysis}
 Decision Tree Parameter Sensitivity:
 Adjusting Max Depth yielded nearly identical results, suggesting the data is easily separable with shallow trees. Increasing Min Samples Split from 2 to 5 slightly reduced training accuracy, but validation accuracy stayed nearly the same, indicating that stricter splitting rules help reduce overfitting without hurting generalization.
 \begin{figure}[H]
@@ -563,6 +552,16 @@ Adjusting Max Depth yielded nearly identical results, suggesting the data is eas
     \label{fig:voting_dt_classification}
 \end{figure}
 The classification report above does not give much new information, but shows that the dataset and the prediction errors for decision tree were roughly equally split across classes.
+
+\subsection{K Nearest Neighbors Results- Voting Dataset}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/voting_knn_results_summary.png}
+    \caption{Decision Tree Results Summary - Voting Dataset}
+    \label{fig:voting_knn_results}
+\end{figure}
+The aim was to get the best parameters for train accuracy and validation accuracy. Validation accuracies are consistently around 0.97-1.00, showing strong performance. Some configurations (e.g., k=7, weights=uniform, p=1 or 2) even reach perfect validation accuracy. Models with weights=distance often have train\_acc=1.0000, suggesting they perfectly fit the training data — possibly a slight overfitting risk. It was a small dataset. So the inference times are negligible.
+
 
 
 \subsubsection{SVM Results - Voting Dataset}
@@ -592,7 +591,7 @@ Best configuration: Linear (C=1.0) achieved 97.7\% accuracy. Both kernels perfor
 \end{figure}
 
 \subsection{Dataset 2: Amazon Reviews Results}
-Decision Tree Results:
+\subsection{Decision Tree Results - Amazon Reviews Dataset}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/reviews_decision_tree_results_summary_table.png}
@@ -602,7 +601,7 @@ Decision Tree Results:
 For this dataset, the decision tree classifier struggled significantly. The best accuracy was achieved with 10-fold CV and reached an average of 40\% on the left-out fold. However, the kaggle results showed only 34\% accuracy on unseen data. This shows the weakness of decision trees on large, high-dimensional datasets. The model likely overfit to the training data, leading to poor generalization.
 Decision Tree Parameter Sensitivity: Hyperparameters like min samples split and max depth do not drastically change performance. The model consistently underperforms regardless of configuration, indicating that the decision tree is not well-suited for this dataset's characteristics.
 
-K Nearest Neighbors:
+\subsection{K Nearest Neighbors Results - Amazon Reviews Dataset}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/reviews_knn_results_summary.png}
@@ -655,7 +654,7 @@ RBF & 1.0 & 0.0267 & 0.0013 & 0.74s \\
 
 \subsection{Dataset 3: Phishing Results}
 
-Decision Tree Results:
+\subsection{Decision Tree Results - Phishing Dataset}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/phishing_decision_tree_results_summary_table.png}
@@ -698,7 +697,7 @@ Best configuration: RBF (C=10.0) achieved 89.3\% accuracy, outperforming Linear 
     \label{fig:phishing_svm}
 \end{figure}
 
-K Nearest Neighbors:
+\subsection{K Nearest Neighbors Results - Phishing Dataset}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/reviews_knn_results_summary.png}
@@ -711,6 +710,7 @@ Both accuracy and F1-score on validation data are very high (~ 0.93–0.99). Thi
 
 \subsection{Dataset 4: Road Safety Results}
 
+\subsection{Decision Tree Results - Road Safety}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/road_safety_decision_tree_results_summary_table.png}
@@ -724,12 +724,13 @@ Both accuracy and F1-score on validation data are very high (~ 0.93–0.99). Thi
     \caption{Classification Report for Best Model - Road Safety Dataset (Decision Tree)}
     \label{fig:road_safety_dt_classification}
 \end{figure}
+The decision tree results for this road safety dataset show poor generalization and significant overfitting. Setting the max depth to 10 did not hurt the test set accuracy, although it brought down the training accuracy by almost half. This performance on a highly imbalanced multi-class dataset shows further weakness in the decision tree approach on large, complex datasets.
 
-K Nearest Neighbors:
+\subsection{K Nearest Neighbors Results - Road Safety}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/road_safety_knn_summary_1}
-    \caption{Decision Tree Results Summary - Voting Dataset}
+    \caption{K Nearest Neighbors Results Summary - Road Safety Dataset}
     \label{fig:road_safety_knn_results_1}
 \end{figure}
 \begin{figure}[H]
