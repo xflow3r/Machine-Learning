@@ -10,7 +10,7 @@ import time
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_validate, train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report
 
 # Add parent directory to path to import preprocess_datasets
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
@@ -20,34 +20,19 @@ from preprocess_datasets import load_amazon_review_dataset
 RANDOM_STATE = 2742
 
 
-def prepare_data(x_train, y_train):
+def prepare_data(x_train):
     """
     Prepare data by dropping the ID column before training.
     
     Returns:
-        X_train_clean: DataFrame without ID column
-        y_train: Series with target labels
+        X_train_clean: DataFrame without ID column for training
     """
-    # Drop ID column for training
     X_train_clean = x_train.drop(columns=['ID'])
-    
-    return X_train_clean, y_train
+
+    return X_train_clean
 
 
 def train_holdout(X_train, y_train, holdout_pct=0.2, max_depth=None, min_samples_split=2):
-    """
-    Train decision tree using holdout validation.
-    
-    Args:
-        X_train: Training features (without ID)
-        y_train: Training labels
-        holdout_pct: Percentage of data to use for validation
-        max_depth: Max tree depth
-        min_samples_split: Min samples required to split
-        
-    Returns:
-        dict with model, metrics, and timing
-    """
     start_time = time.time()
     
     # Split into train/validation
@@ -72,33 +57,18 @@ def train_holdout(X_train, y_train, holdout_pct=0.2, max_depth=None, min_samples
     # Evaluate on validation split
     y_pred_val = clf.predict(X_val)
     val_acc = accuracy_score(y_val, y_pred_val)
-    cm = confusion_matrix(y_val, y_pred_val)
     
     return {
         'model': clf,
         'train_time': train_time,
         'train_accuracy': train_acc,
         'val_accuracy': val_acc,
-        'confusion_matrix': cm,
         'method': f'Holdout ({int((1-holdout_pct)*100)}/{int(holdout_pct*100)})',
         'params': {'max_depth': max_depth, 'min_samples_split': min_samples_split}
     }
 
 
 def train_cross_validation(X_train, y_train, n_folds=5, max_depth=None, min_samples_split=2):
-    """
-    Train decision tree using k-fold cross-validation.
-    
-    Args:
-        X_train: Training features (without ID)
-        y_train: Training labels
-        n_folds: Number of CV folds
-        max_depth: Max tree depth
-        min_samples_split: Min samples required to split
-        
-    Returns:
-        dict with model, metrics, and timing
-    """
     start_time = time.time()
     
     # Create model
@@ -116,17 +86,16 @@ def train_cross_validation(X_train, y_train, n_folds=5, max_depth=None, min_samp
         return_train_score=True,
         n_jobs=-1
     )
-    
-    # Train final model on full training data
+
+    # Fit final model on full training set
     clf.fit(X_train, y_train)
-    
+
     train_time = time.time() - start_time
-    
-    # Compute mean CV scores
+
     mean_train_acc = cv_results['train_score'].mean()
     mean_val_acc = cv_results['test_score'].mean()
     std_val_acc = cv_results['test_score'].std()
-    
+
     return {
         'model': clf,
         'train_time': train_time,
@@ -174,25 +143,24 @@ def run_experiments():
     print("Loading Amazon Review Dataset...")
     x_train, x_test, y_train, y_test = load_amazon_review_dataset(debug=False)
     print()
-    
-    # Prepare data
     print("Preparing data (dropping ID column)...")
-    X_train_clean, y_train = prepare_data(x_train, y_train)
-    print(f"Training data shape (without ID): {X_train_clean.shape}")
+    X_train_clean = prepare_data(x_train)
+    print(f"Training data shape (without ID column): {X_train_clean.shape}")
     print(f"Number of classes: {y_train.nunique()}")
     print()
-    
-    # Define parameter grid
+
     configs = [
-        # Holdout with different splits
+        # Holdout with different splits and parameters
         {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'holdout', 'holdout_pct': 0.3, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 10, 'min_samples_split': 5},
-        
-        # Cross-validation with different folds
+        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 5, 'min_samples_split': 10},
+
+        # Cross-validation with different folds and parameters
         {'method': 'cv', 'n_folds': 5, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'cv', 'n_folds': 10, 'max_depth': None, 'min_samples_split': 2},
         {'method': 'cv', 'n_folds': 5, 'max_depth': 10, 'min_samples_split': 5},
+        {'method': 'cv', 'n_folds': 5, 'max_depth': 5, 'min_samples_split': 10},
     ]
     
     results = []
@@ -218,19 +186,20 @@ def run_experiments():
                 min_samples_split=config['min_samples_split']
             )
         
+        # test set has no labels, so we skip test accuracy calculation
         results.append(result)
-        
+
+        # Print summary
         print(f"  Method: {result['method']}")
         print(f"  Training time: {result['train_time']:.3f}s")
         print(f"  Train accuracy: {result['train_accuracy']:.4f}")
-        print(f"  Val accuracy: {result['val_accuracy']:.4f}", end='')
         if 'val_accuracy_std' in result:
-            print(f" (sd: {result['val_accuracy_std']:.4f})")
+            print(f"  Val accuracy: {result['val_accuracy']:.4f} (sd: {result['val_accuracy_std']:.4f})")
         else:
-            print()
-    
+            print(f"  Val accuracy: {result['val_accuracy']:.4f}")
+
     print("\n" + "=" * 100)
-    print("\nGenerating predictions on test set using best model...")
+    print("Selecting best model based on validation accuracy...")
     
     # Use the model with best validation accuracy
     best_result = max(results, key=lambda r: r['val_accuracy'])
@@ -254,7 +223,7 @@ def run_experiments():
     results_df = pd.DataFrame([
         {
             'Method': r['method'],
-            'Max Depth': r['params']['max_depth'] if r['params']['max_depth'] else 'None',
+            'Max Depth': r['params']['max_depth'] if r['params']['max_depth'] is not None else 'None',
             'Min Split': r['params']['min_samples_split'],
             'Train Time (s)': f"{r['train_time']:.3f}",
             'Train Acc': f"{r['train_accuracy']:.4f}",
@@ -266,28 +235,15 @@ def run_experiments():
     print(results_df.to_string(index=False))
     print("=" * 100)
     
-    # Show confusion matrix for best model (if from holdout)
-    if 'confusion_matrix' in best_result:
-        print("\nConfusion Matrix (Best Model - Validation Set):")
-        print(best_result['confusion_matrix'])
-        
-        # Calculate precision, recall, F1 for each class
-        cm = best_result['confusion_matrix']
-        n_classes = cm.shape[0]
-        
-        print("\nPer-Class Metrics (Best Model):")
-        for i in range(n_classes):
-            tp = cm[i, i]
-            fp = cm[:, i].sum() - tp
-            fn = cm[i, :].sum() - tp
-            tn = cm.sum() - tp - fp - fn
-            
-            precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-            recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-            f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
-            
-            print(f"  Class {i}: Precision={precision:.4f}, Recall={recall:.4f}, F1={f1:.4f}")
-    
+    # Show classification report from best model (if from holdout)
+    if best_result['method'].startswith('Holdout'):
+        y_pred_val_best = best_result['model'].predict(X_train_clean)
+        classification_rep = classification_report(y_train, y_pred_val_best)
+        print("\nClassification Report (Best Model - Validation Set):")
+        print(classification_rep)
+    else:
+        print('No confusion matrix available, best model was CV-based.')
+
     print("\n" + "=" * 100)
     print("Experiments complete!")
 
