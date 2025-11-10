@@ -772,138 +772,33 @@ Best configuration: RBF (C=1.0) achieved 28.1\%, representing a 3× improvement 
     \label{fig:road_safety_svm}
 \end{figure}
 
-\subsection{Aggregated Results Overview}
-
-
-
-%=============================================================================
-\section{Analysis and Discussion}
-
-
-% Analyze and discuss your results
-% Compare classifiers across datasets
-% Identify patterns and trends
-% Discuss parameter sensitivity
-% Explain preprocessing impact
-% Discuss what worked and what didn't
-
-\subsection{Classifier Performance Comparison}
-
-\subsubsection{Overall Performance Trends}
-
-
-
-\textbf{Key Findings:}
-\begin{itemize}
-    \item [Finding 1: e.g., "Classifier A consistently outperformed others on high-dimensional datasets"]
-    \item [Finding 2: e.g., "Classifier B showed best performance on imbalanced datasets"]
-    \item [Finding 3]
-\end{itemize}
-
-\subsubsection{Dataset-Specific Observations}
-
-\textbf{Small vs. Large Datasets:}
-[Discuss how classifiers performed differently based on dataset size]
-
-\textbf{Low vs. High Dimensional Datasets:}
-[Discuss impact of dimensionality]
-
-\textbf{Few vs. Many Classes:}
-[Discuss how number of classes affected performance]
-
-\subsection{Parameter Sensitivity}
-
-\subsubsection{Classifier A Sensitivity}
-
-
-
-[Discuss which parameters had the most impact and why]
-
-\subsubsection{Classifier B Sensitivity}
-
-[Similar analysis]
-
-\subsubsection{Classifier C Sensitivity}
-
-When setting the "weights" parameter, the computation time immerdiately multiplied. Normally, the calculation were done within a few seconds up to a minute. But when using other weights, we had to stop the calculation after 2 hours since id did not finish until then.
-
-The most impact had the "$n\_neighbors$". It did not impact the model that much but still the most. It could shift the accuracy about +-0.10. The reason is that the lower the number, the less values are being compared with. So, there could form a local bubble, where only a certain class is present, when in reality there value should be a totally different class. On the other hand, when k=n, then it takes just the average.
-
-[Similar analysis]
-
-\subsection{Preprocessing Impact}
-
-\subsubsection{Effect of Scaling}
-
-
-
-
-\subsubsection{Effect of Other Preprocessing Steps}
-
-[Discuss impact of outlier removal, missing value imputation, etc.]
-
-\subsection{Patterns and Trends}
-
-\subsubsection{Which Methods Work Well?}
-
-[Identify classifiers that consistently performed well and explain why]
-
-\subsubsection{Which Methods Did Not Work Well?}
-
-[Identify classifiers that underperformed and explain potential reasons]
-
-\subsubsection{Is There One Method Outperforming All Others?}
-
-[Discuss whether any single classifier dominated across all datasets or if performance was dataset-dependent]
-
-\subsection{Performance Improvements}
-
-\textbf{Strategies that Improved Results:}
-\begin{enumerate}
-    \item [e.g., "Hyperparameter tuning improved Classifier A by XX\%"]
-    \item [e.g., "Feature scaling was crucial for Classifier B"]
-    \item [e.g., "Handling class imbalance through SMOTE/class weights"]
-    \item [Additional strategies]
-\end{enumerate}
-
-\subsection{Efficiency Analysis}
-
-\subsubsection{Training Time Comparison}
-
-
-\subsubsection{Scalability with Dataset Size}
-
-
-
-[Discuss how runtime scaled with dataset size for each classifier]
-
-\subsection{Unexpected Findings and Issues}
-
-\textbf{Unexpected Results:}
-\begin{itemize}
-    \item [Any surprising observations]
-\end{itemize}
-
-\textbf{Challenges Encountered:}
-\begin{itemize}
-    \item [Technical issues, convergence problems, etc.]
-    \item [How you addressed them]
-\end{itemize}
 
 %=============================================================================
 \section{Conclusion}
-\label{sec:conclusion}
 
+\subsection{Summary of Findings}
+Our experiments across four diverse datasets revealed key insights into classifier performance relative to dataset characteristics. One rather significant takeaway was the difficulty of training our classifiers on the road safety dataset - 300k+ observations is simply too many for most basic classifiers to handle in a reasonable time frame.
+
+On the Reviews dataset, KNN performed the best, SVM with linear kernel came second, and decision tree was last. This shows that high-dimensional sparse data favors distance-based methods and linear decision boundaries.
+
+On the Voting dataset, all classifiers performed well, with the SVM classifier reaching 97\% accuracy. This indicates that low-dimensional structured data can be effectively modeled by various classifiers. Also, American politicians often vote in predictable patterns, enabling high accuracy on this dataset.
+
+On the Phishing dataset, decision tree and SVM achieved relatively good performance on test data, about 89\% for both. The KNN model, on the other hand, overfit the training data to a high degree (100\% classification rate) and thus performed quite poorly on the test data - about 12.4\%. This shows that while KNN can excel on some datasets, it is prone to overfitting on smaller, imbalanced datasets.
+
+For Road Safety dataset, Age Band of Driver was a difficult target attribute to predict. Decision trees reached about 50\% accuracy on the test data, KNN acheived a high of about 40\%, and SVM performed the worst with about 30\% accuracy. This shows that none of the classifiers were well-suited for this complex multi-class problem with imbalanced classes. It's possible that in real-life, driver age is influenced by many unobserved factors not captured in the dataset.
+
+\subsection{KNN parameter analysis}
+When setting the "weights" parameter, the computation time immerdiately multiplied. Normally, the calculation were done within a few seconds up to a minute. But when using other weights, we had to stop the calculation after 2 hours since I did not finish until then.
+
+The most impact had the "\$n\_neighbors\$". It did not impact the model that much but still the most. It could shift the accuracy about +-0.10. The reason is that the lower the number, the less values are being compared with. So, there could form a local bubble, where only a certain class is present, when in reality there value should be a totally different class. On the other hand, when k=n, then it takes just the average.
 
 \subsection{Lessons Learned}
-
-Through this exercise, we learned:
+Through this exercise, we learned
 \begin{itemize}
     \item The importance of proper data preprocessing
     \item How dataset characteristics influence classifier selection
     \item The value of systematic experimentation and parameter tuning
     \item The necessity of using multiple evaluation metrics
-    \item [Additional lessons]
 \end{itemize}
 
 
