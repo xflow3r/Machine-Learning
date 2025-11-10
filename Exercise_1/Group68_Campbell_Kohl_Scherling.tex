@@ -96,16 +96,14 @@ We selected four diverse datasets to comprehensively evaluate classifier perform
     \item Number of features: 16
     \item Number of classes: 2 (Democrat vs. Republican)
     \item Feature types: Categorical (voting records on various congressional bills)
-    \item Class distribution: Imbalanced (58.3% Democrat / 41.7% Republican)
+    \item Class distribution: Imbalanced (58.3\% Democrat / 41.7\% Republican)
 \end{itemize}
 
 \textbf{Description:}
-This dataset contains congressional voting records for U.S. House Representatives, with each feature representing a vote (yes/no/abstain) on specific legislation. The classification task is to predict party affiliation (Democrat or Republican) based on voting patterns. This represents a classic political science application where voting behavior serves as a strong indicator of party membership.
+This dataset contains congressional voting records for U.S. House Representatives, with each feature representing a vote (yes/no/abstain) on specific legislation. The classification task is to predict party affiliation (Democrat or Republican) based on voting patterns.
 
-
-\textbf{Challenges:} 
-This dataset had a small sample size of only 218 training samples which created a big risk of overfitting. It also had a slight class imbalance
-which could lead to a prediction bias towards the majority class. Also missing votes needed appropriate handling.
+\textbf{Challenges:}
+This dataset had a small sample size of only 218 training samples which created a big risk of overfitting. It also had a slight class imbalance which could lead to a prediction bias towards the majority class. Also missing votes needed appropriate handling.
 
 \subsection{Dataset 2: [Amazon Product Reviews]}
 \label{subsec:dataset2}
@@ -122,13 +120,10 @@ which could lead to a prediction bias towards the majority class. Also missing v
 \end{itemize}
 
 \textbf{Description:}
-This text classification dataset contains Amazon product reviews that have been preprocessed into a high-dimensional feature representation. 
-Each review must be classified into one of 50 product categories. This represents a challenging multi-class text classification problem typical in e-commerce and natural language processing applications.
-
+This text classification dataset contains Amazon product reviews that have been preprocessed into a high-dimensional feature representation. Each review must be classified into one of 50 categories, each class being the name of a reviewer.
 
 \textbf{Challenges:}
-This dataset had a very high dimensionality which was challenging. It also had a relatively small sample size compared to the feature count
-
+This dataset had a very high dimensionality which was challenging. It also had a relatively small sample size compared to the feature count.
 
 
 \subsection{Dataset 3: [Phishing Website Detection]}
@@ -171,8 +166,8 @@ Also the 3-class problem is a bit more complex compared to binary classification
 
 \textbf{Description:}
 This large-scale dataset from the UK Department for Transport contains detailed records of traffic accidents, including information about road conditions, weather, vehicle types, location characteristics, and casualty outcomes. 
-The classification task is to predict casualty severity level (ranging from slight injuries to fatalities) based on accident circumstances. 
-This represents a real-world public safety application where accurate predictions could inform emergency response resource allocation.
+The classification task is to predict Age\_Band\_of\_Driver (different age ranges, rather than predicting numerical value of specific age) based on accident circumstances.
+This represents a real-world public safety application where experiment outcomes could help inform policy decisions and safety measures.
 
 \textbf{Challenges:}
 The dataset is massive with 363.000 samples which made it really challenging to compute. Some teammembers needed to use subsampling since we didn't have the needed compute power.
@@ -203,34 +198,137 @@ Our preprocessing pipeline follows these general steps:
 
 \subsection{Dataset-Specific Preprocessing}
 
-\subsubsection{Dataset 1 Preprocessing}
+\subsubsection{Voting Records Dataset Preprocessing}
 
-\textbf{Missing Values:} [Strategy used and justification]
-
-\textbf{Outliers:} [Detection method and treatment]
-
-\textbf{Encoding:} [e.g., One-Hot Encoding for categorical features]
-
-\textbf{Scaling:} [e.g., StandardScaler, MinMaxScaler, or none]
+\textbf{Missing Values:} 
+The voting dataset contained missing values represented as "unknown" in the original data. We adopted a preservation strategy, converting "unknown" to NaN. This approach was chosen because:
 \begin{itemize}
-    \item \textit{Justification:} [Why this scaling method was chosen]
+    \item Voting abstentions can themselves be datapoints, if the model can use them
+    \item Many scikit-learn classifiers (Decision Trees, KNN) can handle NaN values natively
+    \item Imputation could introduce artificial patterns that don't represent actual voting behavior
 \end{itemize}
 
-\subsubsection{Dataset 2 Preprocessing}
+\textbf{Outliers:} 
+No outlier detection was performed as the data consists of categorical voting records with a constrained domain (yes/no/unknown), where all values are valid.
 
-[Similar structure as Dataset 1]
+\textbf{Encoding:} 
+Categorical voting responses were converted to numerical format:
+\begin{itemize}
+    \item "y" (yes) $\rightarrow$ 1
+    \item "n" (no) $\rightarrow$ 0
+    \item "unknown" $\rightarrow$ NaN (preserved as missing)
+\end{itemize}
+The ID column was retained for test set prediction submission but excluded from training features.
 
-\subsubsection{Dataset 3 Preprocessing}
+\textbf{Scaling:} 
+No feature scaling was applied. The binary (0/1) encoding already provides uniform scale across features.
 
-[Similar structure]
+\subsubsection{Amazon Reviews Dataset Preprocessing}
 
-\subsubsection{Dataset 4 Preprocessing}
+\textbf{Missing Values:} 
+The dataset had no missing values after loading, so no extra work needed.
 
-[Similar structure]
+\textbf{Outliers:} 
+No explicit outlier removal was performed. The high-dimensional nature (10,000 features) of text features makes outlier detection computationally prohibitive and potentially harmful, as rare features may be informative for classification.
+
+\textbf{Encoding:} 
+The Class column (target) contains author names as strings. No encoding was necessary for features as they were already numerical. The ID column was preserved for test set predictions.
+
+\textbf{Scaling:} 
+Feature scaling requirements depend on the classifier:
+\begin{itemize}
+    \item \textit{For KNN and SVM:} StandardScaler applied to normalize the high-dimensional feature space
+    \item \textit{For Decision Trees:} Scaling not needed, as tree-based methods are invariant to feature scaling
+    \item \textit{Justification:} Distance-based methods (KNN) and kernel methods (SVM) are highly sensitive to feature scales, especially in high-dimensional spaces where some features may dominate distance calculations
+\end{itemize}
+
+\subsubsection{Phishing Website Dataset Preprocessing}
+
+\textbf{Missing Values:} 
+The dataset had no missing values. All website characteristic features were complete, likely because they are deterministically extracted from URL analysis.
+
+\textbf{Outliers:} 
+No outlier treatment was performed. The features are categorical/ordinal with predefined value ranges, representing different website characteristics. All values are valid within their respective domains.
+
+\textbf{Encoding:} 
+All features were already numerically encoded in the ARFF format. We preserved this encoding as it maintains ordinal relationships in features (e.g., security certificate validity levels).
+
+We created an additional derived feature \texttt{Result\_Label} mapping the numerical target to descriptive labels:
+\begin{itemize}
+    \item -1 $\rightarrow$ "Legitimate"
+    \item 0 $\rightarrow$ "Suspicious"  
+    \item 1 $\rightarrow$ "Phishing"
+\end{itemize}
+This derived feature was dropped before training but used for interpretability in reporting.
+
+\textbf{Scaling:} 
+No feature scaling was applied. The categorical/ordinal nature of features means their relative ordering is meaningful, and standardization could distort these relationships.
+
+\subsubsection{Road Safety Dataset Preprocessing}
+
+This dataset required the most extensive preprocessing due to its large size, mixed feature types, and missing data across multiple columns.
+
+\textbf{Dimensionality Reduction:}
+Due to computational constraints, we performed strategic column removal:
+\begin{itemize}
+    \item \textbf{High-cardinality identifiers:} Removed \texttt{Accident\_Index}, \texttt{LSOA\_of\_Accident\_Location} (25,000+ unique values), \texttt{Local\_Authority} columns (356+ unique districts)
+    \item \textbf{Perfect predictors:} Removed \texttt{Age\_of\_Driver} as it would perfectly predict our target \texttt{Age\_Band\_of\_Driver}
+    \item \textbf{Geographic coordinates:} Dropped \texttt{Location\_Easting\_OSGR}, \texttt{Location\_Northing\_OSGR}, \texttt{Longitude}, \texttt{Latitude} to reduce dimensionality while retaining other location features
+    \item \textbf{High-missing columns:} Removed \texttt{2nd\_Road\_Class} (48\% missing), \texttt{Junction\_Control} (48\% missing), \texttt{Propulsion\_Code} (23\% missing), \texttt{Casualty\_IMD\_Decile} (19\% missing)
+\end{itemize}
+
+\textbf{Missing Values:}
+In inital pre-processing functions, missing values were left as NaN, as the decision tree classifier can handle them natively. For the KNN and SVM classifiers, rows with missing values were dropped, as the classifiers do not natively support NaN. This likely led to a degradation of performance on this dataset, as the road\_safety dataset had lots of missing values.
+
+\textbf{Feature Engineering:}
+\begin{enumerate}
+    \item \textbf{Date decomposition:} Extracted \texttt{Date\_Month}, \texttt{Date\_Day}, \texttt{Date\_Year} from the \texttt{Date} column (format: DD/MM/YYYY) to capture temporal patterns while avoiding date parsing issues
+    \item \textbf{Time period encoding:} Converted \texttt{Time} strings to numerical \texttt{Time\_Period}:
+    \begin{itemize}
+        \item 0 = Night (22:00-05:59)
+        \item 1 = Morning (06:00-11:59)
+        \item 2 = Afternoon (12:00-17:59)
+        \item 3 = Evening (18:00-21:59)
+    \end{itemize}
+    This transformation reduces dimensionality while capturing accident patterns related to traffic conditions and visibility.
+    \item \textbf{Sex encoding:} Converted \texttt{Sex\_of\_Driver} from string representations ("1.0", "2.0", "3.0") to numeric values
+\end{enumerate}
+
+\textbf{Outliers:}
+No outlier removal was performed. In accident data, extreme cases (e.g., unusual weather conditions, rare vehicle types) are valid observations that may be important for classification.
+
+\textbf{Encoding:}
+Most categorical features were already numerically encoded in the OpenML dataset format. We preserved these encodings.
+
+\textbf{Scaling:}
+Scaling was applied for the SVM classifier using StandardScaler to normalize numerical features. For the Decision Tree classifier, no scaling was applied, as tree-based methods are invariant to feature scaling. No feature scaling was applied for KNN.
+
+\textbf{Dataset Subsampling:}
+Due to the dataset's large size (363,243 samples) and computational limitations, some experiments used random subsampling (e.g., 10,000 samples) with a fixed random seed for reproducibility. This trade-off prioritized experimental feasibility while maintaining representative data distribution.
+
 
 \subsection{Impact of Preprocessing on Performance}
 
 To evaluate the impact of preprocessing, we compared classifier performance with and without key preprocessing steps, particularly scaling.
+
+\subsubsection{Effect of Feature Scaling}
+
+Feature scaling had varying impacts depending on the classifier type:
+TODO, don't have info here yet for KNN and SVM
+\textbf{Distance-based methods (KNN):}
+\begin{itemize}
+    \item TODO
+\end{itemize}
+
+\textbf{Kernel methods (SVM):}
+\begin{itemize}
+    \item TODO
+\end{itemize}
+
+\textbf{Tree-based methods (Decision Trees):}
+\begin{itemize}
+    \item No measurable performance difference with or without scaling (expected)
+\end{itemize}
 
 
 %=============================================================================
