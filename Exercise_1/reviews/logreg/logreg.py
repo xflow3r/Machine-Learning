@@ -23,11 +23,11 @@ print("Training...")
 # Logistic Regression with class balancing; tune C via CV
 logreg = LogisticRegression(
     max_iter=1000,
-    class_weight="balanced",
-    solver="lbfgs"  # use 'saga' if your data is sparse and large
+    class_weight=None,
+    solver="liblinear"  # use 'saga' if your data is sparse and large
 )
 
-param_grid = {"C": np.logspace(-2, 2, 7)}  # 0.01 ... 100
+param_grid = {"C": np.logspace(-4, 2, 7)}  # 0.01 ... 100
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
 grid = GridSearchCV(
@@ -35,7 +35,7 @@ grid = GridSearchCV(
     param_grid=param_grid,
     cv=cv,
     scoring="f1_macro",
-    n_jobs=-1,
+    n_jobs=10,
     refit=True
 )
 
@@ -45,7 +45,7 @@ print(f"CV (f1_macro): {grid.best_score_:.4f}")
 
 # Predict on test
 y_pred = grid.predict(x_test)
-print(y_pred[:30])
+print(y_pred[:10])
 
 # Compare distributions between training labels and predicted ones
 plt.figure(figsize=(8, 5))

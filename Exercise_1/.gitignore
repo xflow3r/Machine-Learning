@@ -45,7 +45,8 @@ var/
 .installed.cfg
 *.egg
 MANIFEST
-/voting/logreg/logreg_voting_result.csv
+/reviews/logreg/logreg_voting_result.csv
 
 # predictions
 *_predictions.csv
+/voting/knn/voting_knn_result.csv
