@@ -101,19 +101,23 @@ def run_experiments():
         print(f"  Train accuracy: {result['train_accuracy']:.4f}")
         print(f"  Val accuracy: {result['val_accuracy']:.4f}")
 
-    # Run GridSearchCV experiment (automated hyperparameter tuning)
-    print(f"\nExperiment {len(holdout_configs) + 1}/{len(holdout_configs) + 1}: GridSearchCV with 5-Fold CV")
-    
-    cv_result = train_cross_validation(X_train_clean, y_train, n_folds=5)
-    
-    results.append(cv_result)
-    
-    # Print summary
-    print(f"  Method: {cv_result['method']}")
-    print(f"  Best params: {cv_result['params']}")
-    print(f"  Training time: {cv_result['train_time']:.3f}s")
-    print(f"  Train accuracy: {cv_result['train_accuracy']:.4f}")
-    print(f"  Val accuracy: {cv_result['val_accuracy']:.4f} (sd: {cv_result['val_accuracy_std']:.4f})")
+    # Run GridSearchCV experiments with different fold counts
+    cv_folds = [5, 10]
+    for fold_idx, n_folds in enumerate(cv_folds, 1):
+        exp_num = len(holdout_configs) + fold_idx
+        total_exps = len(holdout_configs) + len(cv_folds)
+        print(f"\nExperiment {exp_num}/{total_exps}: GridSearchCV with {n_folds}-Fold CV")
+        
+        cv_result = train_cross_validation(X_train_clean, y_train, n_folds=n_folds)
+        
+        results.append(cv_result)
+        
+        # Print summary
+        print(f"  Method: {cv_result['method']}")
+        print(f"  Best params: {cv_result['params']}")
+        print(f"  Training time: {cv_result['train_time']:.3f}s")
+        print(f"  Train accuracy: {cv_result['train_accuracy']:.4f}")
+        print(f"  Val accuracy: {cv_result['val_accuracy']:.4f} (sd: {cv_result['val_accuracy_std']:.4f})")
 
 
     print("\n" + "=" * 100)
