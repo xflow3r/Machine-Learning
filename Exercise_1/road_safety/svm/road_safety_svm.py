@@ -125,7 +125,7 @@ def load_arff_with_pandas(filepath):
 # DATA LOADING
 # ============================================================================
 
-def load_road_safety_dataset(subsample_size=10000):
+def load_road_safety_dataset(subsample_size=100000):
     """
     Load the Road Safety dataset (ARFF format)
     Subsample for reasonable training time
@@ -141,10 +141,18 @@ def load_road_safety_dataset(subsample_size=10000):
     print(f"Loading from: {DATASET_PATH}")
     df = load_arff_file(DATASET_PATH)
     
-    # Last column is the target
-    X = df.iloc[:, :-1]
-    y = df.iloc[:, -1]
+    # EXPLICITLY select Age_Band_of_Driver as target
+    target_column = 'Age_Band_of_Driver'
     
+    if target_column not in df.columns:
+        print(f"ERROR: Target column '{target_column}' not found!")
+        print(f"Available columns: {df.columns.tolist()}")
+        raise ValueError(f"Target column '{target_column}' not found!")
+    
+    y = df[target_column]
+    X = df.drop(columns=[target_column])
+    
+    print(f"✓ Using target variable: {target_column}")
     print(f"✓ Original dataset: {len(X)} samples, {X.shape[1]} features")
     print(f"  Number of classes: {len(y.unique())}")
     print(f"  Classes: {sorted(y.unique())[:10]}...")  # Show first 10
