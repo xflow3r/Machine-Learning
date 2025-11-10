@@ -179,8 +179,6 @@ The dataset is massive with 363.000 samples which made it really challenging to 
 Also since 11 classes are present this creates very complex decision boundaries. There are also missing values across multiple features. 
 
 
-\centering
-
 %=============================================================================
 \section{Data Preprocessing}
 \label{sec:preprocessing}
@@ -244,7 +242,6 @@ To evaluate the impact of preprocessing, we compared classifier performance with
 % Explain characteristics (brief, don't repeat lecture material)
 % Justify your choice
 
-We selected three classifiers from different learning paradigms to ensure comprehensive evaluation:
 
 \subsection{Classifier 1: [e.g., Random Forest]}
 \label{subsec:classifier1}
@@ -263,43 +260,16 @@ We selected three classifiers from different learning paradigms to ensure compre
 
 \textbf{Expected Weaknesses:} [What are its limitations?]
 
-\subsection{Classifier 2: [e.g., Support Vector Machine]}
+\subsection{Classifier 2: [Support Vector Machine]}
 \label{subsec:classifier2}
 
 \textbf{Type/Paradigm:} Kernel-based / Maximum Margin
 
-\textbf{Key Characteristics:}
-\begin{itemize}
-    \item [List key characteristics]
-\end{itemize}
 
-\textbf{Expected Strengths:} [Strengths]
+\textbf{Selection reasoning:}
+We selected SVM specifically to investigate the relationship between dataset dimensionality and kernel performance. SVMs offer a unique capability to switch between linear and non-linear decision boundaries through kernel selection, making them ideal for testing our hypothesis: high-dimensional sparse data (Amazon: 10,000 features) should favor linear kernels, while low-dimensional structured data (Phishing: 9 features) should benefit from non-linear RBF kernels. This kernel flexibility allows us to systematically evaluate how the curse of dimensionality affects non-linear methods. Additionally, SVMs provide theoretical guarantees through margin maximization and clear interpretability through support vectors, making them valuable for understanding classifier behavior across diverse datasets.
 
-\textbf{Expected Weaknesses:} [Weaknesses]
 
-\subsection{Classifier 3: [e.g., Neural Network / Logistic Regression]}
-\label{subsec:classifier3}
-
-\textbf{Type/Paradigm:} [Different from above two]
-
-\textbf{Key Characteristics:}
-\begin{itemize}
-    \item [List key characteristics]
-\end{itemize}
-
-\textbf{Expected Strengths:} [Strengths]
-
-\textbf{Expected Weaknesses:} [Weaknesses]
-
-\subsection{Classifier Selection Rationale}
-
-We selected these three classifiers to ensure:
-\begin{itemize}
-    \item Diversity in learning paradigms (at least two different types)
-    \item Coverage of different algorithmic approaches
-    \item Ability to evaluate performance across various data characteristics
-    \item [Additional justification]
-\end{itemize}
 
 %=============================================================================
 \section{Experimental Methodology}
