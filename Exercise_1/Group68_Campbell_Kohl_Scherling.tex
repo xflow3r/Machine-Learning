@@ -40,10 +40,10 @@
 VU Machine Learning 2025W}}
 
 \author{
-    Group00\\[0.3cm]
-    Student Name 1 (Matriculation Number)\\
-    Student Name 2 (Matriculation Number)\\
-    Student Name 3 (Matriculation Number)
+    Group 68\\[0.3cm]
+    Campbell Lucas (12536848)\\
+    Kohl Leonhard (12047036)\\
+    Scherling Christopher (12119060)
 }
 
 \date{\today}
@@ -85,82 +85,98 @@ This report presents our work on Exercise 1 of the Machine Learning course, focu
 
 We selected four diverse datasets to comprehensively evaluate classifier performance across different data characteristics:
 
-\subsection{Dataset 1: [Kaggle Dataset Name]}
+\subsection{Dataset 1: [Voting Records]}
 \label{subsec:dataset1}
 
 \textbf{Source:} Kaggle Competition (Course-specific)
 
 \textbf{Characteristics:}
 \begin{itemize}
-    \item Number of samples (train/test): XX / XX
-    \item Number of features: XX
-    \item Number of classes: XX
-    \item Feature types: [numerical/categorical/mixed]
-    \item Class distribution: [balanced/imbalanced]
+    \item Number of samples (train/test): 218 / 217
+    \item Number of features: 16
+    \item Number of classes: 2 (Democrat vs. Republican)
+    \item Feature types: Categorical (voting records on various congressional bills)
+    \item Class distribution: Imbalanced (58.3% Democrat / 41.7% Republican)
 \end{itemize}
 
-\textbf{Description:} [Brief description of what the dataset represents]
+\textbf{Description:}
+This dataset contains congressional voting records for U.S. House Representatives, with each feature representing a vote (yes/no/abstain) on specific legislation. The classification task is to predict party affiliation (Democrat or Republican) based on voting patterns. This represents a classic political science application where voting behavior serves as a strong indicator of party membership.
 
-\textbf{Challenges:} [e.g., missing values, outliers, high dimensionality, class imbalance]
 
-\subsection{Dataset 2: [Kaggle Dataset Name]}
+\textbf{Challenges:} 
+This dataset had a small sample size of only 218 training samples which created a big risk of overfitting. It also had a slight class imbalance
+which could lead to a prediction bias towards the majority class. Also missing votes needed appropriate handling.
+
+\subsection{Dataset 2: [Amazon Product Reviews]}
 \label{subsec:dataset2}
 
 \textbf{Source:} Kaggle Competition (Course-specific)
 
 \textbf{Characteristics:}
 \begin{itemize}
-    \item Number of samples (train/test): XX / XX
-    \item Number of features: XX
-    \item Number of classes: XX
-    \item Feature types: [numerical/categorical/mixed]
-    \item Class distribution: [balanced/imbalanced]
+    \item Number of samples (train/test): 750 / 750
+    \item Number of features: 10,000
+    \item Number of classes: 50 (product categories)
+    \item Feature types: Numerical
+    \item Class distribution: Balanced (~2\% per class)
 \end{itemize}
 
-\textbf{Description:} [Brief description]
+\textbf{Description:}
+This text classification dataset contains Amazon product reviews that have been preprocessed into a high-dimensional feature representation. 
+Each review must be classified into one of 50 product categories. This represents a challenging multi-class text classification problem typical in e-commerce and natural language processing applications.
 
-\textbf{Challenges:} [Specific challenges]
 
-\subsection{Dataset 3: [Exercise 0 Dataset Name]}
+\textbf{Challenges:}
+This dataset had a very high dimensionality which was challenging. It also had a relatively small sample size compared to the feature count
+
+
+
+\subsection{Dataset 3: [Phishing Website Detection]}
 \label{subsec:dataset3}
 
 \textbf{Source:} Exercise 0
 
 \textbf{Characteristics:}
 \begin{itemize}
-    \item Number of samples: XX
-    \item Number of features: XX
-    \item Number of classes: XX
-    \item Feature types: [numerical/categorical/mixed]
-    \item Class distribution: [balanced/imbalanced]
+    \item Number of samples: 1,353
+    \item Number of features: 9
+    \item Number of classes: 3 (phishing status: -1, 0, 1)
+    \item Feature types: Categorical (website characteristics)
+    \item Class distribution: Imbalanced (51.9\% / 40.5\% / 7.6\%)
 \end{itemize}
 
-\textbf{Description:} [Brief description]
+\textbf{Description:}
+This dataset contains features describing website characteristics used to detect phishing attempts. 
+Features include URL structure, domain age, SSL certificate status, and other security-related attributes. 
+The three classes represent different levels of phishing risk or legitimacy. 
 
-\textbf{Challenges:} [Specific challenges]
+\textbf{Challenges:}
+Since all features were categorical proper encoding was needed. We also had a slight class imbalance in the dataset (7.6\%).
+Also the 3-class problem is a bit more complex compared to binary classification. There was also some collinearity present among the predictors.
 
-\subsection{Dataset 4: [Exercise 0 Dataset Name]}
+
+\subsection{Dataset 4: [Road Safety Casualties]}
 \label{subsec:dataset4}
 
 \textbf{Source:} Exercise 0
 
 \textbf{Characteristics:}
 \begin{itemize}
-    \item Number of samples: XX
-    \item Number of features: XX
-    \item Number of classes: XX
-    \item Feature types: [numerical/categorical/mixed]
-    \item Class distribution: [balanced/imbalanced]
+    \item Number of samples: 363,243 (subsampled to 10,000 for computational feasibility)
+    \item Number of features: 66 (59 categorical, 7 numerical)
+    \item Number of classes: 11 (casualty severity levels)
+    \item Feature types: Mixed (predominantly categorical)
+    \item Class distribution: Imbalanced (largest class 19.2\%, smallest class 5.6\%)
 \end{itemize}
 
-\textbf{Description:} [Brief description]
+\textbf{Description:}
+This large-scale dataset from the UK Department for Transport contains detailed records of traffic accidents, including information about road conditions, weather, vehicle types, location characteristics, and casualty outcomes. 
+The classification task is to predict casualty severity level (ranging from slight injuries to fatalities) based on accident circumstances. 
+This represents a real-world public safety application where accurate predictions could inform emergency response resource allocation.
 
-\textbf{Challenges:} [Specific challenges]
-
-\subsection{Dataset Selection Rationale}
-\label{subsec:dataset_rationale}
-
-Our dataset selection ensures diversity across multiple dimensions:
+\textbf{Challenges:}
+The dataset is massive with 363.000 samples which made it really challenging to compute. Some teammembers needed to use subsampling since we didn't have the needed compute power.
+Also since 11 classes are present this creates very complex decision boundaries. There are also missing values across multiple features. 
 
 
 \centering
