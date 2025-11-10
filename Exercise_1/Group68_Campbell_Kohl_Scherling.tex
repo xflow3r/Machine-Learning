@@ -322,9 +322,16 @@ Feature scaling had varying impacts depending on the classifier type:
 \end{itemize}
 
 \textbf{Kernel methods (SVM):}
-\begin{itemize}
-    \item TODO
-\end{itemize}
+
+    Kernel scaling was essential for SVM since performance tanked drastically for the datasets.
+    \begin{itemize}
+        \item Voting: 65\% $\rightarrow$ 97.7\% (+50\%)
+        \item Amazon: Failed $\rightarrow$ 58.0\% (essential)
+        \item Road Safety: 15\% $\rightarrow$ 28.1\% (+87\%)
+    \end{itemize}
+    \textbf{Reason:} SVM kernel functions compute distances between points. Unscaled features with different ranges (e.g., 0-1 vs 0-10000) cause large-scale features to completely dominate, which makes the algorithm ignore smaller-scale features. Additionally, the RBF kernel $\exp(-\gamma \|\mathbf{x}_i - \mathbf{x}_j\|^2)$ becomes numerically unstable without scaling.
+    \textbf{Solution:} StandardScaler (zero mean, unit variance) ensures equal feature contribution.
+    \textbf{Practical lesson:} Always scale features for SVM - it's not optional.
 
 \textbf{Tree-based methods (Decision Trees):}
 \begin{itemize}
@@ -360,15 +367,27 @@ Decision trees excel with categorical/mixed data types, handle missing values na
 
 \textbf{Expected Weaknesses:} 
 Prone to overfitting on noisy or complex datasets, especially when trees grow too deep without pruning. Sensitive to small data variations (high variance), which can produce different tree structures from slight changes in training data. May struggle with high-dimensional sparse data (e.g., Amazon Reviews) where feature space is too large.
-\subsection{Classifier 2: [Support Vector Machine]}
+\subsection{Classifier 2: Support Vector Machine}
 \label{subsec:classifier2}
 
 \textbf{Type/Paradigm:} Kernel-based / Maximum Margin
 
+\textbf{Key Characteristics:}
+\begin{itemize}
+    \item \textbf{Margin maximization:} Finds the optimal hyperplane that maximizes the distance (margin) between classes, providing strong generalization guarantees
+    \item \textbf{Kernel flexibility:} Can model both linear and non-linear decision boundaries through kernel functions without explicitly transforming the feature space (kernel trick)
+    \item \textbf{Sparse solution:} Uses only support vectors (subset of training data) for predictions, making it memory-efficient despite potentially large training sets
+    \item \textbf{Scale-sensitive:} Requires feature scaling/normalization as distance computations in kernel functions are heavily influenced by feature magnitudes
+\end{itemize}
+
+\textbf{Expected Strengths:}
+SVMs excel with high-dimensional data where the feature-to-sample ratio is large (e.g., Amazon Reviews with 10,000 features). Linear kernels avoid overfitting in sparse high-dimensional spaces, while RBF kernels can capture complex non-linear patterns in low-dimensional data (e.g., Phishing, Voting). Strong theoretical foundations provide good generalization even with limited training samples. Robust to outliers due to margin-based optimization focusing on boundary cases.
+
+\textbf{Expected Weaknesses:}
+Training time scales poorly with dataset size ($O(n^2)$ to $O(n^3)$), making it computationally expensive for large datasets like Road Safety (requires subsampling). RBF kernels suffer from the curse of dimensionality in very high-dimensional spaces, potentially performing worse than linear kernels. Sensitive to hyperparameter choices (C, gamma) and requires careful tuning. Multi-class classification is handled through one-vs-one or one-vs-rest strategies, increasing computational complexity with many classes.
 
 \textbf{Selection reasoning:}
 We selected SVM specifically to investigate the relationship between dataset dimensionality and kernel performance. SVMs offer a unique capability to switch between linear and non-linear decision boundaries through kernel selection, making them ideal for testing our hypothesis: high-dimensional sparse data (Amazon: 10,000 features) should favor linear kernels, while low-dimensional structured data (Phishing: 9 features) should benefit from non-linear RBF kernels. This kernel flexibility allows us to systematically evaluate how the curse of dimensionality affects non-linear methods. Additionally, SVMs provide theoretical guarantees through margin maximization and clear interpretability through support vectors, making them valuable for understanding classifier behavior across diverse datasets.
-
 \subsection{Classifier 3: K-Nearest Neighbor}
 \label{subsec:classifier3}
 
@@ -398,6 +417,7 @@ We selected SVM specifically to investigate the relationship between dataset dim
 
 
 %=============================================================================
+
 \section{Experimental Methodology}
 \label{sec:methodology}
 
@@ -444,8 +464,51 @@ For Cross Validation, we used 10- and 5-fold CV with the following parameter gri
     \item \textbf{Min Samples Leaf:} [1, 2, 5, 10]
 \end{itemize}
 
-\subsubsection{Classifier 2 Parameters}
-[Similar structure]
+\subsubsection{SVM Parameters}
+
+We systematically explored two kernel types with varying regularization to understand the dimensionality-kernel performance relationship:
+
+\textbf{Kernel Functions Tested:}
+\begin{itemize}
+    \item \textbf{Linear Kernel:} $K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i^T \mathbf{x}_j$
+    \begin{itemize}
+        \item Expected to excel on high-dimensional data (Amazon: 10,000 features)
+        \item Avoids overfitting by maintaining linear decision boundaries
+    \end{itemize}
+    \item \textbf{RBF (Radial Basis Function) Kernel:} $K(\mathbf{x}_i, \mathbf{x}_j) = \exp(-\gamma \|\mathbf{x}_i - \mathbf{x}_j\|^2)$
+    \begin{itemize}
+        \item Expected to excel on low-dimensional data (Phishing: 9 features, Voting: 16 features)
+        \item Can capture non-linear decision boundaries
+        \item Gamma set to 'scale': $\gamma = \frac{1}{n\_features \times X.var()}$ (auto-adapts to feature variance)
+    \end{itemize}
+\end{itemize}
+
+\textbf{Regularization Parameter (C):}
+\begin{itemize}
+    \item Tested values: [0.1, 1.0, 10.0]
+    \item Controls trade-off between margin maximization and training error minimization
+    \item Low C (0.1): Larger margin, more misclassifications allowed (prefer generalization)
+    \item High C (10.0): Smaller margin, fewer misclassifications (fit training data closely)
+\end{itemize}
+
+\textbf{Complete Parameter Grid:}
+\begin{itemize}
+    \item Linear kernel: C $\in$ \{0.1, 1.0, 10.0\} (3 configurations)
+    \item RBF kernel: C $\in$ \{0.1, 1.0, 10.0\}, gamma='scale' (3 configurations)
+    \item \textbf{Total: 6 configurations per dataset, 24 total experiments}
+\end{itemize}
+
+\textbf{Validation Strategy:}
+\begin{itemize}
+    \item 80-20 train-validation split with stratification (preserves class distribution)
+    \item Random seed: 42 for reproducibility
+    \item Separate test set for Kaggle datasets (Voting, Amazon)
+    \item Best configuration selected based on validation accuracy
+    \item Final model trained on full training set for Kaggle submissions
+\end{itemize}
+
+\textbf{Rationale for Parameter Selection:}
+The parameter grid was designed to answer key research questions: (1) Does kernel choice depend on dimensionality? (2) How sensitive is SVM to regularization in different dimensional spaces? (3) Can we identify optimal C values across diverse datasets? By testing both linear and RBF kernels across three C values, we systematically evaluate the hypothesis that high-dimensional data requires linear kernels while low-dimensional data benefits from non-linear kernels.
 
 \subsubsection{Classifier 3 Parameters} 
 We tested multiple different parameters and came to the conclusion that these were the best ones for knn for each dataset. We ran multiple tests and then compared the results. These are the optimized parameters: 
@@ -495,6 +558,32 @@ Decision Tree Parameter Sensitivity:
 Adjusting Max Depth yielded nearly identical results, suggesting the data is easily separable with shallow trees. Increasing Min Samples Split from 2 to 5 slightly reduced training accuracy, but validation accuracy stayed nearly the same, indicating that stricter splitting rules help reduce overfitting without hurting generalization.
 
 
+\subsubsection{SVM Results - Voting Dataset}
+
+\begin{table}[H]
+\centering
+\caption{SVM Performance on Voting Dataset}
+\label{tab:voting_svm_results}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Kernel} & \textbf{C} & \textbf{Accuracy} & \textbf{F1-Score} & \textbf{Train Time} \\
+\midrule
+Linear & 1.0 & \textbf{0.9773} & \textbf{0.9730} & <1ms \\
+RBF & 1.0 & 0.9545 & 0.9500 & <1ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Best configuration: Linear (C=1.0) achieved 97.7\% accuracy. Both kernels performed excellently on this binary classification task with 16 features. Training was nearly instantaneous due to small dataset size (218 samples).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{voting/svm/voting_viz_1_kernel_comparison.png}
+    \caption{SVM kernel comparison - both exceed 95\% on Voting dataset}
+    \label{fig:voting_svm}
+\end{figure}
+
 \subsection{Dataset 2: Amazon Reviews Results}
 Decision Tree Results:
 \begin{figure}[H]
@@ -527,6 +616,34 @@ Most models have a Train Acc = 1.0000, meaning they perfectly fit the training d
 The above two figures show a comparison between scaled,n=1 and unscaled,n=10. We see that the scaled one performs significantly better. Since we don't know the test data, I over layed the predictions (orange) and the train data (blue) as a histogram. They should match.
 
 
+\subsubsection{SVM Results - Amazon Reviews Dataset}
+
+\begin{table}[H]
+\centering
+\caption{SVM Performance on Amazon Reviews (10,000 Features)}
+\label{tab:amazon_svm_results}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Kernel} & \textbf{C} & \textbf{Accuracy} & \textbf{F1-Score} & \textbf{Train Time} \\
+\midrule
+Linear & 1.0 & \textbf{0.5800} & 0.5744 & 0.72s \\
+RBF & 1.0 & 0.0267 & 0.0013 & 0.74s \\
+\midrule
+\multicolumn{5}{l}{\textit{Random baseline: 2\% (50 classes)}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Critical Finding - Curse of Dimensionality:} Linear kernel achieved 58.0\% accuracy (29× random baseline) while RBF completely failed at 2.7\%. In 10,000-dimensional space, RBF's non-linear boundaries overfit catastrophically, while Linear's simpler boundaries generalize effectively. This demonstrates that high-dimensional data requires linear kernels. Notably, Linear accuracy was insensitive to C parameter (all values yielded 58.0\%).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{reviews/svm/amazon_viz_1_kernel_comparison.png}
+    \caption{Dramatic kernel comparison: Linear (58\%) vs RBF (2.7\%) showing curse of dimensionality}
+    \label{fig:amazon_svm}
+\end{figure}
+
 \subsection{Dataset 3: Phishing Results}
 
 \begin{figure}[H]
@@ -541,6 +658,32 @@ The above two figures show a comparison between scaled,n=1 and unscaled,n=10. We
     \includegraphics[width=0.7\textwidth]{assets/phishing_decision_tree_classification_report.png}
     \caption{Classification Report for Best Model - Phishing Dataset (Decision Tree). Shows performance across Legitimate, Suspicious, and Phishing classes on test set.}
     \label{fig:phishing_dt_classification}
+\end{figure}
+
+\subsubsection{SVM Results - Phishing Dataset}
+
+\begin{table}[H]
+\centering
+\caption{SVM Performance on Phishing Dataset}
+\label{tab:phishing_svm_results}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Kernel} & \textbf{C} & \textbf{Accuracy} & \textbf{F1-Score} & \textbf{Train Time} \\
+\midrule
+Linear & 1.0 & 0.8450 & 0.8428 & 9ms \\
+RBF & 10.0 & \textbf{0.8931} & \textbf{0.8928} & 9ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Best configuration: RBF (C=10.0) achieved 89.3\% accuracy, outperforming Linear by 5\%. In contrast to Amazon's high-dimensional space, this low-dimensional dataset (9 features) allows RBF to effectively capture non-linear decision boundaries. Class imbalance (7.6\% minority) was handled well. Training remained fast (<10ms) despite 1,353 samples.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{phishing/svm/phishing_viz_1_kernel_comparison.png}
+    \caption{RBF outperforms Linear in low-dimensional space (Phishing: 9 features)}
+    \label{fig:phishing_svm}
 \end{figure}
 
 K Nearest Neighbors:
@@ -587,6 +730,34 @@ Best model: 5-Fold CV with params {n neighbors: 11, weights: distance, p: 1}; Be
 The KNN results for this phishing dataset show poor generalization and significant overfitting. While the training accuracy and F1-scores are perfect (≈1.0) for most configurations—especially when using distance weighting—the validation accuracy and F1-scores drop sharply to around 0.28–0.41, regardless of k, p, or weighting scheme. This large gap between training and validation performance indicates that the model memorizes the training data but fails to correctly classify unseen samples. Changing distance metrics (p=1 vs p=2) or increasing k does not meaningfully improve results.\newline
 Note that it took forever. So, we pruned the dataset to 100.000 entries instead of 260.000! This pruning significantly affected the performance!!! Even pruned, it took multiple hours on an extremeley powerful PC!
 
+
+\subsubsection{SVM Results - Road Safety Dataset}
+
+\begin{table}[H]
+\centering
+\caption{SVM Performance on Road Safety (Subsampled to 10K)}
+\label{tab:road_safety_svm_results}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Kernel} & \textbf{C} & \textbf{Accuracy} & \textbf{Train Time (s)} & \textbf{vs Baseline} \\
+\midrule
+Linear & 1.0 & 0.2615 & 4.82 & +187\% \\
+RBF & 1.0 & \textbf{0.2810} & 1.95 & \textbf{+209\%} \\
+\midrule
+\multicolumn{5}{l}{\textit{Random baseline: 9.09\% (11 classes)}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Best configuration: RBF (C=1.0) achieved 28.1\%, representing a 3× improvement over random guessing (9.1\%). While this appears low, it demonstrates significant learning on this challenging 11-class problem with imbalanced classes (19.2\% to 5.6\% range). The dataset was subsampled from 363K to 10K samples for computational feasibility. Medium dimensionality (66 features) allowed RBF to maintain slight edge over Linear. Training time scaled dramatically with C: Linear C=10.0 required 45s vs 1.6s for C=0.1.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{road_safety/svm/road_safety_viz_1_kernel_comparison.png}
+    \caption{SVM achieves 3× improvement over random baseline on 11-class problem}
+    \label{fig:road_safety_svm}
+\end{figure}
 
 \subsection{Aggregated Results Overview}
 
@@ -779,11 +950,6 @@ To evaluate the robustness of our results, we compared holdout validation with k
 \section{Conclusion}
 \label{sec:conclusion}
 
-% Summarize your main findings
-% Answer the key questions
-% What did you learn?
-% Future work suggestions
-
 
 \subsection{Lessons Learned}
 
@@ -796,33 +962,5 @@ Through this exercise, we learned:
     \item [Additional lessons]
 \end{itemize}
 
-\subsection{Future Work}
-
-Potential directions for future investigation:
-\begin{itemize}
-    \item [e.g., "Exploring ensemble methods combining our classifiers"]
-    \item [e.g., "Investigating more advanced feature engineering techniques"]
-    \item [e.g., "Testing additional classifier types"]
-    \item [Additional suggestions]
-\end{itemize}
-
-\subsection{Final Remarks}
-
-[Concluding thoughts on the exercise and machine learning classification in general]
-
-%=============================================================================
-\section*{Group Work Organization}
-
-
-\textbf{Collaboration Process:}
-[Describe how you worked together, meetings held, communication methods, etc.]
-
-\textbf{Equal Contribution:}
-All group members contributed equally to this project through [describe how equal contribution was ensured].
-
-%=============================================================================
-% References (if needed)
-% \bibliographystyle{plain}
-% \bibliography{references}
 
 \end{document}
