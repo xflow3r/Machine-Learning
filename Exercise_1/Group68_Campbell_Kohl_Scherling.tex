@@ -469,32 +469,65 @@ We tested multiple different parameters and came to the conclusion that these we
 
 This section presents the experimental results for all dataset-classifier combinations. Results are organized by dataset, with comprehensive performance metrics for each classifier configuration.
 
-\subsection{Dataset 1 Results}
+\subsection{Dataset 1: Voting Records Results}
 
 \subsubsection{Overall Performance Comparison}
-
-
+Decision Tree Results:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/voting_decision_tree_results_summary_table.png}
+    \caption{Decision Tree Results Summary - Voting Dataset}
+    \label{fig:voting_dt_results}
+\end{figure}
+The table above shows results for the Decision Tree classifier. The decision tree was able to reach consistently high accuracies of 96\% or higher. We can also see that grid search CV gave slightly lower training accuracies, but better generalization to the test set. Training times were negligible for single holdout splits, but increased to several seconds for GridSearchCV due to multiple folds and parameter combinations. Performance was stable across the two fold counts. Curiously, the 10-fold CV took less time to train than the 5-fold CV, possibly due to implementation details in sklearn's parallelization, or else local concurrent processes on the machine used for training.
 
 
 \subsubsection{Parameter Sensitivity Analysis}
+Decision Tree Parameter Sensitivity:
+Adjusting Max Depth yielded nearly identical results, suggesting the data is easily separable with shallow trees. Increasing Min Samples Split from 2 to 5 slightly reduced training accuracy, but validation accuracy stayed nearly the same, indicating that stricter splitting rules help reduce overfitting without hurting generalization.
 
 
+\subsection{Dataset 2: Amazon Reviews Results}
+Decision Tree Results:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/reviews_decision_tree_results_summary_table.png}
+    \caption{Decision Tree Results Summary - Amazon Reviews Dataset.}
+    \label{fig:reviews_dt_results}
+\end{figure}
 
-\subsubsection{Confusion Matrices}
 
+\subsection{Dataset 3: Phishing Results}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/phishing_decision_tree_results_summary_table.png}
+    \caption{Decision Tree Results Summary - Phishing Dataset. Performance comparison across holdout validation and GridSearchCV for 3-class phishing detection.}
+    \label{fig:phishing_dt_results}
+\end{figure}
 
-\subsection{Dataset 2 Results}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{assets/phishing_decision_tree_classification_report.png}
+    \caption{Classification Report for Best Model - Phishing Dataset (Decision Tree). Shows performance across Legitimate, Suspicious, and Phishing classes on test set.}
+    \label{fig:phishing_dt_classification}
+\end{figure}
 
-[Similar structure as Dataset 1]
+\subsection{Dataset 4: Road Safety Results}
 
-\subsection{Dataset 3 Results}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/road_safety_decision_tree_results_summary_table.png}
+    \caption{Decision Tree Results Summary - Road Safety Dataset. Performance across different configurations for 11-class age band prediction.}
+    \label{fig:road_safety_dt_results}
+\end{figure}
 
-[Similar structure]
-
-\subsection{Dataset 4 Results}
-
-[Similar structure]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/road_safety_decision_tree_classification_report.png}
+    \caption{Classification Report for Best Model - Road Safety Dataset (Decision Tree). Per-class performance for all 11 driver age bands on test set.}
+    \label{fig:road_safety_dt_classification}
+\end{figure}
 
 \subsection{Aggregated Results Overview}
 
