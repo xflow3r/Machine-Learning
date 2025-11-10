@@ -15,7 +15,9 @@ from preprocess_datasets import load_phishing_dataset
 from decision_tree_common.decision_tree_common import (
     get_holdout_experiment_configs,
     train_holdout,
-    train_cross_validation
+    train_cross_validation,
+    save_table_as_image,
+    save_classification_report_as_image
 )
 
 
@@ -136,11 +138,21 @@ def run_experiments():
     print(results_df.to_string(index=False))
     print("=" * 100)
     
+    # Save results table as PNG
+    output_dir = Path(__file__).parent
+    results_table_path = output_dir / 'results_summary_table.png'
+    save_table_as_image(results_df, results_table_path, 'Decision Tree Results Summary - Phishing Dataset')
+    
     # Show classification report from best model
     y_pred_test_best = best_result['model'].predict(X_test_clean)
     classification_rep = classification_report(y_test, y_pred_test_best)
     print("\nClassification Report (Best Model - Test Set):")
     print(classification_rep)
+    
+    # Save classification report as PNG
+    classification_report_path = output_dir / 'classification_report.png'
+    save_classification_report_as_image(classification_rep, classification_report_path, 
+                                        'Classification Report - Best Model (Test Set)')
 
     print("\n" + "=" * 100)
     print("Experiments complete!")

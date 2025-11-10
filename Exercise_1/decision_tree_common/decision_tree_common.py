@@ -219,16 +219,31 @@ def save_classification_report_as_image(report_text, output_path, title):
     lines = report_text.strip().split('\n')
     data = []
     
-    for line in lines[2:-3]:  # Skip header and footer lines
+    # Process each line
+    for line in lines[2:]:  # Skip the header lines
         parts = line.split()
-        if len(parts) >= 5:
-            data.append(parts)
-    
-    # Last 3 lines (accuracy, macro avg, weighted avg)
-    for line in lines[-3:]:
-        parts = line.split()
+        if len(parts) == 0:
+            continue
+        
+        # Check if this is a metrics line (has numeric values)
         if len(parts) >= 4:
-            data.append(parts)
+            try:
+                # Try to convert last 4 elements to float/int to verify it's a metrics line
+                float(parts[-4])  # precision
+                float(parts[-3])  # recall
+                float(parts[-2])  # f1-score
+                int(parts[-1])    # support
+                
+                # Join all parts except the last 4 as the class name
+                if len(parts) > 4:
+                    class_name = ' '.join(parts[:-4])
+                    data.append([class_name, parts[-4], parts[-3], parts[-2], parts[-1]])
+                else:
+                    # Single word class name
+                    data.append(parts[:5])
+            except (ValueError, IndexError):
+                # Not a metrics line, skip
+                continue
     
     if not data:
         return
@@ -265,3 +280,4 @@ def save_classification_report_as_image(report_text, output_path, title):
     plt.savefig(output_path, bbox_inches='tight', dpi=150)
     plt.close()
     print(f"Classification report saved to: {output_path}")
+
