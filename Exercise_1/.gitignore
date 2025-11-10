@@ -46,4 +46,6 @@ var/
 *.egg
 MANIFEST
 /reviews/logreg/logreg_voting_result.csv
-/reviews/logreg/logreg_voting_result.csv
+
+# predictions
+*_predictions.csv
