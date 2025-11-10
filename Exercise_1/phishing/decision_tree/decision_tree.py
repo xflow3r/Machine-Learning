@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Decision Tree Classifier for Road Safety Dataset
+Decision Tree Classifier for Phishing Dataset
 Compares holdout validation vs. cross-validation with timing and accuracy metrics.
 """
 
@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, classification_report
 
 # Add parent directory to path to import preprocess_datasets
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-from preprocess_datasets import load_road_safety_dataset
+from preprocess_datasets import load_phishing_dataset
 from decision_tree_common.decision_tree_common import (
     get_holdout_experiment_configs,
     train_holdout,
@@ -19,16 +19,35 @@ from decision_tree_common.decision_tree_common import (
     save_table_as_image,
     save_classification_report_as_image
 )
+
+
+def prepare_data(x_train, x_test):
+    """
+    Prepare data by dropping the Result_Label column (it's derived from target).
+
+    Returns:
+        x_train, x_test - 'Result Label' column removed
+    """
+    if 'Result_Label' in x_train.columns:
+        x_train = x_train.drop(columns=['Result_Label'])
+    if 'Result_Label' in x_test.columns:
+        x_test = x_test.drop(columns=['Result_Label'])
+    return x_train, x_test
+
+
 def run_experiments():
     """
     Run decision tree experiments with different configurations.
     """
-    print("Loading Road Safety Dataset...")
-    x_train, x_test, y_train, y_test = load_road_safety_dataset(debug=False)
+    print("Loading Phishing Dataset...")
+    x_train, x_test, y_train, y_test = load_phishing_dataset(debug=False)
     print()
-    print(f"Training data shape: {x_train.shape}")
-    print(f"Test data shape: {x_test.shape}")
+    print("Preparing data (dropping Result_Label column)...")
+    X_train_clean,  X_test_clean = prepare_data(x_train, x_test)
+    print(f"Training data shape: {X_train_clean.shape}")
+    print(f"Test data shape: {X_test_clean.shape}")
     print(f"Number of classes: {y_train.nunique()}")
+    print(f"Target classes: {sorted(y_train.unique())} (-1=Legitimate, 0=Suspicious, 1=Phishing)")
     print()
 
     # Get holdout experiment configs
@@ -44,14 +63,14 @@ def run_experiments():
         print(f"\nExperiment {i}/{len(holdout_configs)}: {config}")
         
         result = train_holdout(
-            x_train, y_train,
+            X_train_clean, y_train,
             holdout_pct=config['holdout_pct'],
             max_depth=config['max_depth'],
             min_samples_split=config['min_samples_split']
         )
 
         # Evaluate on test set
-        y_pred_test = result['model'].predict(x_test)
+        y_pred_test = result['model'].predict(X_test_clean)
         test_acc = accuracy_score(y_test, y_pred_test)
         result['test_accuracy'] = test_acc
 
@@ -71,10 +90,10 @@ def run_experiments():
         total_exps = len(holdout_configs) + len(cv_folds)
         print(f"\nExperiment {exp_num}/{total_exps}: GridSearchCV with {n_folds}-Fold CV")
         
-        cv_result = train_cross_validation(x_train, y_train, n_folds=n_folds)
+        cv_result = train_cross_validation(X_train_clean, y_train, n_folds=n_folds)
         
         # Evaluate on test set
-        y_pred_test = cv_result['model'].predict(x_test)
+        y_pred_test = cv_result['model'].predict(X_test_clean)
         test_acc = accuracy_score(y_test, y_pred_test)
         cv_result['test_accuracy'] = test_acc
         
@@ -122,10 +141,10 @@ def run_experiments():
     # Save results table as PNG
     output_dir = Path(__file__).parent
     results_table_path = output_dir / 'results_summary_table.png'
-    save_table_as_image(results_df, results_table_path, 'Decision Tree Results Summary - Road Safety Dataset')
+    save_table_as_image(results_df, results_table_path, 'Decision Tree Results Summary - Phishing Dataset')
     
     # Show classification report from best model
-    y_pred_test_best = best_result['model'].predict(x_test)
+    y_pred_test_best = best_result['model'].predict(X_test_clean)
     classification_rep = classification_report(y_test, y_pred_test_best)
     print("\nClassification Report (Best Model - Test Set):")
     print(classification_rep)
