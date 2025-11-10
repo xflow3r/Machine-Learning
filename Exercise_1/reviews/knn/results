@@ -1,0 +1,63 @@
+====================================================================================================
+Running HOLDOUT evaluations...
+[Holdout] k=1, weights=uniform, p=2 | train_acc=1.0000 val_acc=0.1000 time: fit=0.096s infer=0.038s
+[Holdout] k=1, weights=distance, p=2 | train_acc=1.0000 val_acc=0.1000 time: fit=0.108s infer=0.043s
+[Holdout] k=3, weights=uniform, p=2 | train_acc=0.1933 val_acc=0.0467 time: fit=0.096s infer=0.038s
+[Holdout] k=3, weights=distance, p=2 | train_acc=1.0000 val_acc=0.1000 time: fit=0.095s infer=0.041s
+[Holdout] k=5, weights=uniform, p=2 | train_acc=0.1917 val_acc=0.0333 time: fit=0.094s infer=0.038s
+[Holdout] k=5, weights=distance, p=2 | train_acc=1.0000 val_acc=0.0933 time: fit=0.098s infer=0.039s
+[Holdout] k=7, weights=uniform, p=2 | train_acc=0.1733 val_acc=0.0600 time: fit=0.096s infer=0.040s
+[Holdout] k=7, weights=distance, p=2 | train_acc=1.0000 val_acc=0.1067 time: fit=0.095s infer=0.039s
+[Holdout] k=9, weights=uniform, p=2 | train_acc=0.1467 val_acc=0.0667 time: fit=0.109s infer=0.042s
+[Holdout] k=9, weights=distance, p=2 | train_acc=1.0000 val_acc=0.1000 time: fit=0.097s infer=0.039s
+
+Running CROSS-VALIDATION evaluations...
+[5-Fold CV] k=1, weights=uniform, p=2 | train_acc=1.0000 val_acc=0.1240 (sd=0.0225) f1_macro=0.1160 time: total=1.882s
+[5-Fold CV] k=1, weights=distance, p=2 | train_acc=1.0000 val_acc=0.1240 (sd=0.0225) f1_macro=0.1160 time: total=1.153s
+[5-Fold CV] k=3, weights=uniform, p=2 | train_acc=0.1720 val_acc=0.0493 (sd=0.0209) f1_macro=0.0297 time: total=1.142s
+[5-Fold CV] k=3, weights=distance, p=2 | train_acc=1.0000 val_acc=0.1147 (sd=0.0271) f1_macro=0.1116 time: total=1.143s
+[5-Fold CV] k=5, weights=uniform, p=2 | train_acc=0.1383 val_acc=0.0493 (sd=0.0137) f1_macro=0.0226 time: total=1.081s
+[5-Fold CV] k=5, weights=distance, p=2 | train_acc=1.0000 val_acc=0.1053 (sd=0.0265) f1_macro=0.0988 time: total=0.809s
+[5-Fold CV] k=7, weights=uniform, p=2 | train_acc=0.1070 val_acc=0.0507 (sd=0.0116) f1_macro=0.0227 time: total=0.799s
+[5-Fold CV] k=7, weights=distance, p=2 | train_acc=1.0000 val_acc=0.0960 (sd=0.0200) f1_macro=0.0883 time: total=0.800s
+[5-Fold CV] k=9, weights=uniform, p=2 | train_acc=0.0767 val_acc=0.0467 (sd=0.0163) f1_macro=0.0172 time: total=0.799s
+[5-Fold CV] k=9, weights=distance, p=2 | train_acc=1.0000 val_acc=0.0907 (sd=0.0182) f1_macro=0.0830 time: total=0.800s
+
+====================================================================================================
+RESULTS SUMMARY TABLE
+         Method  k  Weights  p Train Time (s) Train Acc            Val Acc
+      5-Fold CV  1  uniform  2          1.882    1.0000 0.1240 (sd 0.0225)
+      5-Fold CV  1 distance  2          1.153    1.0000 0.1240 (sd 0.0225)
+      5-Fold CV  3 distance  2          1.143    1.0000 0.1147 (sd 0.0271)
+Holdout (80/20)  7 distance  2          0.095    1.0000             0.1067
+      5-Fold CV  5 distance  2          0.809    1.0000 0.1053 (sd 0.0265)
+Holdout (80/20)  1 distance  2          0.108    1.0000             0.1000
+Holdout (80/20)  9 distance  2          0.097    1.0000             0.1000
+Holdout (80/20)  1  uniform  2          0.096    1.0000             0.1000
+Holdout (80/20)  3 distance  2          0.095    1.0000             0.1000
+      5-Fold CV  7 distance  2          0.800    1.0000 0.0960 (sd 0.0200)
+Holdout (80/20)  5 distance  2          0.098    1.0000             0.0933
+      5-Fold CV  9 distance  2          0.800    1.0000 0.0907 (sd 0.0182)
+Holdout (80/20)  9  uniform  2          0.109    0.1467             0.0667
+Holdout (80/20)  7  uniform  2          0.096    0.1733             0.0600
+      5-Fold CV  7  uniform  2          0.799    0.1070 0.0507 (sd 0.0116)
+      5-Fold CV  3  uniform  2          1.142    0.1720 0.0493 (sd 0.0209)
+      5-Fold CV  5  uniform  2          1.081    0.1383 0.0493 (sd 0.0137)
+      5-Fold CV  9  uniform  2          0.799    0.0767 0.0467 (sd 0.0163)
+Holdout (80/20)  3  uniform  2          0.096    0.1933             0.0467
+Holdout (80/20)  5  uniform  2          0.094    0.1917             0.0333
+
+====================================================================================================
+Best model: 5-Fold CV with params {'n_neighbors': 1, 'weights': 'distance', 'p': 2}
+Best validation accuracy: 0.1240
+
+Final training on full data: 0.118s
+
+First 30 predictions:
+['Chachra' 'Chachra' 'Chachra' 'Brody' 'Chachra' 'Auken' 'Auken' 'Brody'
+ 'Chachra' 'Lawyeraau' 'Chachra' 'Chachra' 'Chachra' 'Lawyeraau' 'Chachra'
+ 'Harp' 'Chachra' 'Chachra' 'Chachra' 'Auken' 'Chachra' 'Engineer'
+ 'Cholette' 'Chachra' 'Lawyeraau' 'Brody' 'Chachra' 'Chachra' 'Auken'
+ 'Chachra']
+
+Predictions saved to: /home/chrisvenator/IdeaProjects/Machine-Learning/Exercise_1/reviews/knn/voting_knn_result.csv
