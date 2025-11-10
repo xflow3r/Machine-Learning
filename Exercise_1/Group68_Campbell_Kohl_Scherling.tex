@@ -40,10 +40,10 @@
 VU Machine Learning 2025W}}
 
 \author{
-    Group00\\[0.3cm]
-    Student Name 1 (Matriculation Number)\\
-    Student Name 2 (Matriculation Number)\\
-    Student Name 3 (Matriculation Number)
+    Group 68\\[0.3cm]
+    Campbell Lucas (12536848)\\
+    Kohl Leonhard (12047036)\\
+    Scherling Christopher (12119060)
 }
 
 \date{\today}
@@ -85,85 +85,99 @@ This report presents our work on Exercise 1 of the Machine Learning course, focu
 
 We selected four diverse datasets to comprehensively evaluate classifier performance across different data characteristics:
 
-\subsection{Dataset 1: [Kaggle Dataset Name]}
+\subsection{Dataset 1: [Voting Records]}
 \label{subsec:dataset1}
 
 \textbf{Source:} Kaggle Competition (Course-specific)
 
 \textbf{Characteristics:}
 \begin{itemize}
-    \item Number of samples (train/test): XX / XX
-    \item Number of features: XX
-    \item Number of classes: XX
-    \item Feature types: [numerical/categorical/mixed]
-    \item Class distribution: [balanced/imbalanced]
+    \item Number of samples (train/test): 218 / 217
+    \item Number of features: 16
+    \item Number of classes: 2 (Democrat vs. Republican)
+    \item Feature types: Categorical (voting records on various congressional bills)
+    \item Class distribution: Imbalanced (58.3% Democrat / 41.7% Republican)
 \end{itemize}
 
-\textbf{Description:} [Brief description of what the dataset represents]
+\textbf{Description:}
+This dataset contains congressional voting records for U.S. House Representatives, with each feature representing a vote (yes/no/abstain) on specific legislation. The classification task is to predict party affiliation (Democrat or Republican) based on voting patterns. This represents a classic political science application where voting behavior serves as a strong indicator of party membership.
 
-\textbf{Challenges:} [e.g., missing values, outliers, high dimensionality, class imbalance]
 
-\subsection{Dataset 2: [Kaggle Dataset Name]}
+\textbf{Challenges:} 
+This dataset had a small sample size of only 218 training samples which created a big risk of overfitting. It also had a slight class imbalance
+which could lead to a prediction bias towards the majority class. Also missing votes needed appropriate handling.
+
+\subsection{Dataset 2: [Amazon Product Reviews]}
 \label{subsec:dataset2}
 
 \textbf{Source:} Kaggle Competition (Course-specific)
 
 \textbf{Characteristics:}
 \begin{itemize}
-    \item Number of samples (train/test): XX / XX
-    \item Number of features: XX
-    \item Number of classes: XX
-    \item Feature types: [numerical/categorical/mixed]
-    \item Class distribution: [balanced/imbalanced]
+    \item Number of samples (train/test): 750 / 750
+    \item Number of features: 10,000
+    \item Number of classes: 50 (product categories)
+    \item Feature types: Numerical
+    \item Class distribution: Balanced (~2\% per class)
 \end{itemize}
 
-\textbf{Description:} [Brief description]
+\textbf{Description:}
+This text classification dataset contains Amazon product reviews that have been preprocessed into a high-dimensional feature representation. 
+Each review must be classified into one of 50 product categories. This represents a challenging multi-class text classification problem typical in e-commerce and natural language processing applications.
 
-\textbf{Challenges:} [Specific challenges]
 
-\subsection{Dataset 3: [Exercise 0 Dataset Name]}
+\textbf{Challenges:}
+This dataset had a very high dimensionality which was challenging. It also had a relatively small sample size compared to the feature count
+
+
+
+\subsection{Dataset 3: [Phishing Website Detection]}
 \label{subsec:dataset3}
 
 \textbf{Source:} Exercise 0
 
 \textbf{Characteristics:}
 \begin{itemize}
-    \item Number of samples: XX
-    \item Number of features: XX
-    \item Number of classes: XX
-    \item Feature types: [numerical/categorical/mixed]
-    \item Class distribution: [balanced/imbalanced]
+    \item Number of samples: 1,353
+    \item Number of features: 9
+    \item Number of classes: 3 (phishing status: -1, 0, 1)
+    \item Feature types: Categorical (website characteristics)
+    \item Class distribution: Imbalanced (51.9\% / 40.5\% / 7.6\%)
 \end{itemize}
 
-\textbf{Description:} [Brief description]
+\textbf{Description:}
+This dataset contains features describing website characteristics used to detect phishing attempts. 
+Features include URL structure, domain age, SSL certificate status, and other security-related attributes. 
+The three classes represent different levels of phishing risk or legitimacy. 
 
-\textbf{Challenges:} [Specific challenges]
+\textbf{Challenges:}
+Since all features were categorical proper encoding was needed. We also had a slight class imbalance in the dataset (7.6\%).
+Also the 3-class problem is a bit more complex compared to binary classification. There was also some collinearity present among the predictors.
 
-\subsection{Dataset 4: [Exercise 0 Dataset Name]}
+
+\subsection{Dataset 4: [Road Safety Casualties]}
 \label{subsec:dataset4}
 
 \textbf{Source:} Exercise 0
 
 \textbf{Characteristics:}
 \begin{itemize}
-    \item Number of samples: XX
-    \item Number of features: XX
-    \item Number of classes: XX
-    \item Feature types: [numerical/categorical/mixed]
-    \item Class distribution: [balanced/imbalanced]
+    \item Number of samples: 363,243 (subsampled to 10,000 for computational feasibility)
+    \item Number of features: 66 (59 categorical, 7 numerical)
+    \item Number of classes: 11 (casualty severity levels)
+    \item Feature types: Mixed (predominantly categorical)
+    \item Class distribution: Imbalanced (largest class 19.2\%, smallest class 5.6\%)
 \end{itemize}
 
-\textbf{Description:} [Brief description]
+\textbf{Description:}
+This large-scale dataset from the UK Department for Transport contains detailed records of traffic accidents, including information about road conditions, weather, vehicle types, location characteristics, and casualty outcomes. 
+The classification task is to predict casualty severity level (ranging from slight injuries to fatalities) based on accident circumstances. 
+This represents a real-world public safety application where accurate predictions could inform emergency response resource allocation.
 
-\textbf{Challenges:} [Specific challenges]
+\textbf{Challenges:}
+The dataset is massive with 363.000 samples which made it really challenging to compute. Some teammembers needed to use subsampling since we didn't have the needed compute power.
+Also since 11 classes are present this creates very complex decision boundaries. There are also missing values across multiple features. 
 
-\subsection{Dataset Selection Rationale}
-\label{subsec:dataset_rationale}
-
-Our dataset selection ensures diversity across multiple dimensions:
-
-
-\centering
 
 %=============================================================================
 \section{Data Preprocessing}
@@ -228,7 +242,6 @@ To evaluate the impact of preprocessing, we compared classifier performance with
 % Explain characteristics (brief, don't repeat lecture material)
 % Justify your choice
 
-We selected three classifiers from different learning paradigms to ensure comprehensive evaluation:
 
 \subsection{Classifier 1: [e.g., Random Forest]}
 \label{subsec:classifier1}
@@ -247,43 +260,42 @@ We selected three classifiers from different learning paradigms to ensure compre
 
 \textbf{Expected Weaknesses:} [What are its limitations?]
 
-\subsection{Classifier 2: [e.g., Support Vector Machine]}
+\subsection{Classifier 2: [Support Vector Machine]}
 \label{subsec:classifier2}
 
 \textbf{Type/Paradigm:} Kernel-based / Maximum Margin
 
-\textbf{Key Characteristics:}
-\begin{itemize}
-    \item [List key characteristics]
-\end{itemize}
 
-\textbf{Expected Strengths:} [Strengths]
+\textbf{Selection reasoning:}
+We selected SVM specifically to investigate the relationship between dataset dimensionality and kernel performance. SVMs offer a unique capability to switch between linear and non-linear decision boundaries through kernel selection, making them ideal for testing our hypothesis: high-dimensional sparse data (Amazon: 10,000 features) should favor linear kernels, while low-dimensional structured data (Phishing: 9 features) should benefit from non-linear RBF kernels. This kernel flexibility allows us to systematically evaluate how the curse of dimensionality affects non-linear methods. Additionally, SVMs provide theoretical guarantees through margin maximization and clear interpretability through support vectors, making them valuable for understanding classifier behavior across diverse datasets.
 
-\textbf{Expected Weaknesses:} [Weaknesses]
-
-\subsection{Classifier 3: [e.g., Neural Network / Logistic Regression]}
+\subsection{Classifier 3: K-Nearest Neighbor}
 \label{subsec:classifier3}
 
-\textbf{Type/Paradigm:} [Different from above two]
+\textbf{Type/Paradigm:} NN, non-parametric supervised learning
 
 \textbf{Key Characteristics:}
 \begin{itemize}
-    \item [List key characteristics]
+    \item lazy loading
+    \item always retains all training data to make predictions
+    \item training data is stored as vectors
+    \item when a new element comes, it will be classified as the mean of the k surrounding nearest neighbors
+    \item basically a majority voting
 \end{itemize}
 
-\textbf{Expected Strengths:} [Strengths]
-
-\textbf{Expected Weaknesses:} [Weaknesses]
-
-\subsection{Classifier Selection Rationale}
-
-We selected these three classifiers to ensure:
+\textbf{Expected Strengths:}
 \begin{itemize}
-    \item Diversity in learning paradigms (at least two different types)
-    \item Coverage of different algorithmic approaches
-    \item Ability to evaluate performance across various data characteristics
-    \item [Additional justification]
+    \item Very simple to implement
+    \item Extremeley fast for small datasets.
+    \item can classify quite good with categorical data (like voting)
 \end{itemize}
+
+\textbf{Expected Weaknesses:}
+\begin{itemize}
+    \item Very basic. Probably not very good performance
+    \item Extremely slow for large datasets.
+\end{itemize}
+
 
 %=============================================================================
 \section{Experimental Methodology}
@@ -345,8 +357,16 @@ For each classifier, we explored multiple parameter configurations:
 \subsubsection{Classifier 2 Parameters}
 [Similar structure]
 
-\subsubsection{Classifier 3 Parameters}
-[Similar structure]
+\subsubsection{Classifier 3 Parameters} 
+We tested multiple different parameters and came to the conclusion that these were the best ones for knn for each dataset. We ran multiple tests and then compared the results. These are the optimized parameters: 
+\begin{itemize}
+    \item \textbf{Dataset phishing:} $n\_neighbors$: 9, weights: distance, p: 1
+    \item \textbf{Dataset reviews:} $n\_neighbors$: 1, weights: distance, p: 2
+    \item \textbf{Dataset road\_safety:} $n\_neighbors$: 11, weights: distance, p: 1
+    \item \textbf{Dataset voting:} $n\_neighbors$: 7, weights: distance, p: 2
+\end{itemize}
+
+
 
 \subsection{Computational Environment}
 
@@ -448,6 +468,10 @@ This section presents the experimental results for all dataset-classifier combin
 [Similar analysis]
 
 \subsubsection{Classifier C Sensitivity}
+
+When setting the "weights" parameter, the computation time immerdiately multiplied. Normally, the calculation were done within a few seconds up to a minute. But when using other weights, we had to stop the calculation after 2 hours since id did not finish until then.
+
+The most impact had the "$n\_neighbors$". It did not impact the model that much but still the most. It could shift the accuracy about +-0.10. The reason is that the lower the number, the less values are being compared with. So, there could form a local bubble, where only a certain class is present, when in reality there value should be a totally different class. On the other hand, when k=n, then it takes just the average.
 
 [Similar analysis]
 
