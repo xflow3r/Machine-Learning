@@ -5,9 +5,12 @@ This module provides shared functionality for:
 - Random state for reproducibility
 - Experiment configurations
 - Training functions (holdout and cross-validation with GridSearchCV)
+- Visualization functions for saving results as PNG images
 """
 
 import time
+import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.metrics import accuracy_score
@@ -161,3 +164,104 @@ def train_cross_validation(X_train, y_train, n_folds=5, param_grid=None):
         'params': best_params,
         'grid_search': grid_search  # Include full grid search object for detailed analysis
     }
+
+
+def save_table_as_image(df, output_path, title):
+    """
+    Save a pandas DataFrame as a PNG image.
+    
+    Args:
+        df: DataFrame to visualize
+        output_path: Path where to save the PNG
+        title: Title for the table
+    """
+    fig, ax = plt.subplots(figsize=(14, len(df) * 0.5 + 1))
+    ax.axis('tight')
+    ax.axis('off')
+    
+    table = ax.table(cellText=df.values, colLabels=df.columns,
+                     cellLoc='left', loc='center',
+                     colWidths=[0.12] * len(df.columns))
+    
+    table.auto_set_font_size(False)
+    table.set_fontsize(9)
+    table.scale(1, 2)
+    
+    # Style header
+    for i in range(len(df.columns)):
+        table[(0, i)].set_facecolor('#4472C4')
+        table[(0, i)].set_text_props(weight='bold', color='white')
+    
+    # Alternate row colors
+    for i in range(1, len(df) + 1):
+        for j in range(len(df.columns)):
+            if i % 2 == 0:
+                table[(i, j)].set_facecolor('#E7E6E6')
+            else:
+                table[(i, j)].set_facecolor('#FFFFFF')
+    
+    plt.title(title, fontsize=14, weight='bold', pad=20)
+    plt.savefig(output_path, bbox_inches='tight', dpi=150)
+    plt.close()
+    print(f"Table saved to: {output_path}")
+
+
+def save_classification_report_as_image(report_text, output_path, title):
+    """
+    Save a classification report as a PNG image.
+    
+    Args:
+        report_text: Classification report text
+        output_path: Path where to save the PNG
+        title: Title for the report
+    """
+    # Parse classification report into DataFrame
+    lines = report_text.strip().split('\n')
+    data = []
+    
+    for line in lines[2:-3]:  # Skip header and footer lines
+        parts = line.split()
+        if len(parts) >= 5:
+            data.append(parts)
+    
+    # Last 3 lines (accuracy, macro avg, weighted avg)
+    for line in lines[-3:]:
+        parts = line.split()
+        if len(parts) >= 4:
+            data.append(parts)
+    
+    if not data:
+        return
+    
+    # Create DataFrame
+    df = pd.DataFrame(data, columns=['Class', 'Precision', 'Recall', 'F1-Score', 'Support'])
+    
+    fig, ax = plt.subplots(figsize=(10, len(df) * 0.4 + 1))
+    ax.axis('tight')
+    ax.axis('off')
+    
+    table = ax.table(cellText=df.values, colLabels=df.columns,
+                     cellLoc='center', loc='center',
+                     colWidths=[0.25, 0.15, 0.15, 0.15, 0.15])
+    
+    table.auto_set_font_size(False)
+    table.set_fontsize(9)
+    table.scale(1, 2)
+    
+    # Style header
+    for i in range(len(df.columns)):
+        table[(0, i)].set_facecolor('#4472C4')
+        table[(0, i)].set_text_props(weight='bold', color='white')
+    
+    # Alternate row colors
+    for i in range(1, len(df) + 1):
+        for j in range(len(df.columns)):
+            if i % 2 == 0:
+                table[(i, j)].set_facecolor('#E7E6E6')
+            else:
+                table[(i, j)].set_facecolor('#FFFFFF')
+    
+    plt.title(title, fontsize=14, weight='bold', pad=20)
+    plt.savefig(output_path, bbox_inches='tight', dpi=150)
+    plt.close()
+    print(f"Classification report saved to: {output_path}")
