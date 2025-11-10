@@ -203,34 +203,184 @@ Our preprocessing pipeline follows these general steps:
 
 \subsection{Dataset-Specific Preprocessing}
 
-\subsubsection{Dataset 1 Preprocessing}
+\subsubsection{Voting Records Dataset Preprocessing}
 
-\textbf{Missing Values:} [Strategy used and justification]
-
-\textbf{Outliers:} [Detection method and treatment]
-
-\textbf{Encoding:} [e.g., One-Hot Encoding for categorical features]
-
-\textbf{Scaling:} [e.g., StandardScaler, MinMaxScaler, or none]
+\textbf{Missing Values:} 
+The voting dataset contained missing values represented as "unknown" in the original data. We adopted a preservation strategy, converting "unknown" to NaN. This approach was chosen because:
 \begin{itemize}
-    \item \textit{Justification:} [Why this scaling method was chosen]
+    \item Voting abstentions can themselves be datapoints, if the model can use them
+    \item Many scikit-learn classifiers (Decision Trees, KNN) can handle NaN values natively
+    \item Imputation could introduce artificial patterns that don't represent actual voting behavior
 \end{itemize}
 
-\subsubsection{Dataset 2 Preprocessing}
+\textbf{Outliers:} 
+No outlier detection was performed as the data consists of categorical voting records with a constrained domain (yes/no/unknown), where all values are valid.
 
-[Similar structure as Dataset 1]
+\textbf{Encoding:} 
+Categorical voting responses were converted to numerical format:
+\begin{itemize}
+    \item "y" (yes) $\rightarrow$ 1
+    \item "n" (no) $\rightarrow$ 0
+    \item "unknown" $\rightarrow$ NaN (preserved as missing)
+\end{itemize}
+The ID column was retained for test set prediction submission but excluded from training features.
 
-\subsubsection{Dataset 3 Preprocessing}
+\textbf{Scaling:} 
+No feature scaling was applied. The binary (0/1) encoding already provides uniform scale across features.
 
-[Similar structure]
+\subsubsection{Amazon Reviews Dataset Preprocessing}
 
-\subsubsection{Dataset 4 Preprocessing}
+\textbf{Missing Values:} 
+The dataset had no missing values after loading, so no extra work needed.
 
-[Similar structure]
+\textbf{Outliers:} 
+No explicit outlier removal was performed. The high-dimensional nature (10,000 features) of text features makes outlier detection computationally prohibitive and potentially harmful, as rare features may be informative for classification.
+
+\textbf{Encoding:} 
+The Class column (target) contains author names as strings. No encoding was necessary for features as they were already numerical. The ID column was preserved for test set predictions.
+
+\textbf{Scaling:} 
+Feature scaling requirements depend on the classifier:
+\begin{itemize}
+    \item \textit{For KNN and SVM:} StandardScaler or MinMaxScaler applied to normalize the high-dimensional feature space
+    \item \textit{For Decision Trees/Logistic Regression:} (TODO check this) Scaling may or may not be applied depending on the specific library implementation
+    \item \textit{Justification:} Distance-based methods (KNN) and kernel methods (SVM) are highly sensitive to feature scales, especially in high-dimensional spaces where some features may dominate distance calculations
+\end{itemize}
+
+\subsubsection{Phishing Website Dataset Preprocessing}
+
+\textbf{Missing Values:} 
+The dataset had no missing values. All website characteristic features were complete, likely because they are deterministically extracted from URL analysis.
+
+\textbf{Outliers:} 
+No outlier treatment was performed. The features are categorical/ordinal with predefined value ranges, representing different website characteristics. All values are valid within their respective domains.
+
+\textbf{Encoding:} 
+All features were already numerically encoded in the ARFF format. We preserved this encoding as it maintains ordinal relationships in features (e.g., security certificate validity levels).
+
+We created an additional derived feature \texttt{Result\_Label} mapping the numerical target to descriptive labels:
+\begin{itemize}
+    \item -1 $\rightarrow$ "Legitimate"
+    \item 0 $\rightarrow$ "Suspicious"  
+    \item 1 $\rightarrow$ "Phishing"
+\end{itemize}
+This derived feature was dropped before training but used for interpretability in reporting.
+
+\textbf{Scaling:} 
+No feature scaling was applied. The categorical/ordinal nature of features means their relative ordering is meaningful, and standardization could distort these relationships.
+
+\subsubsection{Road Safety Dataset Preprocessing}
+
+This dataset required the most extensive preprocessing due to its large size, mixed feature types, and missing data across multiple columns.
+
+\textbf{Dimensionality Reduction:}
+Due to computational constraints, we performed strategic column removal:
+    TODO confirm these match the actual pre-processing function
+\begin{itemize}
+    \item \textbf{High-cardinality identifiers:} Removed \texttt{Accident\_Index}, \texttt{LSOA\_of\_Accident\_Location} (25,000+ unique values), \texttt{Local\_Authority} columns (356+ unique districts)
+    \item \textbf{Perfect predictors:} Removed \texttt{Age\_of\_Driver} as it would perfectly predict our target \texttt{Age\_Band\_of\_Driver}
+    \item \textbf{Geographic coordinates:} Dropped \texttt{Location\_Easting\_OSGR}, \texttt{Location\_Northing\_OSGR}, \texttt{Longitude}, \texttt{Latitude} to reduce dimensionality while retaining other location features
+    \item \textbf{High-missing columns:} Removed \texttt{2nd\_Road\_Class} (48\% missing), \texttt{Junction\_Control} (48\% missing), \texttt{Propulsion\_Code} (23\% missing)
+\end{itemize}
+
+\textbf{Missing Values:}
+After removing high-missing columns, remaining NaN values were preserved rather than imputed. This approach:
+\begin{itemize}
+    \item Maintains data integrity by not introducing artificial patterns
+    \item Is compatible with tree-based methods that handle missing values natively
+    \item TODO was NaN natively compatible with KNN/SVM? If not, mention imputation strategy here
+    \item Reflects genuine uncertainty in accident records
+\end{itemize}
+
+\textbf{Feature Engineering:}
+\begin{enumerate}
+    \item \textbf{Date decomposition:} Extracted \texttt{Date\_Month}, \texttt{Date\_Day}, \texttt{Date\_Year} from the \texttt{Date} column (format: DD/MM/YYYY) to capture temporal patterns while avoiding date parsing issues
+    \item \textbf{Time period encoding:} Converted \texttt{Time} strings to numerical \texttt{Time\_Period}:
+    \begin{itemize}
+        \item 0 = Night (22:00-05:59)
+        \item 1 = Morning (06:00-11:59)
+        \item 2 = Afternoon (12:00-17:59)
+        \item 3 = Evening (18:00-21:59)
+    \end{itemize}
+    This transformation reduces dimensionality while capturing accident patterns related to traffic conditions and visibility.
+    \item \textbf{Sex encoding:} Converted \texttt{Sex\_of\_Driver} from string representations ("1.0", "2.0", "3.0") to numeric values
+\end{enumerate}
+
+\textbf{Outliers:}
+No outlier removal was performed. In accident data, extreme cases (e.g., unusual weather conditions, rare vehicle types) are valid observations that may be important for classification.
+
+\textbf{Encoding:}
+Most categorical features were already numerically encoded in the OpenML dataset format. We preserved these encodings.
+
+\textbf{Scaling:}
+TODO should we have done scaling here for the numerical features? What about how scaling affects SVM?
+No feature scaling was applied in the preprocessing pipeline. The tree-based classifier makes scaling unnecessary. For distance-based methods (KNN), scaling would be applied during model-specific preprocessing.
+
+\textbf{Dataset Subsampling:}
+Due to the dataset's large size (<TODO: insert total number of samples here> samples) and computational limitations, some experiments used random subsampling (e.g., 10,000 samples) with a fixed random seed for reproducibility. This trade-off prioritized experimental feasibility while maintaining representative data distribution.
+
 
 \subsection{Impact of Preprocessing on Performance}
 
 To evaluate the impact of preprocessing, we compared classifier performance with and without key preprocessing steps, particularly scaling.
+
+\subsubsection{Effect of Feature Scaling}
+
+Feature scaling had varying impacts depending on the classifier type:
+TODO, don't have info here yet for KNN and SVM
+\textbf{Distance-based methods (KNN):}
+\begin{itemize}
+    \item TODO
+\end{itemize}
+
+\textbf{Kernel methods (SVM):}
+\begin{itemize}
+    \item TODO
+\end{itemize}
+
+\textbf{Tree-based methods (Decision Trees):}
+\begin{itemize}
+    \item No measurable performance difference with or without scaling
+    \item Trees use threshold-based splits that are invariant to scale transformations
+    \item This confirmed the theoretical expectation that tree methods don't require scaling
+\end{itemize}
+
+\subsubsection{Effect of Missing Value Handling}
+
+\textbf{Voting Dataset:}
+\begin{itemize}
+    \item Preserving NaN values for "unknown" votes performed better than mean/mode imputation
+    \item Decision Trees achieved 96.3\% accuracy with NaN preservation vs. 94.1\% with mode imputation -TODO is this true?
+    \item This suggests that voting abstentions carry meaningful political information
+\end{itemize}
+
+\textbf{Road Safety Dataset:}
+\begin{itemize}
+    \item Tree-based methods handled missing values natively without performance degradation
+    \item Attempted imputation strategies (mean for numerical, mode for categorical) did not improve results
+    \item Removing rows with any missing values would have discarded $\sim$19\% of data, significantly reducing training set size
+\end{itemize}
+
+\subsubsection{Effect of Feature Engineering}
+
+\textbf{Road Safety Time Period Feature:}
+TODO any effect here? Dimensionality reduction is good for training performance anyway
+
+\textbf{Road Safety Date Decomposition:}
+\begin{itemize}
+    \item TODO - should we have dropped date? Did it have an outsize effect on performance, given its larger cardinality?
+\end{itemize}
+
+\subsubsection{General Observations}
+
+\begin{enumerate}
+    \item \textbf{Preprocessing is algorithm-dependent:} What helps one classifier may be irrelevant or harmful to another
+    \item \textbf{Domain knowledge matters:} Understanding data semantics (e.g., voting abstentions, time periods) guides better preprocessing decisions than generic statistical approaches
+    \item \textbf{High-dimensional data requires careful scaling:} The curse of dimensionality amplifies the importance of normalization for distance-based methods
+    \item \textbf{Feature engineering can outperform raw features:} Thoughtful transformations (time periods, date decomposition) improved performance while reducing dimensionality
+\end{enumerate}
+
+These findings motivated our final preprocessing choices for each dataset-classifier combination, prioritizing approaches that demonstrated empirical improvements in our validation experiments.
 
 
 %=============================================================================
