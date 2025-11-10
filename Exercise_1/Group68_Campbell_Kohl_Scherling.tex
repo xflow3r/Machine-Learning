@@ -314,10 +314,11 @@ To evaluate the impact of preprocessing, we compared classifier performance with
 \subsubsection{Effect of Feature Scaling}
 
 Feature scaling had varying impacts depending on the classifier type:
-TODO, don't have info here yet for KNN and SVM
+
 \textbf{Distance-based methods (KNN):}
 \begin{itemize}
-    \item TODO
+    \item Feature scaling had made a major impact on the reviews dataset performance. The accuracy improved from 0.03 to 0.13. It made the model better but not good.
+    \item Feature scaling not applied for road safety dataset, so we will take this into account for model evaluation.
 \end{itemize}
 
 \textbf{Kernel methods (SVM):}
@@ -327,7 +328,7 @@ TODO, don't have info here yet for KNN and SVM
 
 \textbf{Tree-based methods (Decision Trees):}
 \begin{itemize}
-    \item No measurable performance difference with or without scaling (expected)
+    \item No measurable performance difference with or without scaling, as expected.
 \end{itemize}
 
 
@@ -341,23 +342,24 @@ TODO, don't have info here yet for KNN and SVM
 % Justify your choice
 
 
-\subsection{Classifier 1: [e.g., Random Forest]}
+\subsection{Classifier 1: Decision Tree}
 \label{subsec:classifier1}
 
-\textbf{Type/Paradigm:} Ensemble Learning / Tree-based
+\textbf{Type/Paradigm:} Decision Tree
 
 \textbf{Key Characteristics:}
 \begin{itemize}
-    \item [List 3-5 key characteristics]
-    \item [e.g., Handles non-linear relationships]
-    \item [e.g., Robust to outliers]
-    \item [e.g., Provides feature importance]
+    \item \textbf{Recursive partitioning:} Splits data using binary decision rules on features to create a tree structure, making decisions interpretable as a series of if-then-else conditions
+    \item \textbf{Scale-invariant:} Does not require feature scaling or normalization, as splits are based on threshold comparisons that are invariant to monotonic transformations
+    \item \textbf{Native missing value support:} Can handle NaN values directly by learning which branch to follow when a feature value is missing, avoiding the need for imputation
+    \item \textbf{Non-linear decision boundaries:} Captures complex interactions between features through hierarchical splits, enabling modeling of non-linear relationships without kernel tricks
 \end{itemize}
 
-\textbf{Expected Strengths:} [What types of datasets/problems is it good for?]
+\textbf{Expected Strengths:} 
+Decision trees excel with categorical/mixed data types, handle missing values naturally, and provide interpretable models through visualization. They perform well on small-to-medium datasets with clear feature interactions (e.g., Voting, Phishing) and require minimal preprocessing. Their scale-invariance makes them robust across different feature ranges without normalization.
 
-\textbf{Expected Weaknesses:} [What are its limitations?]
-
+\textbf{Expected Weaknesses:} 
+Prone to overfitting on noisy or complex datasets, especially when trees grow too deep without pruning. Sensitive to small data variations (high variance), which can produce different tree structures from slight changes in training data. May struggle with high-dimensional sparse data (e.g., Amazon Reviews) where feature space is too large.
 \subsection{Classifier 2: [Support Vector Machine]}
 \label{subsec:classifier2}
 
@@ -406,50 +408,40 @@ We selected SVM specifically to investigate the relationship between dataset dim
 % Train/test split strategy
 
 \subsection{Experimental Design}
-
 Our experimental design follows a systematic approach to ensure valid and reproducible results:
 
-
-
 \subsection{Ensuring Fair Comparison}
-
 To ensure meaningful comparisons, we:
-
 \begin{itemize}
-    \item Used the same train-test splits for all classifiers on each dataset
+    \item Used an 80/20 train-test split for all classifiers on each dataset
     \item Applied consistent preprocessing for each dataset
-    \item Used the same random seed for reproducibility: [SEED\_VALUE]
+    \item Used the same random seed for reproducibility (within classifiers)
     \item Evaluated all classifiers using identical metrics
     \item Normalized/scaled data appropriately for classifiers that require it
-    \item [Additional measures taken]
 \end{itemize}
 
 \subsection{Performance Measures}
 
-
-We selected multiple performance measures to comprehensively evaluate classifier effectiveness:
-
-
-
-\subsubsection{Additional Metrics}
-\begin{itemize}
-    \item \textbf{Confusion Matrix:} For detailed error analysis
-    \item \textbf{ROC-AUC:} [If applicable for binary/multi-class]
-    \item \textbf{Training Time:} To evaluate efficiency
-    \item \textbf{Prediction Time:} For real-world deployment considerations
-\end{itemize}
-
-\textit{Note:} For multi-class problems, we use [macro/weighted] averaging for precision, recall, and F1-score because [justification].
+We selected multiple performance measures to comprehensively evaluate classifier effectiveness. For the Kaggle Datasets, where the test set was unlabeled, we relied on holdout validation metrics from the training set. For Road Safety and Phishing, we looked at accuracy of the model performance on the test split of the data.
+Additionally, we used Precision, Recall, and F1-Score to capture class-specific performance, especially important for imbalanced datasets. 
+We also include training time, in order to discuss the tradeoff between model training time and performance.
 
 \subsection{Parameter Exploration}
 
 For each classifier, we explored multiple parameter configurations:
 
-\subsubsection{Classifier 1 Parameters}
+\subsubsection{Decision Tree Parameters}
+For the holdout method training, we experimented with a Cartesian product of the following parameter values:
 \begin{itemize}
-    \item \textbf{Parameter 1:} [Values tested and why]
-    \item \textbf{Parameter 2:} [Values tested and why]
-    \item \textbf{Parameter 3:} [Values tested and why]
+    \item \textbf{Holdout Percentage:} [0.2, 0.3] - to evaluate the impact of training set size on model performance
+    \item \textbf{Max Depth:} [None, 10] - to control tree complexity and prevent overfitting
+    \item \textbf{Min Samples Split:} [2, 5] - to ensure sufficient data at each node for reliable splits
+\end{itemize}
+For Cross Validation, we used 10- and 5-fold CV with the following parameter grid, and used the GridSearchCV method from sklearn to find the best parameters (selects best model parameters based on mean validation accuracy):
+\begin{itemize}
+    \item \textbf{Max Depth:} [3, 5, 7, 10, 15, 20, None]
+    \item \textbf{Min Samples Split:} [2, 5, 10, 20, 50]
+    \item \textbf{Min Samples Leaf:} [1, 2, 5, 10]
 \end{itemize}
 
 \subsubsection{Classifier 2 Parameters}
@@ -465,16 +457,6 @@ We tested multiple different parameters and came to the conclusion that these we
 \end{itemize}
 
 
-
-\subsection{Computational Environment}
-
-All experiments were conducted in the following environment:
-\begin{itemize}
-    \item \textbf{Hardware:} [CPU, RAM specifications]
-    \item \textbf{Software:} Python 3.X, scikit-learn X.X.X, [other libraries]
-    \item \textbf{Random Seed:} [Fixed seed value for reproducibility]
-\end{itemize}
-
 %=============================================================================
 \section{Results}
 \label{sec:results}
@@ -487,32 +469,65 @@ All experiments were conducted in the following environment:
 
 This section presents the experimental results for all dataset-classifier combinations. Results are organized by dataset, with comprehensive performance metrics for each classifier configuration.
 
-\subsection{Dataset 1 Results}
+\subsection{Dataset 1: Voting Records Results}
 
 \subsubsection{Overall Performance Comparison}
-
-
+Decision Tree Results:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/voting_decision_tree_results_summary_table.png}
+    \caption{Decision Tree Results Summary - Voting Dataset}
+    \label{fig:voting_dt_results}
+\end{figure}
+The table above shows results for the Decision Tree classifier. The decision tree was able to reach consistently high accuracies of 96\% or higher. We can also see that grid search CV gave slightly lower training accuracies, but better generalization to the test set. Training times were negligible for single holdout splits, but increased to several seconds for GridSearchCV due to multiple folds and parameter combinations. Performance was stable across the two fold counts. Curiously, the 10-fold CV took less time to train than the 5-fold CV, possibly due to implementation details in sklearn's parallelization, or else local concurrent processes on the machine used for training.
 
 
 \subsubsection{Parameter Sensitivity Analysis}
+Decision Tree Parameter Sensitivity:
+Adjusting Max Depth yielded nearly identical results, suggesting the data is easily separable with shallow trees. Increasing Min Samples Split from 2 to 5 slightly reduced training accuracy, but validation accuracy stayed nearly the same, indicating that stricter splitting rules help reduce overfitting without hurting generalization.
 
 
+\subsection{Dataset 2: Amazon Reviews Results}
+Decision Tree Results:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/reviews_decision_tree_results_summary_table.png}
+    \caption{Decision Tree Results Summary - Amazon Reviews Dataset.}
+    \label{fig:reviews_dt_results}
+\end{figure}
 
-\subsubsection{Confusion Matrices}
 
+\subsection{Dataset 3: Phishing Results}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/phishing_decision_tree_results_summary_table.png}
+    \caption{Decision Tree Results Summary - Phishing Dataset. Performance comparison across holdout validation and GridSearchCV for 3-class phishing detection.}
+    \label{fig:phishing_dt_results}
+\end{figure}
 
-\subsection{Dataset 2 Results}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{assets/phishing_decision_tree_classification_report.png}
+    \caption{Classification Report for Best Model - Phishing Dataset (Decision Tree). Shows performance across Legitimate, Suspicious, and Phishing classes on test set.}
+    \label{fig:phishing_dt_classification}
+\end{figure}
 
-[Similar structure as Dataset 1]
+\subsection{Dataset 4: Road Safety Results}
 
-\subsection{Dataset 3 Results}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/road_safety_decision_tree_results_summary_table.png}
+    \caption{Decision Tree Results Summary - Road Safety Dataset. Performance across different configurations for 11-class age band prediction.}
+    \label{fig:road_safety_dt_results}
+\end{figure}
 
-[Similar structure]
-
-\subsection{Dataset 4 Results}
-
-[Similar structure]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/road_safety_decision_tree_classification_report.png}
+    \caption{Classification Report for Best Model - Road Safety Dataset (Decision Tree). Per-class performance for all 11 driver age bands on test set.}
+    \label{fig:road_safety_dt_classification}
+\end{figure}
 
 \subsection{Aggregated Results Overview}
 
