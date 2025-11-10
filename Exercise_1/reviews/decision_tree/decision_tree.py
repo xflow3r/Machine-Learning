@@ -6,18 +6,17 @@ Compares holdout validation vs. cross-validation with timing and accuracy metric
 
 import sys
 from pathlib import Path
-import time
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import cross_validate, train_test_split
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import classification_report
 
 # Add parent directory to path to import preprocess_datasets
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from preprocess_datasets import load_amazon_review_dataset
-
-# Random state for reproducibility
-RANDOM_STATE = 2742
+from decision_tree_common.decision_tree_common import (
+    get_experiment_configs,
+    train_holdout,
+    train_cross_validation
+)
 
 
 def prepare_data(x_train):
@@ -30,81 +29,6 @@ def prepare_data(x_train):
     X_train_clean = x_train.drop(columns=['ID'])
 
     return X_train_clean
-
-
-def train_holdout(X_train, y_train, holdout_pct=0.2, max_depth=None, min_samples_split=2):
-    start_time = time.time()
-    
-    # Split into train/validation
-    X_tr, X_val, y_tr, y_val = train_test_split(
-        X_train, y_train, test_size=holdout_pct, random_state=RANDOM_STATE, stratify=y_train
-    )
-    
-    # Train model
-    clf = DecisionTreeClassifier(
-        max_depth=max_depth,
-        min_samples_split=min_samples_split,
-        random_state=RANDOM_STATE
-    )
-    clf.fit(X_tr, y_tr)
-    
-    train_time = time.time() - start_time
-    
-    # Evaluate on training split
-    y_pred_tr = clf.predict(X_tr)
-    train_acc = accuracy_score(y_tr, y_pred_tr)
-    
-    # Evaluate on validation split
-    y_pred_val = clf.predict(X_val)
-    val_acc = accuracy_score(y_val, y_pred_val)
-    
-    return {
-        'model': clf,
-        'train_time': train_time,
-        'train_accuracy': train_acc,
-        'val_accuracy': val_acc,
-        'method': f'Holdout ({int((1-holdout_pct)*100)}/{int(holdout_pct*100)})',
-        'params': {'max_depth': max_depth, 'min_samples_split': min_samples_split}
-    }
-
-
-def train_cross_validation(X_train, y_train, n_folds=5, max_depth=None, min_samples_split=2):
-    start_time = time.time()
-    
-    # Create model
-    clf = DecisionTreeClassifier(
-        max_depth=max_depth,
-        min_samples_split=min_samples_split,
-        random_state=RANDOM_STATE
-    )
-    
-    # Perform cross-validation
-    cv_results = cross_validate(
-        clf, X_train, y_train,
-        cv=n_folds,
-        scoring='accuracy',
-        return_train_score=True,
-        n_jobs=-1
-    )
-
-    # Fit final model on full training set
-    clf.fit(X_train, y_train)
-
-    train_time = time.time() - start_time
-
-    mean_train_acc = cv_results['train_score'].mean()
-    mean_val_acc = cv_results['test_score'].mean()
-    std_val_acc = cv_results['test_score'].std()
-
-    return {
-        'model': clf,
-        'train_time': train_time,
-        'train_accuracy': mean_train_acc,
-        'val_accuracy': mean_val_acc,
-        'val_accuracy_std': std_val_acc,
-        'method': f'{n_folds}-Fold CV',
-        'params': {'max_depth': max_depth, 'min_samples_split': min_samples_split}
-    }
 
 
 def predict_test(model, x_test):
@@ -149,19 +73,7 @@ def run_experiments():
     print(f"Number of classes: {y_train.nunique()}")
     print()
 
-    configs = [
-        # Holdout with different splits and parameters
-        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': None, 'min_samples_split': 2},
-        {'method': 'holdout', 'holdout_pct': 0.3, 'max_depth': None, 'min_samples_split': 2},
-        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 10, 'min_samples_split': 5},
-        {'method': 'holdout', 'holdout_pct': 0.2, 'max_depth': 5, 'min_samples_split': 10},
-
-        # Cross-validation with different folds and parameters
-        {'method': 'cv', 'n_folds': 5, 'max_depth': None, 'min_samples_split': 2},
-        {'method': 'cv', 'n_folds': 10, 'max_depth': None, 'min_samples_split': 2},
-        {'method': 'cv', 'n_folds': 5, 'max_depth': 10, 'min_samples_split': 5},
-        {'method': 'cv', 'n_folds': 5, 'max_depth': 5, 'min_samples_split': 10},
-    ]
+    configs = get_experiment_configs()
     
     results = []
     
