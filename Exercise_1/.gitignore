@@ -50,3 +50,7 @@ MANIFEST
 # predictions
 *_predictions.csv
 /voting/knn/voting_knn_result.csv
+
+# generated files
+*.png
+*.csv
