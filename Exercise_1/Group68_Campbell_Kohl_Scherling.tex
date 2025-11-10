@@ -551,11 +551,18 @@ K Nearest Neighbors
     \caption{Decision Tree Results Summary - Voting Dataset}
     \label{fig:voting_knn_results}
 \end{figure}
-The aim was to get the best parameters for train accuracy and validation accuracy. Validation accuracies are consistently around 0.97–1.00, showing strong performance. Some configurations (e.g., k=7, weights=uniform, p=1 or 2) even reach perfect validation accuracy. Models with weights=distance often have train_acc=1.0000, suggesting they perfectly fit the training data — possibly a slight overfitting risk. It was a small dataset. So the inference times are negligible.
+The aim was to get the best parameters for train accuracy and validation accuracy. Validation accuracies are consistently around 0.97-1.00, showing strong performance. Some configurations (e.g., k=7, weights=uniform, p=1 or 2) even reach perfect validation accuracy. Models with weights=distance often have train\_acc=1.0000, suggesting they perfectly fit the training data — possibly a slight overfitting risk. It was a small dataset. So the inference times are negligible.
 
 \subsubsection{Parameter Sensitivity Analysis}
 Decision Tree Parameter Sensitivity:
 Adjusting Max Depth yielded nearly identical results, suggesting the data is easily separable with shallow trees. Increasing Min Samples Split from 2 to 5 slightly reduced training accuracy, but validation accuracy stayed nearly the same, indicating that stricter splitting rules help reduce overfitting without hurting generalization.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{assets/voting_classification_report.png}
+    \caption{Decision Tree Classification Report - Voting Dataset}
+    \label{fig:voting_dt_classification}
+\end{figure}
+The classification report above does not give much new information, but shows that the dataset and the prediction errors for decision tree were roughly equally split across classes.
 
 
 \subsubsection{SVM Results - Voting Dataset}
@@ -592,6 +599,8 @@ Decision Tree Results:
     \caption{Decision Tree Results Summary - Amazon Reviews Dataset.}
     \label{fig:reviews_dt_results}
 \end{figure}
+For this dataset, the decision tree classifier struggled significantly. The best accuracy was achieved with 10-fold CV and reached an average of 40\% on the left-out fold. However, the kaggle results showed only 34\% accuracy on unseen data. This shows the weakness of decision trees on large, high-dimensional datasets. The model likely overfit to the training data, leading to poor generalization.
+Decision Tree Parameter Sensitivity: Hyperparameters like min samples split and max depth do not drastically change performance. The model consistently underperforms regardless of configuration, indicating that the decision tree is not well-suited for this dataset's characteristics.
 
 K Nearest Neighbors:
 \begin{figure}[H]
@@ -646,19 +655,22 @@ RBF & 1.0 & 0.0267 & 0.0013 & 0.74s \\
 
 \subsection{Dataset 3: Phishing Results}
 
+Decision Tree Results:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/phishing_decision_tree_results_summary_table.png}
-    \caption{Decision Tree Results Summary - Phishing Dataset. Performance comparison across holdout validation and GridSearchCV for 3-class phishing detection.}
+    \caption{Decision Tree Results Summary - Phishing Dataset}
     \label{fig:phishing_dt_results}
 \end{figure}
+Decision Tree had average performance on the phishing dataset. Validation accuracy was consistently lower than training accuracy, but only by about 10\%. Similar to the reviews dataset, GridSearchCV provided better generalization than single holdout splits.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{assets/phishing_decision_tree_classification_report.png}
-    \caption{Classification Report for Best Model - Phishing Dataset (Decision Tree). Shows performance across Legitimate, Suspicious, and Phishing classes on test set.}
+    \caption{Classification Report for Best Model - Phishing Dataset (Decision Tree).}
     \label{fig:phishing_dt_classification}
 \end{figure}
+The weakest class accuracy was 0 (Suspicious), which also had the lowest support, so the poor performance here is possibly due to class imbalance.
 
 \subsubsection{SVM Results - Phishing Dataset}
 
@@ -694,7 +706,7 @@ K Nearest Neighbors:
     \label{fig:phishing_knn_results}
 \end{figure}
 Best model: Holdout (80/20) with params {n neighbors: 9, weights: distance, p: 1}; Best validation: F1m=0.9933 | Acc=0.9908; \newline
-Both accuracy and F1-score on validation data are very high (≈ 0.93–0.99). This indicates that the KNN model distinguishes phishing from legitimate sites extremely well. The best configurations reach Val Acc ≈ 0.99 and Val F1m ≈ 0.993, meaning very balanced precision and recall. Overall, KNN is a highly effective choice for this dataset.
+Both accuracy and F1-score on validation data are very high (~ 0.93–0.99). This indicates that the KNN model distinguishes phishing from legitimate sites extremely well. The best configurations reach Val Acc ~ 0.99 and Val F1m ~ 0.993, meaning very balanced precision and recall. Overall, KNN is a highly effective choice for this dataset.
 
 
 \subsection{Dataset 4: Road Safety Results}
@@ -702,14 +714,14 @@ Both accuracy and F1-score on validation data are very high (≈ 0.93–0.99). T
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/road_safety_decision_tree_results_summary_table.png}
-    \caption{Decision Tree Results Summary - Road Safety Dataset. Performance across different configurations for 11-class age band prediction.}
+    \caption{Decision Tree Results Summary - Road Safety Dataset}
     \label{fig:road_safety_dt_results}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/road_safety_decision_tree_classification_report.png}
-    \caption{Classification Report for Best Model - Road Safety Dataset (Decision Tree). Per-class performance for all 11 driver age bands on test set.}
+    \caption{Classification Report for Best Model - Road Safety Dataset (Decision Tree)}
     \label{fig:road_safety_dt_classification}
 \end{figure}
 
@@ -727,7 +739,7 @@ K Nearest Neighbors:
     \label{fig:road_safety_knn_results_2}
 \end{figure}
 Best model: 5-Fold CV with params {n neighbors: 11, weights: distance, p: 1}; Best validation: F1m=0.3588 | Acc=0.4095; \newline
-The KNN results for this phishing dataset show poor generalization and significant overfitting. While the training accuracy and F1-scores are perfect (≈1.0) for most configurations—especially when using distance weighting—the validation accuracy and F1-scores drop sharply to around 0.28–0.41, regardless of k, p, or weighting scheme. This large gap between training and validation performance indicates that the model memorizes the training data but fails to correctly classify unseen samples. Changing distance metrics (p=1 vs p=2) or increasing k does not meaningfully improve results.\newline
+The KNN results for this phishing dataset show poor generalization and significant overfitting. While the training accuracy and F1-scores are perfect (~1.0) for most configurations—especially when using distance weighting—the validation accuracy and F1-scores drop sharply to around 0.28–0.41, regardless of k, p, or weighting scheme. This large gap between training and validation performance indicates that the model memorizes the training data but fails to correctly classify unseen samples. Changing distance metrics (p=1 vs p=2) or increasing k does not meaningfully improve results.\newline
 Note that it took forever. So, we pruned the dataset to 100.000 entries instead of 260.000! This pruning significantly affected the performance!!! Even pruned, it took multiple hours on an extremeley powerful PC!
 
 
@@ -876,75 +888,6 @@ The most impact had the "$n\_neighbors$". It did not impact the model that much 
     \item [Technical issues, convergence problems, etc.]
     \item [How you addressed them]
 \end{itemize}
-
-%=============================================================================
-\section{Holdout vs. Cross-Validation Comparison}
-\label{sec:holdout_cv}
-
-% Compare holdout to cross-validation
-% Pay attention to splits and settings
-% Are there differences? Why? In which metrics?
-
-To evaluate the robustness of our results, we compared holdout validation with k-fold cross-validation.
-
-\subsection{Methodology}
-
-\textbf{Holdout Validation:}
-\begin{itemize}
-    \item Train-test split: [e.g., 80-20]
-    \item Random seed: [SEED]
-    \item Single split used for all experiments
-\end{itemize}
-
-\textbf{Cross-Validation:}
-\begin{itemize}
-    \item Method: [e.g., 5-fold or 10-fold CV]
-    \item Stratified: [Yes/No and why]
-    \item Random seed: [SEED]
-\end{itemize}
-
-\subsection{Results Comparison}
-
-
-
-
-
-\subsection{Analysis}
-
-\subsubsection{Differences Observed}
-
-[Discuss whether holdout and CV results differ significantly]
-
-\subsubsection{Variance and Stability}
-
-[Discuss standard deviation from CV - which classifiers are more stable?]
-
-\subsubsection{Reasons for Differences}
-
-
-
-\subsubsection{Which Metrics Are Most Affected?}
-
-[Analyze if certain metrics (accuracy, precision, recall) show more variation between holdout and CV]
-
-\subsection{Recommendations}
-
-
-
-
-% Optional section: Discuss your Kaggle submissions
-% What strategies worked best?
-% How did you rank?
-
-\subsection{Competition Performance}
-
-
-
-
-
-\subsection{Lessons Learned from Competition}
-
-[Discuss what worked well and what didn't in the competitive setting]
 
 %=============================================================================
 \section{Conclusion}
