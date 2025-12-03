@@ -162,7 +162,23 @@ class RegressionTree:
         
         return X_left, y_left, X_right, y_right
 
-    
+    def get_params(self, deep=True): # included because of sklearn
+        """
+        Get parameters for this estimator (required for sklearn compatibility)
+        """
+        return {
+            'max_depth': self.max_depth,
+            'min_samples_split': self.min_samples_split,
+            'min_samples_leaf': self.min_samples_leaf
+        }
+
+    def set_params(self, **params): # included because of sklearn
+        """
+        Set parameters for this estimator (required for sklearn compatibility)
+        """
+        for key, value in params.items():
+            setattr(self, key, value)
+        return self
     
     def _create_leaf(self, y):
         """
@@ -189,5 +205,29 @@ class RegressionTree:
             return self._traverse_tree(x, node.right) # right
 
     
-
 if __name__ == "__main__":
+    import pandas as pd
+    from sklearn.model_selection import cross_val_score
+    from sklearn.metrics import make_scorer, mean_squared_error, r2_score
+
+    datasets = {
+        'Bikes': ('datasets/preprocessed_bikes.csv', 'Rented Bike Count'),
+        'Cars': ('datasets/preprocessed_cars.csv', 'price_usd'),
+        'Houses': ('datasets/preprocessed_houses.csv', 'SalePrice')
+    }
+    
+    for name, (path, target) in datasets.items():
+        print(f"Testing on {name} Dataset")
+        
+        df = pd.read_csv(path)
+        
+        X = df.drop(target, axis=1).values
+        y = df[target].values
+        
+        tree = RegressionTree(max_depth=5, min_samples_split=10, min_samples_leaf=5)
+        
+        mse_scores = -cross_val_score(tree, X, y, cv=5, scoring='neg_mean_squared_error')
+        r2_scores = cross_val_score(tree, X, y, cv=5, scoring='r2')
+        
+        print(f"MSE: {mse_scores.mean():.2f} (+/- {mse_scores.std():.2f})")
+        print(f"R2: {r2_scores.mean():.4f} (+/- {r2_scores.std():.4f})")
