@@ -1,5 +1,5 @@
+#!/usr/bin/env python3
 import numpy as np
-
 
 class TreeNode:
     """
@@ -97,7 +97,7 @@ class RegressionTree:
         """
         Find the best feature and threshold to split on
         """
-        best_mse = float('inf')  # Start with infinity (worst possible)
+        best_variance = float('inf')  # Start with infinity (worst possible)
         best_feature = None
         best_threshold = None
         
@@ -122,19 +122,19 @@ class RegressionTree:
                 if len(y_left) < self.min_samples_leaf or len(y_right) < self.min_samples_leaf:
                     continue
                 
-                mse = self._calculate_mse(y_left, y_right)
+                variance = self._calculate_variance(y_left, y_right)
                 
-                if mse < best_mse: # update mse if it improved
-                    best_mse = mse
+                if variance < best_variance: # update best variance, if it improved
+                    best_variance = variance
                     best_feature = feature_index
                     best_threshold = threshold
         
         return best_feature, best_threshold
     
     
-    def _calculate_mse(self, y_left, y_right):
+    def _calculate_variance(self, y_left, y_right):
         """
-        Calculate weighted Mean Squared Error for a split
+        Calculate weighted variance for a split
         """
         n_left = len(y_left)
         n_right = len(y_right)
@@ -226,6 +226,8 @@ if __name__ == "__main__":
         
         tree = RegressionTree(max_depth=5, min_samples_split=10, min_samples_leaf=5)
         
+        # TODO: may need to update RegressionTree to inherit from BaseEstimator for sklearn compatibility,
+        # else add # type: ignore
         mse_scores = -cross_val_score(tree, X, y, cv=5, scoring='neg_mean_squared_error')
         r2_scores = cross_val_score(tree, X, y, cv=5, scoring='r2')
         

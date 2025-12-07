@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 def preprocess_bikes():
     df = pd.read_csv('datasets/SeoulBikeData.csv', encoding='unicode_escape')
