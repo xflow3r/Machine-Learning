@@ -28,13 +28,15 @@ class RegressionTree:
     Regression Tree for predicting continuous values
     """
     
-    def __init__(self, max_depth=10, min_samples_split=2, min_samples_leaf=1):
+    def __init__(self, max_depth=10, min_samples_split=2, min_samples_leaf=1, in_random_forest=False, max_features=None):
         """
         Constructor
         """
         self.max_depth = max_depth # max tree depth (too deep = overfitting, too shallow = underfitting)
         self.min_samples_split = min_samples_split # samples needed to split (prevents splitting of too small groups)
         self.min_samples_leaf = min_samples_leaf # samples needed in a leaf node (prevents leafes with to few samples which makes predictions more stable)
+        self.in_random_forest = in_random_forest # whether to use random feature selection at each node
+        self.max_features = max_features # number of features to consider at each split (only used if in_random_forest=True)
         
         self.root = None
 
@@ -103,7 +105,22 @@ class RegressionTree:
         
         n_samples, n_features = X.shape
         
-        for feature_index in range(n_features):
+        # Select feature subset if in random forest mode
+        if self.in_random_forest:
+            # Determine number of features to consider
+            if self.max_features is None:
+                # Default: sqrt(n_features) for random forests
+                n_features_to_consider = max(1, int(np.sqrt(n_features)))
+            else:
+                n_features_to_consider = min(self.max_features, n_features)
+            
+            # Randomly select feature indices
+            feature_indices = np.random.choice(n_features, size=n_features_to_consider, replace=False)
+        else:
+            # Use all features
+            feature_indices = range(n_features)
+        
+        for feature_index in feature_indices:
             feature_values = X[:, feature_index]
             
             possible_thresholds = np.unique(feature_values) # unique values for possible thresholds
@@ -169,7 +186,9 @@ class RegressionTree:
         return {
             'max_depth': self.max_depth,
             'min_samples_split': self.min_samples_split,
-            'min_samples_leaf': self.min_samples_leaf
+            'min_samples_leaf': self.min_samples_leaf,
+            'in_random_forest': self.in_random_forest,
+            'max_features': self.max_features
         }
 
     def set_params(self, **params): # included because of sklearn
