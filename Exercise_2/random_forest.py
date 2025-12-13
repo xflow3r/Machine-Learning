@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
+from joblib import Parallel, delayed
 from regression_tree import RegressionTree
 
 
@@ -10,7 +11,7 @@ class RandomForest:
     """
     
     def __init__(self, n_trees=100, max_depth=10, min_samples_split=2, 
-                 min_samples_leaf=1, max_features=None):
+                 min_samples_leaf=1, max_features=None, n_jobs=-1):
         """
         Initialize Random Forest
         """
@@ -19,25 +20,37 @@ class RandomForest:
         self.min_samples_split = min_samples_split
         self.min_samples_leaf = min_samples_leaf
         self.max_features = max_features # number of features to consider at each split
+        self.n_jobs = n_jobs # number of parallel jobs (-1 = use all cores)
         self.trees = []
 
     
     def fit(self, X, y):
         """
-        Build forest of trees from training data
+        Build forest of trees from training data (parallelized)
         """
-        # Split data and train each tree
-        for _ in range(self.n_trees):
-            X_sample, y_sample = self._bootstrap_sample(X, y)
-            tree = RegressionTree(
-                max_depth=self.max_depth,
-                min_samples_split=self.min_samples_split,
-                min_samples_leaf=self.min_samples_leaf,
-                in_random_forest=True,
-                max_features=self.max_features
-            )
-            tree.fit(X_sample, y_sample)
-            self.trees.append(tree)
+        # Train trees in parallel
+        self.trees = Parallel(n_jobs=self.n_jobs)(
+            delayed(self._train_tree)(X, y, seed) 
+            for seed in range(self.n_trees)
+        )
+    
+    
+    def _train_tree(self, X, y, seed):
+        """
+        Train a single tree (helper for parallelization)
+        """
+        # Each _train_tree call is a separate process, so need to call seed() for each tree
+        np.random.seed(seed)
+        X_sample, y_sample = self._bootstrap_sample(X, y)
+        tree = RegressionTree(
+            max_depth=self.max_depth,
+            min_samples_split=self.min_samples_split,
+            min_samples_leaf=self.min_samples_leaf,
+            in_random_forest=True,
+            max_features=self.max_features
+        )
+        tree.fit(X_sample, y_sample)
+        return tree
 
     
     def predict(self, X):
@@ -68,7 +81,8 @@ class RandomForest:
             'max_depth': self.max_depth,
             'min_samples_split': self.min_samples_split,
             'min_samples_leaf': self.min_samples_leaf,
-            'max_features': self.max_features
+            'max_features': self.max_features,
+            'n_jobs': self.n_jobs
         }
     
     

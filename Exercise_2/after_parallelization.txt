@@ -1,0 +1,118 @@
+###############
+BEFORE PARALLEL
+###############
+$ for i in 5 10 15; do time ./random_forest.py -n $i; done
+Random Forest Parameters: n_trees=5, max_depth=10, min_samples_split=2, min_samples_leaf=1, max_features=None
+
+Testing Random Forest on Bikes Dataset
+MSE: 165993.25 (+/- 77924.93)
+R2: 0.4093 (+/- 0.2056)
+
+Testing Random Forest on Cars Dataset
+MSE: 2246162.95 (+/- 284625.53)
+R2: 0.7351 (+/- 0.0182)
+
+Testing Random Forest on Houses Dataset
+MSE: 1275844184.57 (+/- 342649738.55)
+R2: 0.7674 (+/- 0.0481)
+
+
+real    2m20.905s
+user    2m24.055s
+sys     0m1.180s
+Random Forest Parameters: n_trees=10, max_depth=10, min_samples_split=2, min_samples_leaf=1, max_features=None
+
+Testing Random Forest on Bikes Dataset
+MSE: 142431.76 (+/- 73602.54)
+R2: 0.4479 (+/- 0.1689)
+
+Testing Random Forest on Cars Dataset
+MSE: 1894314.21 (+/- 83007.32)
+R2: 0.7618 (+/- 0.0130)
+
+Testing Random Forest on Houses Dataset
+MSE: 1205808566.23 (+/- 342819177.52)
+R2: 0.8375 (+/- 0.0173)
+
+
+real    4m35.880s
+user    4m38.631s
+sys     0m1.450s
+Random Forest Parameters: n_trees=15, max_depth=10, min_samples_split=2, min_samples_leaf=1, max_features=None
+
+Testing Random Forest on Bikes Dataset
+MSE: 138921.02 (+/- 70692.50)
+R2: 0.4597 (+/- 0.1330)
+
+Testing Random Forest on Cars Dataset
+MSE: 1921332.54 (+/- 24371.15)
+R2: 0.7672 (+/- 0.0118)
+
+Testing Random Forest on Houses Dataset
+MSE: 1105140940.92 (+/- 305385763.14)
+R2: 0.8393 (+/- 0.0173)
+
+
+real    6m53.129s
+user    6m54.689s
+sys     0m2.355s
+
+##############
+AFTER PARALLEL
+##############
+
+(venv) lucas@Lucas-dell-14:~/projects/Machine-Learning/Exercise_2$ for i in 5 10 15; do time ./random_forest.py -n $i; done
+Random Forest Parameters: n_trees=5, max_depth=10, min_samples_split=2, min_samples_leaf=1, max_features=None
+
+Testing Random Forest on Bikes Dataset
+MSE: 172988.21 (+/- 90561.69)
+R2: 0.3102 (+/- 0.2896)
+
+Testing Random Forest on Cars Dataset
+MSE: 2329096.40 (+/- 135815.64)
+R2: 0.7016 (+/- 0.0103)
+
+Testing Random Forest on Houses Dataset
+MSE: 1276730539.44 (+/- 309796923.07)
+R2: 0.7984 (+/- 0.0335)
+
+
+real    0m54.866s
+user    3m40.988s
+sys     0m5.956s
+Random Forest Parameters: n_trees=10, max_depth=10, min_samples_split=2, min_samples_leaf=1, max_features=None
+
+Testing Random Forest on Bikes Dataset
+MSE: 151928.20 (+/- 79957.02)
+R2: 0.4286 (+/- 0.1779)
+
+Testing Random Forest on Cars Dataset
+MSE: 2049157.63 (+/- 92266.19)
+R2: 0.7374 (+/- 0.0058)
+
+Testing Random Forest on Houses Dataset
+MSE: 1115362323.45 (+/- 294758814.38)
+R2: 0.8252 (+/- 0.0293)
+
+
+real    0m58.633s
+user    7m16.996s
+sys     0m5.795s
+Random Forest Parameters: n_trees=15, max_depth=10, min_samples_split=2, min_samples_leaf=1, max_features=None
+
+Testing Random Forest on Bikes Dataset
+MSE: 147655.37 (+/- 78740.70)
+R2: 0.4555 (+/- 0.1501)
+
+Testing Random Forest on Cars Dataset
+MSE: 1970961.13 (+/- 105731.20)
+R2: 0.7475 (+/- 0.0077)
+
+Testing Random Forest on Houses Dataset
+MSE: 1061770394.42 (+/- 279103914.69)
+R2: 0.8335 (+/- 0.0280)
+
+
+real    1m5.990s
+user    11m43.136s
+sys     0m6.590s
