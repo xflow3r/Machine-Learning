@@ -97,8 +97,10 @@ class RandomForest:
 
 if __name__ == "__main__":
     import argparse
+    import os
     import pandas as pd
     from sklearn.model_selection import cross_val_score
+    from joblib import dump
     
     parser = argparse.ArgumentParser(description='Random Forest Regressor')
     parser.add_argument('-n', '--n_trees', type=int, default=100, help='Number of trees in the forest')
@@ -106,6 +108,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--min_samples_split', type=int, default=2, help='Minimum samples required to split a node')
     parser.add_argument('-l', '--min_samples_leaf', type=int, default=1, help='Minimum samples required at a leaf node')
     parser.add_argument('-f', '--max_features', type=int, default=None, help='Number of features to consider at each split (default: sqrt(n_features))')
+    parser.add_argument('-j', '--n_jobs', type=int, default=-1, help='Number of parallel jobs (-1 uses all cores)')
     
     args = parser.parse_args()
     
@@ -122,7 +125,7 @@ if __name__ == "__main__":
     
     for name, (path, target) in datasets.items():
         print(f"Testing Random Forest on {name} Dataset")
-        
+
         df = pd.read_csv(path)
         
         X = df.drop(target, axis=1).values
@@ -133,7 +136,8 @@ if __name__ == "__main__":
             max_depth=args.max_depth,
             min_samples_split=args.min_samples_split,
             min_samples_leaf=args.min_samples_leaf,
-            max_features=args.max_features
+            max_features=args.max_features,
+            n_jobs=args.n_jobs
         )
         
         mse_scores = -cross_val_score(forest, X, y, cv=5, scoring='neg_mean_squared_error')
@@ -141,4 +145,19 @@ if __name__ == "__main__":
         
         print(f"MSE: {mse_scores.mean():.2f} (+/- {mse_scores.std():.2f})")
         print(f"R2: {r2_scores.mean():.4f} (+/- {r2_scores.std():.4f})")
+        
+        # Check if model already exists
+        params_str = f"n{args.n_trees}_d{args.max_depth}_s{args.min_samples_split}_l{args.min_samples_leaf}_f{args.max_features}"
+        model_filename = f"{name}_trained_model.{params_str}.joblib"
+        
+        if os.path.exists(model_filename):
+            print(f"Model {model_filename} already exists, skipping full dataset training + saving.")
+        else:
+            # Train on full dataset
+            print(f"Training on full {name} dataset...")
+            forest.fit(X, y)
+            
+            # Save model
+            dump(forest, model_filename)
+            print(f"Model saved to {model_filename}")
         print()
