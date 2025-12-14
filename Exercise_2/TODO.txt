@@ -1,0 +1,40 @@
+
+
+Powerpoint slides:
+
+* 1-3 slides about Regression Tree implementation
+* 1-3 slides describing Random Forest implementation
+* 1-3 slides performance metrics (define/describe them)
+    - MSE (mean squared error)
+    - R2 score (gives percentage of explained variance by the model)
+    - training times
+    - prediction times
+* models compared:
+    - RegressionTree (custom)
+    - RandomForest (custom)
+        * 3 configs: 
+            (10 trees, depth 5) - faster to train, lower accuracy
+            (50 trees, depth 10) - middle option
+            (100 trees, depth 15) - longer training time, improved accuracy (on par with sklearn models)
+    - DecisionTreeRegressor (sklearn)
+    - RandomForestRegressor (sklearn)
+    - GradientBoostingRegressor (sklearn)
+* dataset descriptions:
+    - 2-5 slides
+    - see comparison_results_metadata.txt for description of datasets and of final columns in comparison_results.txt
+* experiment process:
+    - 5-fold cross validation for each model
+    - for each fold, training/prediction time was measured and recorded, plus accuracy metrics
+* comparison of models:
+    - stacked bar charts (or box plots, to show std deviations?) for each dataset, show performance of each model separately
+    - training/prediction times
+    - MSE/R2 score
+    - 7 models, so may be easiest to show one table per dataset, rather than plotting
+    - But: at least 2 charts/tables per dataset, so 6 tables minimum (6 slides minimum)
+    - Could also do instead one chart per model, showing all metrics at once
+        * thus 7 slides
+* Conclusions/lessons learned (2+ slides, could be many)
+    - give conclusions about best model
+    - performance (accuracy) vs training/prediction time tradeoffs (if any)
+    - Good finding: parallelization of tree growth for random forests sped up training time SIGNIFICANTLY (6-10x improvement in training time)
+        * unfortunately no recorded metrics to back this up, though

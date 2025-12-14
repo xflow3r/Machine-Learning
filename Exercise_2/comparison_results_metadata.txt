@@ -1,0 +1,111 @@
+COMPARISON RESULTS METADATA
+============================
+
+This file describes the columns in comparison_results.csv
+
+Column Descriptions:
+--------------------
+
+dataset
+    The name of the dataset used for evaluation.
+    Values: 'Bikes', 'Cars', 'Houses'
+    - Bikes: Seoul Bike Sharing dataset (predicting 'Rented Bike Count')
+    - Cars: Used Car Price dataset (predicting 'price_usd')
+    - Houses: Housing dataset (predicting 'SalePrice')
+
+model
+    The name and configuration of the regression model being evaluated.
+    Includes both custom implementations and sklearn baseline models.
+    Examples:
+    - "Custom RegressionTree"
+    - "Custom RandomForest (n=10, d=5)" - n=trees, d=max_depth
+    - "sklearn DecisionTreeRegressor"
+    - "sklearn RandomForestRegressor"
+    - "sklearn GradientBoostingRegressor"
+
+r2_mean
+    Mean R² (coefficient of determination) score across all cross-validation folds.
+    Range: (-∞, 1.0], where 1.0 is perfect prediction
+    Interpretation: Proportion of variance in the target variable explained by the model
+    Higher values indicate better model performance.
+
+r2_std
+    Standard deviation of R² scores across cross-validation folds.
+    Measures the variability/consistency of model performance.
+    Lower values indicate more stable predictions across different data splits.
+
+mse_mean
+    Mean MSE (Mean Squared Error) across all cross-validation folds.
+    Units: Squared units of the target variable
+    Lower values indicate better model performance.
+    Note: MSE values are not directly comparable across different datasets
+    due to different scales of target variables.
+
+mse_std
+    Standard deviation of MSE across cross-validation folds.
+    Measures the variability of prediction error.
+    Lower values indicate more consistent error rates across different data splits.
+
+train_time_mean
+    Mean training time in seconds across all cross-validation folds.
+    Measures the computational efficiency of the model's fit() method.
+    Lower values indicate faster training.
+
+train_time_std
+    Standard deviation of training time in seconds.
+    Measures variability in training duration across folds.
+    High variability may indicate inconsistent computational performance.
+
+predict_time_mean
+    Mean prediction time in seconds across all cross-validation folds.
+    Measures the computational efficiency of the model's predict() method.
+    Lower values indicate faster predictions (important for deployment).
+
+predict_time_std
+    Standard deviation of prediction time in seconds.
+    Measures variability in prediction duration.
+    Generally should be very small for consistent performance.
+
+
+Cross-Validation Details:
+--------------------------
+- Method: 5-fold cross-validation with KFold (shuffle=True, random_state=42)
+- Each model is trained and evaluated 5 times on different train/test splits
+- Mean and standard deviation are computed across these 5 folds
+- All timing measurements include only the fit() and predict() operations
+
+
+Model Configurations:
+---------------------
+
+Custom RegressionTree:
+    max_depth=10, min_samples_split=10, min_samples_leaf=5
+
+Custom RandomForest (n=10, d=5):
+    n_trees=10, max_depth=5, min_samples_split=10, min_samples_leaf=5, n_jobs=-1
+
+Custom RandomForest (n=50, d=10):
+    n_trees=50, max_depth=10, min_samples_split=10, min_samples_leaf=5, n_jobs=-1
+
+Custom RandomForest (n=100, d=15):
+    n_trees=100, max_depth=15, min_samples_split=10, min_samples_leaf=5, n_jobs=-1
+
+sklearn DecisionTreeRegressor:
+    max_depth=10, min_samples_split=10, min_samples_leaf=5, random_state=42
+
+sklearn RandomForestRegressor:
+    n_estimators=50, max_depth=10, min_samples_split=10, min_samples_leaf=5,
+    n_jobs=-1, random_state=42
+
+sklearn GradientBoostingRegressor:
+    n_estimators=100, max_depth=5, learning_rate=0.1, random_state=42
+
+
+Analysis Recommendations:
+--------------------------
+1. Compare R² scores to assess prediction accuracy
+2. Compare training times to evaluate computational efficiency
+3. Compare prediction times to assess deployment feasibility
+4. Look at standard deviations to evaluate model stability
+5. Compare custom implementations vs sklearn to validate correctness
+6. Analyze tradeoffs between Random Forest configurations (speed vs accuracy)

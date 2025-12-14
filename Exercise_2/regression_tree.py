@@ -245,8 +245,6 @@ if __name__ == "__main__":
         
         tree = RegressionTree(max_depth=5, min_samples_split=10, min_samples_leaf=5)
         
-        # TODO: may need to update RegressionTree to inherit from BaseEstimator for sklearn compatibility,
-        # else add # type: ignore
         mse_scores = -cross_val_score(tree, X, y, cv=5, scoring='neg_mean_squared_error')
         r2_scores = cross_val_score(tree, X, y, cv=5, scoring='r2')
         
