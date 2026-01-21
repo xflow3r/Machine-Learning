@@ -32,10 +32,10 @@ def create_dataloaders(X_train, y_train, X_test, y_test, batch_size=64):
     Create PyTorch dataloaders from numpy arrays
     """
     # Add channel dimension for CNNs
-    X_train_torch = torch.FloatTensor(X_train).unsqueeze(1)
-    X_test_torch = torch.FloatTensor(X_test).unsqueeze(1)
-    y_train_torch = torch.LongTensor(y_train)
-    y_test_torch = torch.LongTensor(y_test)
+    X_train_torch = torch.FloatTensor(X_train.copy()).unsqueeze(1)
+    X_test_torch = torch.FloatTensor(X_test.copy()).unsqueeze(1)
+    y_train_torch = torch.LongTensor(y_train.copy())
+    y_test_torch = torch.LongTensor(y_test.copy())
 
     train_dataset = TensorDataset(X_train_torch, y_train_torch)
     test_dataset = TensorDataset(X_test_torch, y_test_torch)
