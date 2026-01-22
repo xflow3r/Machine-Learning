@@ -1,1 +1,42 @@
+# Dataset directory
 /fashion_mnist_data/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# PyTorch model checkpoints
+*.pth
+*.pt
+checkpoints/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Results
+results/tables/*.csv
+results/figures/*.png
