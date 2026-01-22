@@ -9,7 +9,7 @@ def load_fashion_mnist(normalize=True):
     Load Fashion-MNIST and return both numpy arrays and PyTorch dataloaders
 
     Returns:
-        tuple: (X_train, y_train, X_test, y_test, train_loader, test_loader, class_names)
+        tuple: (X_train, y_train, X_test, y_test, class_names)
     """
     train_images, train_labels, test_images, test_labels, class_names = download_fashion_mnist()
 

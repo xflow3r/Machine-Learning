@@ -2,6 +2,14 @@ import gzip
 import urllib.request
 import numpy as np
 import os
+from tqdm import tqdm
+
+
+class DownloadProgressBar(tqdm):
+    def update_to(self, b=1, bsize=1, tsize=None):
+        if tsize is not None:
+            self.total = tsize
+        self.update(b * bsize - self.n)
 
 
 def download_fashion_mnist():
@@ -9,11 +17,8 @@ def download_fashion_mnist():
     Downloads the Fashion-MNIST dataset (training and test data/labels)
     Only downloads files if they don't already exist
     """
-
-    # Base URL for Fashion-MNIST dataset
     base_url = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
 
-    # File names
     files = {
         'train_images': 'train-images-idx3-ubyte.gz',
         'train_labels': 'train-labels-idx1-ubyte.gz',
@@ -21,45 +26,37 @@ def download_fashion_mnist():
         'test_labels': 't10k-labels-idx1-ubyte.gz'
     }
 
-    # Create directory for dataset
     os.makedirs('fashion_mnist_data', exist_ok=True)
 
-    # Check if all files already exist
     all_files_exist = all(
         os.path.exists(os.path.join('fashion_mnist_data', filename))
         for filename in files.values()
     )
 
     if all_files_exist:
-        print("Skipping download...")
+        print("Dataset files already exist. Skipping download...")
     else:
         print("Downloading Fashion-MNIST dataset...")
-
-        # Download missing files
         for key, filename in files.items():
             filepath = os.path.join('fashion_mnist_data', filename)
-
             if os.path.exists(filepath):
                 print(f"✓ {filename} already exists, skipping...")
             else:
                 url = base_url + filename
                 print(f"Downloading {filename}...")
-                urllib.request.urlretrieve(url, filepath)
+                with DownloadProgressBar(unit='B', unit_scale=True, miniters=1, desc=filename) as t:
+                    urllib.request.urlretrieve(url, filepath, reporthook=t.update_to)
                 print(f"✓ {filename} downloaded")
 
-    # Load training images
     with gzip.open('fashion_mnist_data/train-images-idx3-ubyte.gz', 'rb') as f:
         train_images = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 28, 28)
 
-    # Load training labels
     with gzip.open('fashion_mnist_data/train-labels-idx1-ubyte.gz', 'rb') as f:
         train_labels = np.frombuffer(f.read(), np.uint8, offset=8)
 
-    # Load test images
     with gzip.open('fashion_mnist_data/t10k-images-idx3-ubyte.gz', 'rb') as f:
         test_images = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 28, 28)
 
-    # Load test labels
     with gzip.open('fashion_mnist_data/t10k-labels-idx1-ubyte.gz', 'rb') as f:
         test_labels = np.frombuffer(f.read(), np.uint8, offset=8)
 

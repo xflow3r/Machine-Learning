@@ -25,6 +25,10 @@ def main():
                         help='Device to use for deep learning models')
     parser.add_argument('--batch-size', type=int, default=64,
                         help='Batch size for deep learning models')
+    parser.add_argument('--epochs', type=int, default=10,
+                        help='Number of epochs for deep learning models')
+    parser.add_argument('--lr', type=float, default=0.001,
+                        help='Learning rate for deep learning models')
 
     args = parser.parse_args()
 
@@ -59,25 +63,32 @@ def main():
                 train_loader, test_loader = create_dataloaders(
                     X_train, y_train, X_test, y_test, batch_size=args.batch_size
                 )
-                results = run_deep(model_name, train_loader, test_loader, device=args.device)
+                results = run_deep(model_name, train_loader, test_loader,
+                                   device=args.device, epochs=args.epochs, lr=args.lr)
 
             # Extract results
             y_true = results['y_true']
             y_pred = results['y_pred']
 
-            # Compute metrics (if not already in results)
-            if 'accuracy' not in results or 'f1_macro' not in results:
-                metrics = compute_metrics(y_true, y_pred)
-                results.update(metrics)
+            # Compute metrics
+            metrics = compute_metrics(y_true, y_pred)
+            results.update(metrics)
 
             # Print results
-            print(f"\nResults for {model_name}:")
-            print(f"  Accuracy: {results['accuracy']:.4f}")
-            print(f"  F1-macro: {results['f1_macro']:.4f}")
+            print(f"\n{'=' * 80}")
+            print(f"RESULTS FOR {model_name.upper()}")
+            print(f"{'=' * 80}")
+            print(f"  Accuracy:   {results['accuracy']:.4f} ({results['accuracy'] * 100:.2f}%)")
+            print(f"  F1-macro:   {results['f1_macro']:.4f}")
             print(f"  Train time: {results['train_time']:.2f}s")
-            print(f"  Test time: {results['test_time']:.2f}s")
+            print(f"  Test time:  {results['test_time']:.2f}s")
             if 'feature_time' in results:
                 print(f"  Feature extraction time: {results['feature_time']:.2f}s")
+                total_time = results['feature_time'] + results['train_time'] + results['test_time']
+            else:
+                total_time = results['train_time'] + results['test_time']
+            print(f"  Total time: {total_time:.2f}s")
+            print(f"{'=' * 80}")
 
             # Plot confusion matrix
             cm_path = f'results/figures/cm_{args.dataset}_{model_name}.png'
@@ -92,23 +103,24 @@ def main():
                 'feature_time': results.get('feature_time', 0.0),
                 'train_time': results['train_time'],
                 'test_time': results['test_time'],
-                'total_time': results.get('feature_time', 0.0) + results['train_time'] + results['test_time'],
+                'total_time': total_time,
                 'seed': args.seed,
-                'notes': ''
+                'notes': f"epochs={args.epochs},lr={args.lr}" if model_name.startswith('cnn') else ''
             }
 
             # Save to CSV
             save_results_to_csv(csv_results)
 
-        except NotImplementedError:
-            print(f"❌ {model_name} not yet implemented")
         except Exception as e:
             print(f"❌ Error running {model_name}: {str(e)}")
             import traceback
             traceback.print_exc()
 
     print("\n" + "=" * 80)
-    print("All experiments completed!")
+    print("ALL EXPERIMENTS COMPLETED!")
+    print("=" * 80)
+    print(f"Results saved to: results/tables/results.csv")
+    print(f"Confusion matrices saved to: results/figures/")
     print("=" * 80)
 
 
