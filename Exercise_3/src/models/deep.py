@@ -1,6 +1,7 @@
 """
 PERSON B: Deep learning methods implementation
 Implements CNN-small and CNN-medium architectures
+Supports both grayscale (Fashion-MNIST) and RGB (CIFAR-10) images
 """
 
 import torch
@@ -13,18 +14,21 @@ from tqdm import tqdm
 
 class CNNSmall(nn.Module):
     """
-    Small CNN architecture for Fashion-MNIST
-    ~100K parameters
+    Small CNN architecture
+    ~100K parameters for grayscale, ~130K for RGB
     """
-    def __init__(self, num_classes=10):
+    def __init__(self, num_classes=10, input_channels=1):
         super(CNNSmall, self).__init__()
 
         # Convolutional layers
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)  # 28x28x32
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)  # 14x14x64
+        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
 
         # Pooling
         self.pool = nn.MaxPool2d(2, 2)
+
+        # Adaptive pooling to handle different input sizes
+        self.adaptive_pool = nn.AdaptiveAvgPool2d((7, 7))
 
         # Fully connected layers
         self.fc1 = nn.Linear(64 * 7 * 7, 128)
@@ -37,11 +41,14 @@ class CNNSmall(nn.Module):
     def forward(self, x):
         # Conv block 1
         x = self.relu(self.conv1(x))
-        x = self.pool(x)  # 14x14
+        x = self.pool(x)
 
         # Conv block 2
         x = self.relu(self.conv2(x))
-        x = self.pool(x)  # 7x7
+        x = self.pool(x)
+
+        # Adaptive pooling to ensure 7x7
+        x = self.adaptive_pool(x)
 
         # Flatten
         x = x.view(-1, 64 * 7 * 7)
@@ -56,14 +63,14 @@ class CNNSmall(nn.Module):
 
 class CNNMedium(nn.Module):
     """
-    Medium CNN architecture for Fashion-MNIST
-    ~300K parameters
+    Medium CNN architecture
+    ~300K parameters for grayscale, ~330K for RGB
     """
-    def __init__(self, num_classes=10):
+    def __init__(self, num_classes=10, input_channels=1):
         super(CNNMedium, self).__init__()
 
         # Convolutional layers
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
+        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
         self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
 
@@ -74,6 +81,9 @@ class CNNMedium(nn.Module):
 
         # Pooling
         self.pool = nn.MaxPool2d(2, 2)
+
+        # Adaptive pooling to handle different input sizes
+        self.adaptive_pool = nn.AdaptiveAvgPool2d((3, 3))
 
         # Fully connected layers
         self.fc1 = nn.Linear(128 * 3 * 3, 256)
@@ -87,15 +97,18 @@ class CNNMedium(nn.Module):
     def forward(self, x):
         # Conv block 1
         x = self.relu(self.bn1(self.conv1(x)))
-        x = self.pool(x)  # 14x14
+        x = self.pool(x)
 
         # Conv block 2
         x = self.relu(self.bn2(self.conv2(x)))
-        x = self.pool(x)  # 7x7
+        x = self.pool(x)
 
         # Conv block 3
         x = self.relu(self.bn3(self.conv3(x)))
-        x = self.pool(x)  # 3x3
+        x = self.pool(x)
+
+        # Adaptive pooling to ensure 3x3
+        x = self.adaptive_pool(x)
 
         # Flatten
         x = x.view(-1, 128 * 3 * 3)
@@ -204,7 +217,8 @@ def evaluate_model(model, test_loader, device):
     return np.array(y_true), np.array(y_pred), test_time
 
 
-def run_deep(model_name, train_loader, test_loader, device='cuda', epochs=10, lr=0.001):
+def run_deep(model_name, train_loader, test_loader, device='cuda',
+             epochs=10, lr=0.001, input_channels=1):
     """
     Run deep learning methods (CNNs)
 
@@ -215,6 +229,7 @@ def run_deep(model_name, train_loader, test_loader, device='cuda', epochs=10, lr
         device: str, 'cuda' or 'cpu'
         epochs: Number of training epochs
         lr: Learning rate
+        input_channels: Number of input channels (1 for grayscale, 3 for RGB)
 
     Returns:
         dict containing results
@@ -229,11 +244,11 @@ def run_deep(model_name, train_loader, test_loader, device='cuda', epochs=10, lr
     # Initialize model
     print("\n=== Model Initialization ===")
     if model_name == "cnn_small":
-        model = CNNSmall(num_classes=10)
-        print("Initialized CNN-Small")
+        model = CNNSmall(num_classes=10, input_channels=input_channels)
+        print(f"Initialized CNN-Small (input_channels={input_channels})")
     elif model_name == "cnn_medium":
-        model = CNNMedium(num_classes=10)
-        print("Initialized CNN-Medium")
+        model = CNNMedium(num_classes=10, input_channels=input_channels)
+        print(f"Initialized CNN-Medium (input_channels={input_channels})")
     else:
         raise ValueError(f"Unknown model: {model_name}")
 

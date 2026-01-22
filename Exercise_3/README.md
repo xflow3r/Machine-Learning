@@ -1,34 +1,51 @@
-# ============================================================================
-# File: README.md
-# ============================================================================
+# Fashion-MNIST and CIFAR-10 Classification Project
 
-# Fashion-MNIST Classification Project
+This project compares traditional machine learning methods with deep learning approaches on two image classification datasets: Fashion-MNIST and CIFAR-10.
 
-This project compares traditional machine learning methods (HOG features + SVM/Logistic Regression) with deep learning approaches (CNNs) on the Fashion-MNIST dataset.
+## Exercise Requirements Met
+
+### ✅ Two Datasets
+1. **Fashion-MNIST**: 28×28 grayscale images of fashion items
+2. **CIFAR-10**: 32×32 RGB images of natural objects
+
+### ✅ Traditional Methods
+1. **Simple Feature**: Color Histogram + SVM/Logistic Regression
+2. **Powerful Feature**: HOG (keypoint-based) + SVM/Logistic Regression
+
+### ✅ Deep Learning
+1. **CNN-Small**: Lightweight architecture (~100-130K parameters)
+2. **CNN-Medium**: Deeper architecture (~300-330K parameters)
+3. **Data Augmentation**: Optional flag to enable augmentation
+
+### ✅ Evaluation
+- Confusion matrices per class
+- Performance metrics (accuracy, F1-macro)
+- Runtime comparison (feature extraction, training, testing)
 
 ## Project Structure
 
 ```
 .
 ├── src/
-│   ├── fashion_mnist_downloader.py  # Dataset downloader
-│   ├── data.py                       # Data loading utilities
+│   ├── fashion_mnist_downloader.py  # Fashion-MNIST downloader
+│   ├── data.py                       # Multi-dataset loader with augmentation
 │   ├── metrics.py                    # Evaluation metrics
 │   ├── timing.py                     # Timing utilities
 │   ├── utils.py                      # Helper functions
 │   ├── main.py                       # Main entry point
 │   └── models/
-│       ├── traditional.py            # HOG + SVM/LogReg (Person A)
-│       └── deep.py                   # CNN models (Person B)
+│       ├── traditional.py            # Color Histogram + HOG features
+│       └── deep.py                   # CNN models (grayscale + RGB support)
 ├── results/
 │   ├── tables/
-│   │   └── results.csv              # Results table
+│   │   └── results.csv              # Consolidated results
 │   └── figures/
 │       └── cm_*.png                 # Confusion matrices
-├── report/                           # Report and figures
-├── fashion_mnist_data/              # Downloaded dataset (auto-created)
+├── fashion_mnist_data/              # Fashion-MNIST (auto-downloaded)
+├── cifar10_data/                    # CIFAR-10 (auto-downloaded)
 ├── requirements.txt
-└── README.md
+├── Quickstart.md                    # Quick start guide
+└── README.md                        # This file
 ```
 
 ## Setup
@@ -39,302 +56,245 @@ This project compares traditional machine learning methods (HOG features + SVM/L
 pip install -r requirements.txt
 ```
 
-### 2. Download Dataset
+Or with virtual environment:
 
-The dataset will be automatically downloaded when you run the code for the first time.
+```bash
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+```
+
+### 2. Download Datasets
+
+Datasets are automatically downloaded on first run:
+- **Fashion-MNIST**: Downloaded to `fashion_mnist_data/`
+- **CIFAR-10**: Downloaded to `cifar10_data/` via torchvision
 
 ## Usage
 
-### Run All Models
+### Quick Start - Run Everything
 
 ```bash
-python src/main.py --model all --seed 42
+# Run all models on both datasets
+python src/main.py --model all --dataset both --seed 42
 ```
 
-### Run Specific Models
+### Run Specific Combinations
 
-Traditional methods:
+**Specific model on both datasets:**
 ```bash
-python src/main.py --model hog_svm --seed 42
-python src/main.py --model hog_logreg --seed 42
+python src/main.py --model hog_svm --dataset both --seed 42
 ```
 
-Deep learning methods:
+**All models on one dataset:**
 ```bash
-python src/main.py --model cnn_small --device cuda --seed 42
-python src/main.py --model cnn_medium --device cuda --seed 42
+python src/main.py --model all --dataset fashion_mnist --seed 42
 ```
+
+**Single model + dataset:**
+```bash
+python src/main.py --model cnn_medium --dataset cifar10 --device cuda --seed 42
+```
+
+### Available Models
+
+**Traditional Methods:**
+- `hist_svm`: Color Histogram + SVM (simple baseline)
+- `hist_logreg`: Color Histogram + Logistic Regression (simple baseline)
+- `hog_svm`: HOG + SVM (powerful keypoint-based)
+- `hog_logreg`: HOG + Logistic Regression (powerful keypoint-based)
+
+**Deep Learning:**
+- `cnn_small`: Small CNN (~100K parameters)
+- `cnn_medium`: Medium CNN (~300K parameters)
 
 ### Command Line Arguments
 
-- `--model`: Model to run (`hog_svm`, `hog_logreg`, `cnn_small`, `cnn_medium`, `all`)
-- `--dataset`: Dataset name (default: `fashion_mnist`)
-- `--seed`: Random seed for reproducibility (default: 42)
-- `--device`: Device for deep learning (`cuda` or `cpu`, default: `cuda`)
-- `--batch-size`: Batch size for deep learning (default: 64)
-
-## For Collaborators
-
-### Person A (Traditional Methods)
-
-Implement in `src/models/traditional.py`:
-- HOG feature extraction
-- SVM classifier (`hog_svm`)
-- Logistic Regression classifier (`hog_logreg`)
-
-**Required function signature:**
-```python
-def run_traditional(model_name, X_train, y_train, X_test, y_test) -> dict
+```bash
+python src/main.py \
+  --model {hist_svm,hist_logreg,hog_svm,hog_logreg,cnn_small,cnn_medium,all} \
+  --dataset {fashion_mnist,cifar10,both} \
+  --seed 42 \
+  --device {cuda,cpu} \
+  --epochs 10 \
+  --lr 0.001 \
+  --batch-size 64 \
+  --augment  # Flag for data augmentation (DL only)
 ```
 
-**Required return dictionary:**
-```python
-var = {
-    'accuracy': float,
-    'f1_macro': float,
-    'train_time': float,
-    'test_time': float,
-    'feature_time': float,  # HOG extraction time
-    'y_true': np.array,
-    'y_pred': np.array,
-    'model_name': str
-}
-```
+### Data Augmentation Example
 
-### Person B (Deep Learning Methods)
+```bash
+# Without augmentation
+python src/main.py --model cnn_medium --dataset cifar10 --seed 42
 
-Implement in `src/models/deep.py`:
-- CNN-small architecture
-- CNN-medium architecture
-- Training loop
-- Evaluation loop
-
-**Required function signature:**
-```python
-def run_deep(model_name, train_loader, test_loader, device='cuda') -> dict
-```
-
-**Required return dictionary:**
-```python
-var = {
-    'accuracy': float,
-    'f1_macro': float,
-    'train_time': float,
-    'test_time': float,
-    'y_true': np.array,
-    'y_pred': np.array,
-    'model_name': str
-}
+# With augmentation
+python src/main.py --model cnn_medium --dataset cifar10 --augment --seed 42
 ```
 
 ## Results
 
-Results are automatically saved to:
-- **CSV table**: `results/tables/results.csv`
-- **Confusion matrices**: `results/figures/cm_fashion_mnist_<model>.png`
+### Output Files
+
+1. **CSV Table**: `results/tables/results.csv`
+   - All experiments in one file
+   - Columns: dataset, model, accuracy, f1_macro, feature_time, train_time, test_time, total_time, seed, augmented, notes
+
+2. **Confusion Matrices**: `results/figures/`
+   - Format: `cm_{dataset}_{model}.png`
+   - With augmentation: `cm_{dataset}_{model}_augmented.png`
+
+### Expected Performance
+
+**Fashion-MNIST (easier dataset):**
+- Color Histogram: ~76-82% (simple baseline)
+- HOG: ~84-89% (powerful traditional)
+- CNNs: ~89-93% (deep learning)
+
+**CIFAR-10 (harder dataset):**
+- Color Histogram: ~28-35% (simple baseline struggles with complex images)
+- HOG: ~42-50% (better but still limited)
+- CNNs: ~65-80% (significant improvement, especially with augmentation)
+
+## For Collaborators
+
+### Person A: Traditional Methods (`src/models/traditional.py`)
+
+Implements:
+1. **Color Histogram Features**:
+   - Simple baseline (32 bins per channel)
+   - Grayscale: 32 features
+   - RGB: 96 features (3×32)
+
+2. **HOG Features**:
+   - Powerful keypoint-based approach
+   - Handles both grayscale and RGB
+   - Orientations=9, pixels_per_cell=(8,8), cells_per_block=(2,2)
+
+3. **Classifiers**:
+   - SVM with RBF kernel (C=10.0)
+   - Logistic Regression (multinomial, lbfgs)
+
+### Person B: Deep Learning (`src/models/deep.py`)
+
+Implements:
+1. **CNN-Small**:
+   - 2 conv layers (32, 64 filters)
+   - Adaptive pooling for different input sizes
+   - ~100-130K parameters
+
+2. **CNN-Medium**:
+   - 3 conv layers (32, 64, 128 filters)
+   - Batch normalization
+   - ~300-330K parameters
+
+3. **Features**:
+   - Supports both grayscale (1 channel) and RGB (3 channels)
+   - Data augmentation (rotation, flip, crop, color jitter)
+   - Adam optimizer
+
+## Hardware Requirements
+
+### GPU Acceleration
+
+**Important**: Only **deep learning models (CNNs)** can use GPU. Traditional methods are CPU-only.
+
+| Method | GPU Support | Library |
+|--------|-------------|---------|
+| Color Histogram | ❌ CPU only | NumPy |
+| HOG Features | ❌ CPU only | scikit-image |
+| SVM | ❌ CPU only | scikit-learn |
+| Logistic Regression | ❌ CPU only | scikit-learn |
+| CNN-Small | ✅ GPU supported | PyTorch |
+| CNN-Medium | ✅ GPU supported | PyTorch |
+
+**Why?** scikit-learn doesn't support GPU acceleration. To use GPU for traditional ML, you'd need to switch to alternatives like cuML (NVIDIA Rapids), which requires significant code changes.
+
+### Minimum
+- CPU: Any modern processor (4+ cores recommended)
+- RAM: 8 GB
+- Disk: 5 GB (for datasets)
+
+### Recommended
+- GPU: NVIDIA GPU with 4+ GB VRAM (for CNNs only)
+- RAM: 16 GB
+- CUDA 11.0+
+
+### Runtime Estimates
+
+**Note**: Traditional methods (Histogram, HOG, SVM, LogReg) use CPU only, regardless of GPU availability.
+
+**On GPU (e.g., RTX 3080) for CNNs + CPU for Traditional:**
+- Color Histogram + SVM/LogReg: 1-3 minutes (CPU)
+- HOG + SVM/LogReg: 5-15 minutes (CPU)
+- CNN-Small: 2-5 minutes (GPU, 10 epochs)
+- CNN-Medium: 3-8 minutes (GPU, 10 epochs)
+- **Full run (all models, both datasets): ~1-2 hours**
+
+**On CPU only (no GPU):**
+- Traditional methods: Same as above (1-15 minutes)
+- CNN-Small: 20-60 minutes (10 epochs)
+- CNN-Medium: 30-90 minutes (10 epochs)
+- **Full run (all models, both datasets): ~4-8 hours**
 
 ## Reproducibility
 
-- Python version: 3.8+
-- Random seed: 42 (default)
-- All dependencies listed in `requirements.txt`
-- Run with `--seed 42` for reproducible results
+- **Python**: 3.8+
+- **Random seed**: 42 (default)
+- **Dependencies**: Listed in `requirements.txt`
+- **Datasets**: Automatically downloaded with fixed versions
 
-## Hardware
-
-Experiments were run on:
-- CPU: [Fill in]
-- GPU: [Fill in]
-- RAM: [Fill in]
-
----
-
-# ============================================================================
-# File: requirements.txt
-# ============================================================================
-
-# Core dependencies
-numpy>=1.21.0
-torch>=2.0.0
-torchvision>=0.15.0
-
-# Traditional ML
-scikit-learn>=1.0.0
-scikit-image>=0.19.0
-
-# Visualization
-matplotlib>=3.5.0
-seaborn>=0.11.0
-
-# Utilities
-pandas>=1.3.0
-tqdm>=4.62.0
-
----
-
-# ============================================================================
-# File: setup_project.sh (Bash script to create directory structure)
-# ============================================================================
-
-#!/bin/bash
-
-# Create directory structure
-mkdir -p src/models
-mkdir -p results/tables
-mkdir -p results/figures
-mkdir -p report
-mkdir -p fashion_mnist_data
-
-# Create __init__.py files
-touch src/__init__.py
-touch src/models/__init__.py
-
-echo "Project structure created successfully!"
-echo ""
-echo "Next steps:"
-echo "1. Copy the code from the artifact into the respective files"
-echo "2. Install dependencies: pip install -r requirements.txt"
-echo "3. Run: python src/main.py --model all"
-
----
-
-# ============================================================================
-# File: report/report_template.md
-# ============================================================================
-
-# Fashion-MNIST Classification: Traditional vs Deep Learning
-
-## 1. Setup
-
-### 1.1 Dataset
-- **Dataset**: Fashion-MNIST
-- **Training samples**: 60,000
-- **Test samples**: 10,000
-- **Image size**: 28×28 grayscale
-- **Classes**: 10 (T-shirt/top, Trouser, Pullover, Dress, Coat, Sandal, Shirt, Sneaker, Bag, Ankle boot)
-
-### 1.2 Preprocessing
-- Normalization: [0, 255] → [0, 1]
-- No data augmentation used
-
-### 1.3 Hardware
-- CPU: [Fill in]
-- GPU: [Fill in]
-- RAM: [Fill in]
-
-### 1.4 Software
-- Python: [version]
-- PyTorch: [version]
-- scikit-learn: [version]
-- See `requirements.txt` for full dependencies
-
----
-
-## 2. Traditional Methods
-
-### 2.1 Feature Extraction
-- **Method**: Histogram of Oriented Gradients (HOG)
-- **Parameters**: [Fill in]
-
-### 2.2 Classifiers
-
-#### 2.2.1 SVM
-- **Kernel**: [Fill in]
-- **C**: [Fill in]
-- **Other parameters**: [Fill in]
-
-#### 2.2.2 Logistic Regression
-- **Solver**: [Fill in]
-- **Regularization**: [Fill in]
-- **Max iterations**: [Fill in]
-
----
-
-## 3. Deep Learning Methods
-
-### 3.1 CNN-Small
-- **Architecture**:
-  - [Fill in layers]
-- **Parameters**: [Total params]
-- **Training**:
-  - Optimizer: [e.g., Adam]
-  - Learning rate: [e.g., 0.001]
-  - Epochs: [e.g., 10]
-  - Batch size: 64
-
-### 3.2 CNN-Medium
-- **Architecture**:
-  - [Fill in layers]
-- **Parameters**: [Total params]
-- **Training**: [Same as CNN-Small or specify differences]
-
----
-
-## 4. Results
-
-### 4.1 Performance Metrics
-
-| Model | Accuracy | F1-Macro | Feature Time (s) | Train Time (s) | Test Time (s) | Total Time (s) |
-|-------|----------|----------|------------------|----------------|---------------|----------------|
-| HOG+SVM | [Fill] | [Fill] | [Fill] | [Fill] | [Fill] | [Fill] |
-| HOG+LogReg | [Fill] | [Fill] | [Fill] | [Fill] | [Fill] | [Fill] |
-| CNN-Small | [Fill] | [Fill] | N/A | [Fill] | [Fill] | [Fill] |
-| CNN-Medium | [Fill] | [Fill] | N/A | [Fill] | [Fill] | [Fill] |
-
-### 4.2 Confusion Matrices
-
-[Insert confusion matrix figures here]
-
----
-
-## 5. Discussion
-
-### 5.1 Performance Comparison
-[Discuss which models performed best and why]
-
-### 5.2 Confusion Patterns
-[Discuss which classes were frequently confused and why]
-
-### 5.3 Computational Efficiency
-[Discuss the tradeoff between accuracy and training/inference time]
-
-### 5.4 Traditional vs Deep Learning
-[Compare the two approaches: when would you use each?]
-
-### 5.5 Limitations
-[Discuss limitations of the experiments]
-
----
-
-## 6. Reproducibility
-
-### 6.1 Running the Code
-
+To reproduce results:
 ```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Run all experiments
-python src/main.py --model all --seed 42
-
-# Run specific model
-python src/main.py --model cnn_small --device cuda --seed 42
+python src/main.py --model all --dataset both --seed 42 --epochs 10
 ```
 
-### 6.2 Random Seed
-All experiments use seed=42 for reproducibility.
+## Analysis Questions for Report
 
-### 6.3 Package Versions
-See `requirements.txt` for exact versions used.
+1. **Feature Comparison**:
+   - How does the simple color histogram compare to HOG?
+   - Which features are more robust to dataset complexity?
+
+2. **Dataset Comparison**:
+   - Why do traditional methods struggle more on CIFAR-10?
+   - How does RGB vs grayscale affect different approaches?
+
+3. **Traditional vs Deep Learning**:
+   - What's the accuracy-speed tradeoff?
+   - When would you choose each approach?
+
+4. **Data Augmentation**:
+   - How much does augmentation help?
+   - Which dataset benefits more? Why?
+
+5. **Error Analysis**:
+   - Which classes are most confused?
+   - Are error patterns different across methods?
+   - Do CNNs make "smarter" mistakes than traditional methods?
+
+6. **Confusion Matrices**:
+   - Look for systematic confusion patterns
+   - Compare confusion between simple/powerful features
+   - How do error types differ between methods?
+
+## Citation & Sources
+
+This project is for the course 184.702 Machine Learning at TU Wien.
+
+**Datasets:**
+- Fashion-MNIST: Xiao, H., Rasul, K., & Vollgraf, R. (2017)
+- CIFAR-10: Krizhevsky, A. (2009)
+
+**Methods:**
+- HOG: Dalal, N., & Triggs, B. (2005)
+- CNNs: Various architectures inspired by LeNet, VGG
+
+## License
+
+For educational use in the Machine Learning course at TU Wien.
 
 ---
 
-## 7. Conclusion
-
-[Brief summary of findings and key takeaways]
-
----
-
-## References
-
-[Add any references if needed]
+For detailed instructions, see `Quickstart.md`.
+For troubleshooting, see `Troubleshooting.md`.

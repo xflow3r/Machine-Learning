@@ -40,3 +40,4 @@ Thumbs.db
 # Results
 results/tables/*.csv
 results/figures/*.png
+/cifar10_data/
