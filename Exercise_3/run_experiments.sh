@@ -5,98 +5,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 VENV_DIR="$SCRIPT_DIR/venv"
-VENV_PY="$VENV_DIR/bin/python"
-REQ_FILE="$SCRIPT_DIR/requirements.txt"
-
-requirements_ok() {
-  "$VENV_PY" - <<'PY'
-import sys
-from importlib import metadata
-from packaging.requirements import Requirement
-
-req_path = "requirements.txt"
-
-def iter_reqs(path: str):
-    with open(path, "r", encoding="utf-8") as f:
-        for raw in f:
-            line = raw.strip()
-            if not line or line.startswith("#"):
-                continue
-            if line.startswith(("-r ", "--requirement ", "-e ", "--editable ", "--find-links", "-f ", "--extra-index-url", "--index-url")):
-                continue
-            yield line
-
-bad = []
-for line in iter_reqs(req_path):
-    try:
-        req = Requirement(line)
-    except Exception:
-        continue
-
-    try:
-        installed = metadata.version(req.name)
-    except metadata.PackageNotFoundError:
-        bad.append(f"{req.name} (not installed)")
-        continue
-
-    if req.specifier and installed not in req.specifier:
-        bad.append(f"{req.name} ({installed} does not satisfy {req.specifier})")
-
-if bad:
-    print("Requirements not satisfied:")
-    for b in bad:
-        print(" -", b)
-    sys.exit(1)
-sys.exit(0)
-PY
-}
-
-run_setup_in_new_terminal_and_wait() {
-  local setup_cmd
-  setup_cmd="cd \"$SCRIPT_DIR\" && bash \"$SCRIPT_DIR/setup_project.sh\""
-
-  if [ -z "${DISPLAY:-}" ] && [ -z "${WAYLAND_DISPLAY:-}" ]; then
-    bash "$SCRIPT_DIR/setup_project.sh"
-    return 0
-  fi
-
-  if command -v gnome-terminal >/dev/null 2>&1; then
-    gnome-terminal --wait -- bash -lc "$setup_cmd" &
-    wait $!
-  elif command -v konsole >/dev/null 2>&1; then
-    konsole -e bash -lc "$setup_cmd" &
-    wait $!
-  elif command -v x-terminal-emulator >/dev/null 2>&1; then
-    x-terminal-emulator -e bash -lc "$setup_cmd" &
-    wait $!
-  elif command -v xterm >/dev/null 2>&1; then
-    xterm -e bash -lc "$setup_cmd" &
-    wait $!
-  else
-    bash "$SCRIPT_DIR/setup_project.sh"
-  fi
-}
 
 echo "=========================================="
 echo "Fashion-MNIST & CIFAR-10 Classification"
 echo "=========================================="
 echo ""
 
-need_setup=0
-
+# Check if venv exists
 if [ ! -d "$VENV_DIR" ]; then
-  need_setup=1
-else
-  if [ -f "$REQ_FILE" ]; then
-    if ! requirements_ok; then
-      need_setup=1
-    fi
-  fi
-fi
-
-if [ "$need_setup" -eq 1 ]; then
-  echo "Setup required (missing venv and/or requirements). Launching setup in a new terminal window..."
-  run_setup_in_new_terminal_and_wait
+    echo "Error: Virtual environment not found at $VENV_DIR"
+    echo "Please run setup_project.sh first to create the environment."
+    exit 1
 fi
 
 echo "Activating virtual environment..."
@@ -145,3 +64,9 @@ echo "Results saved to:"
 echo "  - results/tables/results.csv"
 echo "  - results/figures/cm_*.png"
 echo ""
+
+echo "Running augmented data experiments for CNN models..."
+echo ""
+# Run augmented data experiments for CNN models
+python src/main.py --model cnn_small --dataset both --seed 42 --epochs 10 --device cuda --augment
+python src/main.py --model cnn_medium --dataset both --seed 42 --epochs 10 --device cuda --augment

@@ -2,25 +2,28 @@
 
 This project compares traditional machine learning methods with deep learning approaches on two image classification datasets: Fashion-MNIST and CIFAR-10.
 
-## Exercise Requirements Met
+## Our Approach to this Exercise - What We Did
 
-### ✅ Two Datasets
+### Two Datasets
 1. **Fashion-MNIST**: 28×28 grayscale images of fashion items
 2. **CIFAR-10**: 32×32 RGB images of natural objects
 
-### ✅ Traditional Methods
+### Traditional Methods
 1. **Simple Feature**: Color Histogram + SVM/Logistic Regression
 2. **Powerful Feature**: HOG (keypoint-based) + SVM/Logistic Regression
 
-### ✅ Deep Learning
+### Deep Learning
 1. **CNN-Small**: Lightweight architecture (~100-130K parameters)
 2. **CNN-Medium**: Deeper architecture (~300-330K parameters)
 3. **Data Augmentation**: Optional flag to enable augmentation
 
-### ✅ Evaluation
+### Evaluation
 - Confusion matrices per class
 - Performance metrics (accuracy, F1-macro)
 - Runtime comparison (feature extraction, training, testing)
+
+## AI Disclaimer
+AI agents were used in generating the skeletons of certain files and in debugging experiments. It was also used to write some of this README and the setup scripts.
 
 ## Project Structure
 
@@ -44,7 +47,6 @@ This project compares traditional machine learning methods with deep learning ap
 ├── fashion_mnist_data/              # Fashion-MNIST (auto-downloaded)
 ├── cifar10_data/                    # CIFAR-10 (auto-downloaded)
 ├── requirements.txt
-├── Quickstart.md                    # Quick start guide
 └── README.md                        # This file
 ```
 
@@ -221,23 +223,6 @@ Implements:
 - RAM: 16 GB
 - CUDA 11.0+
 
-### Runtime Estimates
-
-**Note**: Traditional methods (Histogram, HOG, SVM, LogReg) use CPU only, regardless of GPU availability.
-
-**On GPU (e.g., RTX 3080) for CNNs + CPU for Traditional:**
-- Color Histogram + SVM/LogReg: 1-3 minutes (CPU)
-- HOG + SVM/LogReg: 5-15 minutes (CPU)
-- CNN-Small: 2-5 minutes (GPU, 10 epochs)
-- CNN-Medium: 3-8 minutes (GPU, 10 epochs)
-- **Full run (all models, both datasets): ~1-2 hours**
-
-**On CPU only (no GPU):**
-- Traditional methods: Same as above (1-15 minutes)
-- CNN-Small: 20-60 minutes (10 epochs)
-- CNN-Medium: 30-90 minutes (10 epochs)
-- **Full run (all models, both datasets): ~4-8 hours**
-
 ## Reproducibility
 
 - **Python**: 3.8+
@@ -248,53 +233,5 @@ Implements:
 To reproduce results:
 ```bash
 python src/main.py --model all --dataset both --seed 42 --epochs 10
+python src/main.py --model cnn-medium --dataset both --seed 42 --epochs 10
 ```
-
-## Analysis Questions for Report
-
-1. **Feature Comparison**:
-   - How does the simple color histogram compare to HOG?
-   - Which features are more robust to dataset complexity?
-
-2. **Dataset Comparison**:
-   - Why do traditional methods struggle more on CIFAR-10?
-   - How does RGB vs grayscale affect different approaches?
-
-3. **Traditional vs Deep Learning**:
-   - What's the accuracy-speed tradeoff?
-   - When would you choose each approach?
-
-4. **Data Augmentation**:
-   - How much does augmentation help?
-   - Which dataset benefits more? Why?
-
-5. **Error Analysis**:
-   - Which classes are most confused?
-   - Are error patterns different across methods?
-   - Do CNNs make "smarter" mistakes than traditional methods?
-
-6. **Confusion Matrices**:
-   - Look for systematic confusion patterns
-   - Compare confusion between simple/powerful features
-   - How do error types differ between methods?
-
-## Citation & Sources
-
-This project is for the course 184.702 Machine Learning at TU Wien.
-
-**Datasets:**
-- Fashion-MNIST: Xiao, H., Rasul, K., & Vollgraf, R. (2017)
-- CIFAR-10: Krizhevsky, A. (2009)
-
-**Methods:**
-- HOG: Dalal, N., & Triggs, B. (2005)
-- CNNs: Various architectures inspired by LeNet, VGG
-
-## License
-
-For educational use in the Machine Learning course at TU Wien.
-
----
-
-For detailed instructions, see `Quickstart.md`.
-For troubleshooting, see `Troubleshooting.md`.
