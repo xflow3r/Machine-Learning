@@ -233,5 +233,6 @@ Implements:
 To reproduce results:
 ```bash
 python src/main.py --model all --dataset both --seed 42 --epochs 10
-python src/main.py --model cnn-medium --dataset both --seed 42 --epochs 10
+python src/main.py --model cnn_small --dataset both --seed 42 --epochs 10
+python src/main.py --model cnn_medium --dataset both --seed 42 --epochs 10
 ```
