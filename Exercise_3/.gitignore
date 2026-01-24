@@ -1,5 +1,5 @@
 # Dataset directory
-/fashion_mnist_data/
+fashion_mnist_data/
 
 # Python cache
 __pycache__/
@@ -38,6 +38,4 @@ Thumbs.db
 *.log
 
 # Results
-results/tables/*.csv
-results/figures/*.png
-/cifar10_data/
+cifar10_data/
