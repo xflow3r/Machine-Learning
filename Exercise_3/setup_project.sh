@@ -12,14 +12,14 @@ touch src/__init__.py src/models/__init__.py
 if [ ! -d "venv" ]; then
   echo "Virtual environment not found. Creating one..."
   python3 -m venv venv
-  echo "✓ Virtual environment created"
+  echo "Virtual environment created"
 fi
 
 echo ""
 echo "Installing dependencies..."
 ./venv/bin/python -m pip install --upgrade pip
 ./venv/bin/pip install -r requirements.txt
-echo "✓ Dependencies installed"
+echo "Dependencies installed"
 
 echo ""
-echo "✓ Project structure created successfully!"
+echo "Project structure created successfully!"

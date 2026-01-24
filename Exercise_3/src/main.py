@@ -144,7 +144,7 @@ def main():
                 save_results_to_csv(csv_results)
 
             except Exception as e:
-                print(f"❌ Error running {model_name} on {dataset_name}: {str(e)}")
+                print(f"Error running {model_name} on {dataset_name}: {str(e)}")
                 import traceback
                 traceback.print_exc()
 

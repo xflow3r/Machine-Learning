@@ -1,5 +1,5 @@
 """
-PERSON B: Deep learning methods implementation
+Deep learning methods implementation
 Implements CNN-small and CNN-medium architectures
 Supports both grayscale (Fashion-MNIST) and RGB (CIFAR-10) images
 """

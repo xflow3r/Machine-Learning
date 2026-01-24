@@ -245,5 +245,3 @@ Key things to analyze:
 - Look at confusion matrices
 - Which classes are most confused?
 - Are errors different between traditional and deep learning?
-
-Good luck! 🚀

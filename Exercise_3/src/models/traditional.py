@@ -1,5 +1,5 @@
 """
-PERSON A: Traditional machine learning methods implementation
+Traditional machine learning methods implementation
 Implements:
 - Color histogram features (simple baseline)
 - HOG feature extraction (powerful keypoint-based)

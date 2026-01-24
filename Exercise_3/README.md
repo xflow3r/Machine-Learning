@@ -159,7 +159,7 @@ python src/main.py --model cnn_medium --dataset cifar10 --augment --seed 42
 
 ## For Collaborators
 
-### Person A: Traditional Methods (`src/models/traditional.py`)
+### Traditional Methods (`src/models/traditional.py`)
 
 Implements:
 1. **Color Histogram Features**:
@@ -176,7 +176,7 @@ Implements:
    - SVM with RBF kernel (C=10.0)
    - Logistic Regression (multinomial, lbfgs)
 
-### Person B: Deep Learning (`src/models/deep.py`)
+### Deep Learning (`src/models/deep.py`)
 
 Implements:
 1. **CNN-Small**:

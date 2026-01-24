@@ -40,13 +40,13 @@ def download_fashion_mnist():
         for key, filename in files.items():
             filepath = os.path.join('fashion_mnist_data', filename)
             if os.path.exists(filepath):
-                print(f"✓ {filename} already exists, skipping...")
+                print(f"{filename} already exists, skipping...")
             else:
                 url = base_url + filename
                 print(f"Downloading {filename}...")
                 with DownloadProgressBar(unit='B', unit_scale=True, miniters=1, desc=filename) as t:
                     urllib.request.urlretrieve(url, filepath, reporthook=t.update_to)
-                print(f"✓ {filename} downloaded")
+                print(f"{filename} downloaded")
 
     with gzip.open('fashion_mnist_data/train-images-idx3-ubyte.gz', 'rb') as f:
         train_images = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 28, 28)
